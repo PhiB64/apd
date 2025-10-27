@@ -1,0 +1,52 @@
+{
+  "kind": "singleType",
+  "collectionName": "eglises",
+  "info": {
+    "singularName": "eglise",
+    "pluralName": "eglises",
+    "displayName": "Eglise"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "nom": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "blocks",
+      "required": true
+    },
+    "image_principale": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "images": {
+      "type": "media",
+      "multiple": true,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "style_architectural": {
+      "type": "blocks"
+    },
+    "localisation": {
+      "type": "component",
+      "component": "eglise.adresse",
+      "repeatable": true
+    }
+  }
+}
