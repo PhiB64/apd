@@ -1,5 +1,5 @@
 "use client";
-
+import { useRouter } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
@@ -11,6 +11,7 @@ export default function FloatingHeader({ site, onContactClick }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
   const headerRef = useRef(null);
+  const router = useRouter();
 
   const logoUrl =
     site?.logo?.url ??
@@ -18,7 +19,17 @@ export default function FloatingHeader({ site, onContactClick }) {
     "/fallback-logo.png";
 
   const navLinks = [
-    { label: "Accueil", href: "/" },
+    {
+      label: "Accueil",
+      action: () => {
+        if (pathname === "/") {
+          const skipButton = document.getElementById("skipButton");
+          if (skipButton) skipButton.click();
+        } else {
+          router.push("/?triggerSkip=true");
+        }
+      },
+    },
     { label: "Notre action", href: "/action" },
     { label: "Devenez partenaire", href: "/partners" },
     { label: "Blog", href: "/blog" },
@@ -51,7 +62,7 @@ export default function FloatingHeader({ site, onContactClick }) {
         ref={headerRef}
         className="fixed top-3 left-0 right-0 z-50 flex justify-center pointer-events-none"
       >
-        <div className="pointer-events-auto bg-white/60 backdrop-blur-md shadow-xl rounded-full px-4 sm:px-6 lg:px-8 py-1 flex items-center justify-between w-full max-w-screen-lg mx-4 overflow-hidden min-h-[64px] hidden md:flex">
+        <div className="pointer-events-auto bg-white/60 backdrop-blur-md shadow-xl rounded-sm px-4 sm:px-6 lg:px-8 py-1 flex items-center justify-between w-full max-w-screen-lg mx-4 overflow-hidden min-h-[64px] hidden md:flex">
           <Image
             src={logoUrl}
             alt="Logo"
@@ -67,8 +78,8 @@ export default function FloatingHeader({ site, onContactClick }) {
                 <a
                   key={link.label}
                   href={link.href}
-                  className={`transition hover:text-red-600 ${
-                    isActive ? "text-red-600 font-semibold" : ""
+                  className={`transition hover:text-red-700 ${
+                    isActive ? "text-[#ac1115] font-semibold" : ""
                   }`}
                 >
                   {link.label}
@@ -77,7 +88,7 @@ export default function FloatingHeader({ site, onContactClick }) {
                 <button
                   key={link.label}
                   onClick={link.action}
-                  className="transition hover:text-red-600 text-gray-800 font-medium cursor-pointer"
+                  className="transition hover:text-red-700 text-gray-800 font-medium cursor-pointer"
                 >
                   {link.label}
                 </button>
@@ -89,7 +100,7 @@ export default function FloatingHeader({ site, onContactClick }) {
       </header>
 
       {/* 🧭 Floating header mobile */}
-      <header className="fixed top-3 left-0 right-0 z-50 flex items-center justify-between px-4 py-2 bg-white/60 backdrop-blur-md shadow-md rounded-full md:hidden">
+      <header className="fixed top-3 left-0 right-0 z-50 flex items-center justify-between px-4 py-2 bg-white/60 backdrop-blur-md shadow-md rounded-sm md:hidden">
         <Image
           src={logoUrl}
           alt="Logo"
@@ -103,7 +114,7 @@ export default function FloatingHeader({ site, onContactClick }) {
             href={site?.url_don}
             target="_blank"
             rel="noopener noreferrer"
-            className="p-2 rounded-full text-red-600 hover:text-red-700 transition"
+            className="p-2 rounded-full text-[#ac1115] hover:text-red-700 transition"
             aria-label="Faire un don"
           >
             <svg
@@ -164,8 +175,8 @@ export default function FloatingHeader({ site, onContactClick }) {
                 key={link.label}
                 href={link.href}
                 onClick={() => setMenuOpen(false)}
-                className={`text-lg transition hover:text-red-600 ${
-                  isActive ? "text-red-600 font-semibold" : ""
+                className={`text-lg transition hover:text-red-700 ${
+                  isActive ? "text-[#ac1115] font-semibold" : ""
                 }`}
               >
                 {link.label}
@@ -177,7 +188,7 @@ export default function FloatingHeader({ site, onContactClick }) {
                   setMenuOpen(false);
                   link.action?.();
                 }}
-                className="text-lg transition hover:text-red-600 text-gray-800 font-medium"
+                className="text-lg transition hover:text-red-700 text-gray-800 font-medium"
               >
                 {link.label}
               </button>

@@ -14,7 +14,7 @@ export default function DonationButton({
         href={href}
         target="_blank"
         rel="noopener noreferrer"
-        className={`flex items-center justify-center px-6 py-2 rounded-full bg-red-600 text-white font-semibold shadow-md hover:bg-red-700 transition-all duration-300 w-fit sm:hidden lg:flex ${className}`}
+        className={`flex items-center justify-center px-6 py-2 rounded-sm bg-[#ac1115] text-white font-semibold shadow-md hover:bg-red-700 transition-all duration-300 w-fit sm:hidden lg:flex ${className}`}
       >
         {label}
       </a>
@@ -24,7 +24,7 @@ export default function DonationButton({
         href={href}
         target="_blank"
         rel="noopener noreferrer"
-        className={`hidden sm:flex lg:hidden items-center justify-center text-red-600 hover:text-red-700 transition p-2 rounded-full ${className}`}
+        className={`hidden sm:flex lg:hidden items-center justify-center text-[#ac1115] hover:text-red-700 transition p-2 rounded-full ${className}`}
         aria-label="Faire un don"
       >
         <svg

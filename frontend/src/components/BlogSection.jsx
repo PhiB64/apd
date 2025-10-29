@@ -49,9 +49,12 @@ export default function BlogSection({ API_URL, limit = null }) {
     );
   }, [articles]);
 
+  const sectionClasses =
+    "py-20 px-6 md:px-32 min-h-screen bg-[url('/fond_pierre.jpg')] bg-cover bg-center";
+
   if (isLoading) {
     return (
-      <section className="py-20 px-6 md:px-32 text-center">
+      <section className={sectionClasses + " text-center"}>
         <p className="text-sm md:text-base text-gray-500">
           Chargement des articles...
         </p>
@@ -61,7 +64,7 @@ export default function BlogSection({ API_URL, limit = null }) {
 
   if (error) {
     return (
-      <section className="py-20 px-6 md:px-32 text-center">
+      <section className={sectionClasses + " text-center"}>
         <p className="text-sm md:text-base text-red-500">Erreur : {error}</p>
       </section>
     );
@@ -75,7 +78,7 @@ export default function BlogSection({ API_URL, limit = null }) {
 
   if (displayed.length === 0) {
     return (
-      <section className="py-20 px-6 md:px-32 text-center">
+      <section className={sectionClasses + " text-center"}>
         <p className="text-sm md:text-base text-gray-500">
           Aucun article disponible pour le moment.
         </p>
@@ -84,9 +87,9 @@ export default function BlogSection({ API_URL, limit = null }) {
   }
 
   return (
-    <section className="py-20 px-6 md:px-32 bg-white">
+    <section className={sectionClasses}>
       <div ref={wrapperRef} className="max-w-6xl mx-auto blog-wrapper">
-        <h2 className="text-2xl md:text-3xl font-bold text-center mb-12 text-gray-800">
+        <h2 className="text-3xl md:text-4xl font-garamond text-center mb-12 text-black">
           {limit ? "Les derniers articles" : "Tous les articles"}
         </h2>
 

@@ -4,14 +4,24 @@ import { forwardRef, useLayoutEffect, useRef, useState } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Gallery from "./Gallery";
+import Interview from "./Interview";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const DescriptionSection = forwardRef(({ eglise }, ref) => {
+const DescriptionSection = forwardRef(({ eglise, interviewBlock }, ref) => {
   const sectionRef = useRef(null);
-  const curtainRef = useRef(null);
+  const backgroundRef = useRef(null);
+  const containerRef = useRef(null);
   const textRef = useRef(null);
   const imageRef = useRef(null);
+  const interviewRef = useRef(null);
+
+  const nom = eglise?.nom?.trim() || "";
+  const mots = nom.split(" ");
+  const premier = mots[0];
+  const reste = mots.slice(1, -1).join(" ");
+  const dernier = mots.slice(-1)[0];
 
   const [selectedImage, setSelectedImage] = useState(
     eglise?.image_principale ?? null
@@ -20,113 +30,147 @@ const DescriptionSection = forwardRef(({ eglise }, ref) => {
   const getImageUrl = (img) =>
     img?.formats?.large?.url ?? img?.formats?.medium?.url ?? img?.url;
 
+  const titreInterview = interviewBlock?.titre;
+  const descriptionInterview =
+    interviewBlock?.description?.[0]?.children?.[0]?.text;
+  const videoUrl = interviewBlock?.video?.url;
+
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
-      const curtain = curtainRef.current;
-      const text = textRef.current;
-      const image = imageRef.current;
-
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top top",
-          end: "+=150%",
+          end: "top+=180%",
           pin: true,
           scrub: 0.5,
         },
       });
 
-      // 🧵 Rideau en arrière-plan
       tl.fromTo(
-        curtain,
-        { xPercent: -100 },
-        { xPercent: 0, ease: "power3.out", duration: 0.6 }
-      );
-
-      // ✨ Contenu glisse et apparaît
-      tl.fromTo(
-        text,
-        { xPercent: -200, opacity: 0 },
-        { xPercent: 0, opacity: 1, ease: "power3.out", duration: 0.6 },
-        "+=0.2"
+        backgroundRef.current,
+        { xPercent: 100, opacity: 1 },
+        { xPercent: 0, opacity: 1, ease: "power3.out", duration: 0.6 }
       );
 
       tl.fromTo(
-        image,
-        { xPercent: 200, opacity: 0 },
-        { xPercent: 0, opacity: 1, ease: "power3.out", duration: 0.6 },
-        "-=0.6"
+        textRef.current,
+        { xPercent: -200, opacity: 1 },
+        { xPercent: 0, opacity: 1, ease: "power3.out", duration: 1.5 },
+        "+=0.6"
       );
 
-      // 🧵 Rideau sort
+      tl.fromTo(
+        imageRef.current,
+        { xPercent: 200, opacity: 1 },
+        { xPercent: 0, opacity: 1, ease: "power3.out", duration: 1.5 },
+        "-=1.5"
+      );
+
       tl.to(
-        curtain,
-        { xPercent: -100, ease: "power3.inOut", duration: 0.6 },
-        "+=0.3"
+        [textRef.current, imageRef.current],
+        { xPercent: -300, opacity: 1, ease: "power3.inOut", duration: 1.5 },
+        "+=0.6"
       );
 
-      // 🎨 Texte devient blanc
-      tl.to(
-        text,
-        { color: "#ffffff", ease: "power2.out", duration: 0.4 },
-        "-=0.4"
-      );
+      if (interviewRef.current) {
+        tl.fromTo(
+          interviewRef.current,
+          { xPercent: 200, opacity: 1 },
+          { xPercent: 0, opacity: 1, ease: "power3.out", duration: 2.5 },
+          "-=0.6"
+        );
+      }
     }, sectionRef);
 
     return () => ctx.revert();
   }, []);
 
-  if (!eglise?.nom && !eglise?.description?.length && !selectedImage)
-    return null;
+  const hasInterviewContent =
+    titreInterview || descriptionInterview || videoUrl;
+
+  if (!eglise && !hasInterviewContent) return null;
 
   return (
     <section
-      ref={(el) => {
-        if (typeof ref === "function") ref(el);
-        else if (ref) ref.current = el;
-        sectionRef.current = el;
-      }}
-      className="relative w-screen min-h-screen px-6 md:px-32 overflow-hidden flex flex-col justify-center pt-[120px] md:pt-0"
+      ref={sectionRef}
+      className="relative w-screen min-h-screen overflow-auto flex items-center justify-center "
     >
-      {/* 🧵 Rideau blanc en arrière-plan */}
       <div
-        ref={curtainRef}
-        className="absolute top-0 left-0 w-full h-full bg-white z-[-1] pointer-events-none"
+        ref={backgroundRef}
+        className="absolute top-0 left-0 w-full min-h-full z-0 bg-cover bg-center "
+        style={{
+          backgroundImage: 'url("/fond_pierre.jpg")',
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}
       />
 
-      {/* 🎬 Contenu principal */}
-      <div className="relative z-10 max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-center gap-10 ">
-        {/* Texte à gauche */}
-        <div ref={textRef} className="md:w-1/2 w-full text-gray-800">
-          <div className="space-y-4">
-            {eglise?.nom && (
-              <h2 className="text-2xl md:text-3xl font-bold drop-shadow-lg leading-snug">
-                {eglise.nom}
-              </h2>
-            )}
-            {eglise?.description?.length > 0 && (
-              <div className="text-sm md:text-base font-normal space-y-2 drop-shadow-sm leading-relaxed">
-                {eglise.description.map((para, index) => {
-                  const text = para?.children?.[0]?.text?.trim();
-                  return text ? <p key={index}>{text}</p> : null;
-                })}
-              </div>
-            )}
+      <div
+        ref={containerRef}
+        className="relative z-10 w-full max-w-6xl pt-[150px]"
+      >
+        {/* Texte + image */}
+        <div className="flex flex-col md:flex-row items-center justify-center gap-10 w-full h-auto px-6">
+          <div ref={textRef} className="md:w-1/2 w-full text-black px-6">
+            <div className="space-y-4">
+              {eglise?.nom && (
+                <h2 className="text-3xl md:text-4xl font-garamond leading-snug break-words">
+                  {premier}
+                  <br />
+                  {reste}{" "}
+                  <span className="text-white shadow-underline">{dernier}</span>
+                </h2>
+              )}
+              {Array.isArray(eglise?.description) && (
+                <div className="text-sm md:text-base lettrine space-y-2 leading-relaxed text-justify">
+                  {eglise.description.map((para, index) => {
+                    const text = para?.children?.[0]?.text?.trim();
+                    return text ? (
+                      <p key={index} className={index === 0 ? "lettrine" : ""}>
+                        {text}
+                      </p>
+                    ) : null;
+                  })}
+                </div>
+              )}
+            </div>
+            <button className="flex items-center justify-center px-6 py-2 rounded-sm bg-[#ac1115] text-white font-semibold shadow-md hover:bg-red-700 transition-all duration-300 w-fit sm:hidden lg:flex mt-5">
+              Découvrez son histoire
+            </button>
           </div>
+
+          {selectedImage && (
+            <div
+              ref={imageRef}
+              className="md:w-1/2 w-full flex flex-col items-center gap-4 px-6"
+            >
+              <div className="relative w-full aspect-[4/3] rounded-t-full overflow-hidden shadow-xl">
+                <Image
+                  src={getImageUrl(selectedImage)}
+                  alt={selectedImage.name || "Image principale"}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
+              </div>
+              <Gallery eglise={eglise} />
+            </div>
+          )}
         </div>
 
-        {/* Image à droite */}
-        {selectedImage && (
-          <div ref={imageRef} className="md:w-1/2 w-full flex justify-center">
-            <div className="relative w-full aspect-[4/3] rounded-lg overflow-hidden shadow-xl">
-              <Image
-                src={getImageUrl(selectedImage)}
-                alt={selectedImage.name || "Image principale"}
-                fill
-                className="object-cover"
-                sizes="(max-width: 768px) 100vw, 50vw"
-              />
-            </div>
+        {/* Interview superposée */}
+        {hasInterviewContent && (
+          <div
+            ref={interviewRef}
+            className="absolute inset-0 flex items-center justify-center"
+          >
+            <Interview
+              titre={titreInterview}
+              description={descriptionInterview}
+              videoUrl={videoUrl}
+            />
           </div>
         )}
       </div>

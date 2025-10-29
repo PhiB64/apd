@@ -5,7 +5,7 @@ import { useSiteData } from "@hooks/useSiteData";
 import FloatingHeader from "@components/FloatingHeader";
 import Footer from "@components/Footer";
 import BlogSection from "@components/BlogSection";
-import GallerySection from "@components/GallerySection";
+import GallerySection from "@components/Gallery";
 import ContactModal from "@components/ContactModal";
 
 export default function BlogIndexPage() {

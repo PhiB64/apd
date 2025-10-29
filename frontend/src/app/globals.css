@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=EB+Garamond&display=swap");
 @import "tailwindcss";
 
 /* Thème clair/sombre */
@@ -30,7 +31,7 @@ html {
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  font-family: "EB Garamond", var(--font-sans), Arial, Helvetica, sans-serif;
   min-height: 100vh;
   overflow-x: hidden;
   overflow-y: auto;
@@ -73,4 +74,26 @@ body {
 .scroll-touch {
   -webkit-overflow-scrolling: touch;
   touch-action: pan-x;
+}
+.font-garamond {
+  font-family: "EB Garamond", serif !important;
+}
+.shadow-underline {
+  box-shadow: inset 0 1.1em 0 #ac1115;
+  display: inline;
+}
+.lettrine {
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.5; /* ou ajusté selon ton texte */
+}
+
+.lettrine::first-letter {
+  font-family: "EB Garamond", serif;
+  font-size: clamp(3rem, 8vw, 6rem);
+  color: black;
+  float: left;
+  line-height: 0.9;
+  margin-top: -0.1em; /* réduit l’espace au-dessus */
+  margin-bottom: -0.1em; /* réduit l’espace en dessous */
+  padding-right: 0.1em; /* espace entre la lettrine et le texte */
 }
