@@ -50,19 +50,19 @@ const DescriptionSection = forwardRef(({ eglise, interviewBlock }, ref) => {
       tl.fromTo(
         backgroundRef.current,
         { xPercent: 100, opacity: 1 },
-        { xPercent: 0, opacity: 1, ease: "power3.out", duration: 0.6 }
+        { xPercent: 0, opacity: 1, ease: "power3.out", duration: 1.5 }
       );
 
       tl.fromTo(
         textRef.current,
-        { xPercent: -200, opacity: 1 },
+        { xPercent: 300, opacity: 1 },
         { xPercent: 0, opacity: 1, ease: "power3.out", duration: 1.5 },
-        "+=0.6"
+        "-=1.5"
       );
 
       tl.fromTo(
         imageRef.current,
-        { xPercent: 200, opacity: 1 },
+        { xPercent: 300, opacity: 1 },
         { xPercent: 0, opacity: 1, ease: "power3.out", duration: 1.5 },
         "-=1.5"
       );
@@ -109,7 +109,7 @@ const DescriptionSection = forwardRef(({ eglise, interviewBlock }, ref) => {
 
       <div
         ref={containerRef}
-        className="relative z-10 w-full max-w-6xl pt-[150px]"
+        className="relative z-10 w-full max-w-6xl pt-[100px]"
       >
         {/* Texte + image */}
         <div className="flex flex-col md:flex-row items-center justify-center gap-10 w-full h-auto px-6">
