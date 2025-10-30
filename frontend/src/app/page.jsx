@@ -87,7 +87,7 @@ export default function Home() {
 
           {partenaires?.length > 0 && <PartnerSection partners={partenaires} />}
 
-          <div className="flex-grow">
+          <div>
             <BlogSection API_URL={API_URL} limit={4} />
           </div>
 

@@ -53,7 +53,7 @@ const HomeSection = forwardRef(({ eglise }, ref) => {
     <section
       id="HomeSection"
       ref={ref}
-      className=" relative h-[70vh] flex items-end justify-center text-white px-4 sm:px-6 pb-10"
+      className=" relative h-[70vh] flex items-end justify-center text-white px-4 sm:px-6 pb-15"
     >
       {/* Contenu centré */}
       <div className="intro-content relative z-10  text-center w-full max-w-4xl mx-auto ">

@@ -64,7 +64,15 @@ export default function ArticlePage({ params }) {
         onContactClick={() => setShowContactModal(true)}
       />
 
-      <main className="min-h-screen pt-[150px] pb-20 px-6 bg-white">
+      <main
+        className="min-h-screen pt-[150px] pb-20 px-6 "
+        style={{
+          backgroundImage: 'url("/fond_pierre.jpg")',
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}
+      >
         <div className="max-w-3xl mx-auto">
           <h1 className="text-2xl md:text-3xl font-bold drop-shadow-lg leading-snug text-gray-900 text-center mb-6">
             {titre}

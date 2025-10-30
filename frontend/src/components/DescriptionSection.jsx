@@ -199,7 +199,7 @@ const DescriptionSection = forwardRef(({ eglise, interviewBlock }, ref) => {
         {hasInterviewContent && (
           <div
             ref={interviewRef}
-            className="absolute inset-0 flex items-start justify-center pt-28 "
+            className="absolute z-20 inset-0 flex items-start justify-center pt-28 "
           >
             <Interview
               titre={titreInterview}
