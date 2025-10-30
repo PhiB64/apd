@@ -16,6 +16,7 @@ const DescriptionSection = forwardRef(({ eglise, interviewBlock }, ref) => {
   const textRef = useRef(null);
   const imageRef = useRef(null);
   const interviewRef = useRef(null);
+  const groupRef = useRef(null);
 
   const nom = eglise?.nom?.trim() || "";
   const mots = nom.split(" ");
@@ -36,12 +37,14 @@ const DescriptionSection = forwardRef(({ eglise, interviewBlock }, ref) => {
   const videoUrl = interviewBlock?.video?.url;
 
   useLayoutEffect(() => {
+    const isMobile = window.innerWidth < 768;
+
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top top",
-          end: "top+=180%",
+          end: "top+=300%",
           pin: true,
           scrub: 0.5,
         },
@@ -50,36 +53,68 @@ const DescriptionSection = forwardRef(({ eglise, interviewBlock }, ref) => {
       tl.fromTo(
         backgroundRef.current,
         { xPercent: 100, opacity: 1 },
-        { xPercent: 0, opacity: 1, ease: "power3.out", duration: 1.5 }
+        { xPercent: 0, opacity: 1, ease: "none", duration: 1.5 }
       );
 
       tl.fromTo(
-        textRef.current,
-        { xPercent: 300, opacity: 1 },
-        { xPercent: 0, opacity: 1, ease: "power3.out", duration: 1.5 },
+        groupRef.current,
+        { xPercent: 300, opacity: 0 },
+        { xPercent: 0, opacity: 1, ease: "none", duration: 3 },
         "-=1.5"
       );
 
-      tl.fromTo(
-        imageRef.current,
-        { xPercent: 300, opacity: 1 },
-        { xPercent: 0, opacity: 1, ease: "power3.out", duration: 1.5 },
-        "-=1.5"
-      );
+      if (isMobile) {
+        tl.to(
+          groupRef.current,
+          {
+            yPercent: -150,
+            ease: "none",
+            duration: 5,
+          },
+          "+=0.5"
+        );
+      }
 
       tl.to(
-        [textRef.current, imageRef.current],
-        { xPercent: -300, opacity: 1, ease: "power3.inOut", duration: 1.5 },
-        "+=0.6"
+        groupRef.current,
+        {
+          xPercent: -200,
+          opacity: 1,
+          ease: "none",
+          duration: 3,
+        },
+        "+=1"
       );
 
-      if (interviewRef.current) {
+      if (isMobile) {
         tl.fromTo(
           interviewRef.current,
           { xPercent: 200, opacity: 1 },
-          { xPercent: 0, opacity: 1, ease: "power3.out", duration: 2.5 },
-          "-=0.6"
+          { xPercent: 0, opacity: 1, ease: "none", duration: 1 },
+          "-=5"
         );
+      } else {
+        tl.fromTo(
+          interviewRef.current,
+          { xPercent: 200, opacity: 1 },
+          { xPercent: 0, opacity: 1, ease: "none", duration: 3 },
+          "-=2"
+        );
+      }
+      if (isMobile) {
+        tl.to(interviewRef.current, {
+          yPercent: 0,
+          opacity: 1,
+          ease: "none",
+          duration: 0.1,
+        });
+      } else {
+        tl.to(interviewRef.current, {
+          xPercent: 0,
+          opacity: 1,
+          ease: "none",
+          duration: 1,
+        });
       }
     }, sectionRef);
 
@@ -107,13 +142,13 @@ const DescriptionSection = forwardRef(({ eglise, interviewBlock }, ref) => {
         }}
       />
 
-      <div
-        ref={containerRef}
-        className="relative z-10 w-full max-w-6xl pt-[100px]"
-      >
+      <div ref={containerRef} className="relative z-10 w-full max-w-6xl ">
         {/* Texte + image */}
-        <div className="flex flex-col md:flex-row items-center justify-center gap-10 w-full h-auto px-6">
-          <div ref={textRef} className="md:w-1/2 w-full text-black px-6">
+        <div
+          ref={groupRef}
+          className="flex flex-col md:flex-row items-center justify-center gap-10 w-full h-auto px-6"
+        >
+          <div ref={textRef} className="md:w-1/2 w-full text-black pt-[100px]">
             <div className="space-y-4">
               {eglise?.nom && (
                 <h2 className="text-3xl md:text-4xl font-garamond leading-snug break-words">
@@ -144,7 +179,7 @@ const DescriptionSection = forwardRef(({ eglise, interviewBlock }, ref) => {
           {selectedImage && (
             <div
               ref={imageRef}
-              className="md:w-1/2 w-full flex flex-col items-center gap-4 px-6"
+              className="md:w-1/2 w-full flex flex-col items-center gap-4"
             >
               <div className="relative w-full aspect-[4/3] rounded-t-full overflow-hidden shadow-xl">
                 <Image
@@ -164,7 +199,7 @@ const DescriptionSection = forwardRef(({ eglise, interviewBlock }, ref) => {
         {hasInterviewContent && (
           <div
             ref={interviewRef}
-            className="absolute inset-0 flex items-center justify-center"
+            className="absolute inset-0 h-min-screen flex items-start justify-center pt-28 pb-0 mb-0 "
           >
             <Interview
               titre={titreInterview}

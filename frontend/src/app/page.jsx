@@ -39,14 +39,14 @@ export default function Home() {
   const introRef = useRef(null);
   const descriptionRef = useRef(null);
 
-  // ✅ Fonction centralisée pour passer l’intro
+  // Fonction centralisée pour passer l’intro
   const handleSkip = () => {
     introRef.current?.scrollIntoView({ behavior: "smooth" });
     setShowHeader(true);
     setShowContent(true);
   };
 
-  // ✅ Déclenche le passage automatique si triggerSkip=true
+  // Déclenche le passage automatique si triggerSkip=true
   useEffect(() => {
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
@@ -59,26 +59,16 @@ export default function Home() {
     }
   }, []);
 
-  // ✅ Rafraîchit ScrollTrigger après le rendu du contenu
-  useEffect(() => {
-    if (showContent) {
-      setTimeout(() => {
-        ScrollTrigger.refresh();
-      }, 300);
-    }
-  }, [showContent]);
-
-  if (isLoading) return <p>Chargement…</p>;
   if (error) return <p>{error}</p>;
 
   const firstInterview = Array.isArray(interviews) ? interviews[0] : null;
 
   return (
     <main className="relative overflow-x-hidden">
-      {/* 🎥 Vidéo de fond */}
+      {/* Vidéo de fond */}
       {videoUrl && <VideoBackground videoUrl={videoUrl} />}
 
-      {/* 🧭 Header flottant */}
+      {/* Header flottant */}
       {showHeader && (
         <FloatingHeader
           site={parametres_site}
@@ -86,10 +76,10 @@ export default function Home() {
         />
       )}
 
-      {/* 🎬 Intro vidéo avec bouton "Passer" */}
+      {/* Intro vidéo avec bouton "Passer" */}
       {!showContent && <IntroSection videoUrl={videoUrl} onSkip={handleSkip} />}
 
-      {/* 📦 Contenu principal */}
+      {/* Contenu principal */}
       {showContent && (
         <div className="relative z-10">
           <HomeSection ref={introRef} eglise={eglise} />
@@ -112,7 +102,7 @@ export default function Home() {
         </div>
       )}
 
-      {/* 📬 Modal contact */}
+      {/* Modal contact */}
       <ContactModal
         isOpen={showContactModal}
         onClose={() => setShowContactModal(false)}

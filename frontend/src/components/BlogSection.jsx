@@ -147,7 +147,7 @@ export default function BlogSection({ API_URL, limit = null }) {
           <div className="mt-12 text-center">
             <Link
               href="/blog"
-              className="inline-block px-6 py-3 bg-red-600 text-white font-semibold rounded-lg shadow hover:bg-red-700 transition"
+              className="inline-block px-6 py-3 bg-[#ac1115] text-white font-semibold rounded-lg shadow hover:bg-red-700 transition"
             >
               Voir tous les articles
             </Link>

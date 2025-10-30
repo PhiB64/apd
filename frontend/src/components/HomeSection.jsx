@@ -10,26 +10,31 @@ const HomeSection = forwardRef(({ eglise }, ref) => {
   const scrollIndicatorRef = useRef(null);
   const [showScrollIndicator, setShowScrollIndicator] = useState(true);
 
-  // ✨ Animation d’entrée au montage
+  const nom = eglise?.nom?.trim() || "";
+  const mots = nom.split(" ");
+  const reste = mots.slice(0, -1).join(" ");
+  const dernier = mots.slice(-1)[0];
+
+  // Animation d’entrée au montage
   useEffect(() => {
     const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
     tl.fromTo(
       titleRef.current,
       { opacity: 1, xPercent: -200 },
-      { opacity: 1, xPercent: 0, duration: 1.2 },
+      { opacity: 1, xPercent: 0, duration: 1 },
       0
     );
 
     tl.fromTo(
       descRef.current,
       { opacity: 1, xPercent: 200 },
-      { opacity: 1, xPercent: 0, duration: 1.2 },
+      { opacity: 1, xPercent: 0, duration: 1 },
       "-=0.8"
     );
   }, []);
 
-  // 🧭 ScrollIndicator réversible selon la position
+  // ScrollIndicator réversible selon la position
   useEffect(() => {
     const handleScroll = () => {
       const isAtTop = window.scrollY < 10;
@@ -48,12 +53,12 @@ const HomeSection = forwardRef(({ eglise }, ref) => {
     <section
       id="HomeSection"
       ref={ref}
-      className="intro-overlay relative min-h-screen flex items-center justify-center text-white px-4 sm:px-6"
+      className=" relative h-[65vh] flex items-end justify-center text-white px-4 sm:px-6"
     >
-      {/* 🧊 Fond semi-transparent derrière le texte */}
+      {/* Fond semi-transparent derrière le texte */}
       <div className="absolute inset-0  z-0 pointer-events-none" />
 
-      {/* 📝 Contenu centré */}
+      {/* Contenu centré */}
       <div className="intro-content relative z-10  text-center w-full max-w-4xl mx-auto">
         <h1
           ref={titleRef}
@@ -71,22 +76,25 @@ const HomeSection = forwardRef(({ eglise }, ref) => {
           ref={descRef}
           className="mt-6 font-medium drop-shadow-lg opacity-0"
           style={{
-            fontSize: "clamp(1rem, 3vw, 1.5rem)",
-            lineHeight: "3",
+            fontSize: "clamp(1.2rem, 3.5vw, 1.8rem)",
+            lineHeight: "2",
           }}
         >
           Chaque don contribue à restaurer
           <br />
           {eglise?.nom && (
-            <span className=" font-garamond shadow-underline text-4xl">
-              {eglise.nom}
-            </span>
+            <>
+              <span className=" font-garamond  text-4xl">{reste} </span>
+              <span className=" font-garamond shadow-underline text-4xl">
+                {dernier}
+              </span>
+            </>
           )}
           <br />
         </p>
       </div>
 
-      {/* 🧭 ScrollIndicator avec transition fluide */}
+      {/* ScrollIndicator avec transition fluide */}
       <div
         ref={scrollIndicatorRef}
         className={`absolute bottom-6 sm:bottom-10 z-40 pointer-events-none transition-opacity duration-500 ${
