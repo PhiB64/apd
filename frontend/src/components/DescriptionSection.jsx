@@ -98,7 +98,7 @@ const DescriptionSection = forwardRef(({ eglise, interviewBlock }, ref) => {
           interviewRef.current,
           { xPercent: 200, opacity: 1 },
           { xPercent: 0, opacity: 1, ease: "none", duration: 3 },
-          "-=2"
+          "-=3.5"
         );
       }
       if (isMobile) {
@@ -199,7 +199,7 @@ const DescriptionSection = forwardRef(({ eglise, interviewBlock }, ref) => {
         {hasInterviewContent && (
           <div
             ref={interviewRef}
-            className="absolute inset-0 h-min-screen flex items-start justify-center pt-28 pb-0 mb-0 "
+            className="absolute inset-0 flex items-start justify-center pt-28 "
           >
             <Interview
               titre={titreInterview}

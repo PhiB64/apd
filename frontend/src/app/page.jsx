@@ -20,15 +20,8 @@ gsap.registerPlugin(ScrollTrigger);
 
 export default function Home() {
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
-  const {
-    eglise,
-    accueil,
-    parametres_site,
-    partenaires,
-    interviews,
-    error,
-    isLoading,
-  } = useSiteData(API_URL);
+  const { eglise, accueil, parametres_site, partenaires, interviews, error } =
+    useSiteData(API_URL);
 
   const videoUrl = accueil?.video?.url ?? null;
 

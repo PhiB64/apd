@@ -11,61 +11,56 @@ gsap.registerPlugin(ScrollTrigger);
 
 export default function BlogSection({ API_URL, limit = null }) {
   const { articles, isLoading, error } = useSiteData(API_URL);
-  const wrapperRef = useRef(null);
+  const sectionRef = useRef(null);
+  const cardsRef = useRef([]);
 
   useLayoutEffect(() => {
-    const wrapper = wrapperRef.current;
-    if (!wrapper) return;
+    if (!articles || articles.length === 0) return;
 
-    const cards = wrapper.querySelectorAll(".blog-card");
-    if (cards.length === 0) return;
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top top",
+          end: "bottom 50%",
+          pin: true,
+          scrub: 0.5,
+        },
+      });
 
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: wrapper,
-        start: "top 50%",
-        end: "bottom top",
-        toggleActions: "play reverse play reverse",
-      },
-    });
+      tl.fromTo(
+        cardsRef.current,
+        { opacity: 0, scale: 0.8 },
+        {
+          opacity: 1,
+          scale: 1,
+          duration: 0.8,
+          ease: "power2.out",
+          stagger: 0.2,
+        }
+      );
+    }, sectionRef);
 
-    tl.fromTo(
-      wrapper,
-      { opacity: 0, y: 50 },
-      { opacity: 1, y: 0, duration: 1, ease: "power2.out" }
-    );
-
-    tl.fromTo(
-      cards,
-      { opacity: 0, y: 30 },
-      {
-        opacity: 1,
-        y: 0,
-        duration: 0.6,
-        ease: "power2.out",
-        stagger: 0.2,
-      },
-      "-=0.8"
-    );
+    return () => ctx.revert();
   }, [articles]);
 
   const sectionClasses =
-    "py-20 px-6 md:px-32 min-h-screen bg-[url('/fond_pierre.jpg')] bg-cover bg-center";
+    "relative py-20 px-6 md:px-32 min-h-screen bg-cover bg-center bg-no-repeat";
 
-  if (isLoading) {
-    return (
-      <section className={sectionClasses + " text-center"}>
-        <p className="text-sm md:text-base text-gray-500">
-          Chargement des articles...
-        </p>
-      </section>
-    );
-  }
+  const backgroundStyle = {
+    backgroundImage: "url('/fond_pierre.jpg')",
+  };
 
   if (error) {
     return (
-      <section className={sectionClasses + " text-center"}>
-        <p className="text-sm md:text-base text-red-500">Erreur : {error}</p>
+      <section
+        ref={sectionRef}
+        className={sectionClasses}
+        style={backgroundStyle}
+      >
+        <p className="text-center text-sm md:text-base text-red-500">
+          Erreur : {error}
+        </p>
       </section>
     );
   }
@@ -78,8 +73,12 @@ export default function BlogSection({ API_URL, limit = null }) {
 
   if (displayed.length === 0) {
     return (
-      <section className={sectionClasses + " text-center"}>
-        <p className="text-sm md:text-base text-gray-500">
+      <section
+        ref={sectionRef}
+        className={sectionClasses}
+        style={backgroundStyle}
+      >
+        <p className="text-center text-sm md:text-base text-gray-500">
           Aucun article disponible pour le moment.
         </p>
       </section>
@@ -87,14 +86,18 @@ export default function BlogSection({ API_URL, limit = null }) {
   }
 
   return (
-    <section className={sectionClasses}>
-      <div ref={wrapperRef} className="max-w-6xl mx-auto blog-wrapper">
-        <h2 className="text-3xl md:text-4xl font-garamond text-center mb-12 text-black">
+    <section
+      ref={sectionRef}
+      className={sectionClasses}
+      style={backgroundStyle}
+    >
+      <div className="max-w-6xl mx-auto">
+        <h2 className="text-3xl md:text-4xl font-garamond text-center mt-12 mb-12 text-black">
           {limit ? "Les derniers articles" : "Tous les articles"}
         </h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-10 justify-center">
-          {displayed.map((article) => {
+          {displayed.map((article, index) => {
             const {
               id,
               titre,
@@ -116,6 +119,7 @@ export default function BlogSection({ API_URL, limit = null }) {
                 key={id}
                 href={`/blog/${slug}`}
                 className="blog-card group block bg-gray-50 rounded-lg overflow-hidden shadow hover:shadow-lg transition"
+                ref={(el) => (cardsRef.current[index] = el)}
               >
                 <div className="relative h-48 w-full">
                   <Image
