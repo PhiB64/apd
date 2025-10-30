@@ -99,8 +99,8 @@ export default function PartnerSection({ partners }) {
           <h2 className="text-3xl md:text-4xl font-garamond leading-snug drop-shadow-xl">
             Nos <span className="shadow-underline text-white">partenaires</span>
           </h2>
-          <div className="text-sm md:text-base lettrine space-y-1 leading-relaxed text-justify font-garamond">
-            <p className="lettrine">
+          <div className="text-sm md:text-base lettrine_w space-y-1 leading-relaxed text-justify font-garamond">
+            <p className="lettrine_w">
               Ils accompagnent notre démarche patrimoniale et soutiennent la
               transmission des mémoires locales. Leur engagement contribue à
               faire rayonner les lieux, les récits et les savoir-faire qui

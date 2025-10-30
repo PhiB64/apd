@@ -55,9 +55,6 @@ const HomeSection = forwardRef(({ eglise }, ref) => {
       ref={ref}
       className=" relative h-[65vh] flex items-end justify-center text-white px-4 sm:px-6"
     >
-      {/* Fond semi-transparent derrière le texte */}
-      <div className="absolute inset-0  z-0 pointer-events-none" />
-
       {/* Contenu centré */}
       <div className="intro-content relative z-10  text-center w-full max-w-4xl mx-auto">
         <h1

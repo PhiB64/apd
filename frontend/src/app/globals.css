@@ -97,3 +97,18 @@ body {
   margin-bottom: -0.1em; /* réduit l’espace en dessous */
   padding-right: 0.1em; /* espace entre la lettrine et le texte */
 }
+.lettrine_w {
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.5; /* ou ajusté selon ton texte */
+}
+
+.lettrine_w::first-letter {
+  font-family: "EB Garamond", serif;
+  font-size: clamp(3rem, 8vw, 6rem);
+  color: white;
+  float: left;
+  line-height: 0.9;
+  margin-top: -0.1em; /* réduit l’espace au-dessus */
+  margin-bottom: -0.1em; /* réduit l’espace en dessous */
+  padding-right: 0.1em; /* espace entre la lettrine et le texte */
+}

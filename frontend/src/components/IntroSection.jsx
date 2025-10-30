@@ -11,8 +11,8 @@ export default function IntroSection({ onSkip }) {
   useEffect(() => {
     const tl = gsap.timeline({
       defaults: { ease: "power2.out" },
-      delay: 3,
-    }); // ⏱️ délai de 3s
+      delay: 4,
+    }); //  délai de 3s
 
     const words = wordRef.current?.querySelectorAll("span");
     if (!words) return;
@@ -62,9 +62,9 @@ export default function IntroSection({ onSkip }) {
       <div className="pointer-events-none flex items-center justify-center">
         <h1
           ref={wordRef}
-          className=" text-white text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight text-center w-full max-w-[90vw] px-4"
+          className=" text-white text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-garamond leading-tight text-center w-full max-w-[90vw] px-4"
         >
-          {["Nous", "avons", "besoin", "de", "vous"].map((word, i) => (
+          {["Art", "&", "Patrimoine", "de", "DOAZIT"].map((word, i) => (
             <span key={i} className="inline-block mx-2 opacity-0">
               {word}
             </span>
