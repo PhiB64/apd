@@ -129,7 +129,7 @@ const DescriptionSection = forwardRef(({ eglise, interviewBlock }, ref) => {
   return (
     <section
       ref={sectionRef}
-      className="relative h-[100vh] w-screen overflow-hidden flex items-center justify-center "
+      className="relative h-screen w-screen overflow-hidden flex items-center justify-center "
     >
       <div
         ref={backgroundRef}
@@ -146,9 +146,9 @@ const DescriptionSection = forwardRef(({ eglise, interviewBlock }, ref) => {
         {/* Texte + image */}
         <div
           ref={groupRef}
-          className="flex flex-col md:flex-row items-center justify-center gap-10 w-full h-auto px-6"
+          className="flex flex-col md:flex-row items-center justify-center gap-10 w-full h-auto px-6 pt-100 md:pt-0"
         >
-          <div ref={textRef} className="md:w-1/2 w-full text-black pt-[100px]">
+          <div ref={textRef} className="md:w-1/2 w-full text-black">
             <div className="space-y-4">
               {eglise?.nom && (
                 <h2 className="text-3xl md:text-4xl font-garamond leading-snug break-words">
@@ -199,7 +199,7 @@ const DescriptionSection = forwardRef(({ eglise, interviewBlock }, ref) => {
         {hasInterviewContent && (
           <div
             ref={interviewRef}
-            className="absolute z-20 inset-0 flex items-start justify-center pt-28 "
+            className="absolute z-20 inset-0 flex items-start justify-center pt-120 md:pt-0 "
           >
             <Interview
               titre={titreInterview}
