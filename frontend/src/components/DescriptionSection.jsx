@@ -129,7 +129,7 @@ const DescriptionSection = forwardRef(({ eglise, interviewBlock }, ref) => {
   return (
     <section
       ref={sectionRef}
-      className="relative w-screen min-h-screen overflow-auto flex items-center justify-center "
+      className="relative h-[100vh] w-screen overflow-hidden flex items-center justify-center "
     >
       <div
         ref={backgroundRef}
