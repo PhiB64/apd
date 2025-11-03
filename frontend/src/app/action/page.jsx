@@ -29,7 +29,7 @@ export default function ActionPage() {
       />
 
       <main
-        className="min-h-screen bg-white pt-28 pb-10 px-6 font-garamond"
+        className="min-h-screen bg-white pt-28 pb-10 px-6 "
         style={{
           backgroundImage: 'url("/fond_pierre.jpg")',
           backgroundSize: "cover",
@@ -39,7 +39,7 @@ export default function ActionPage() {
       >
         {/* Intro */}
         <section className="max-w-4xl mx-auto text-center mb-16">
-          <h1 className="text-2xl md:text-3xl  drop-shadow-lg leading-snug text-black mb-6">
+          <h1 className="text-3xl md:text-4xl  drop-shadow-lg leading-snug text-black mb-6 font-garamond">
             Notre action pour Saint-Jean-Baptiste{" "}
             <span className="shadow-underline text-white">d’Aulès</span>
           </h1>
@@ -82,8 +82,9 @@ export default function ActionPage() {
 
         {/* Appel à l'action */}
         <section className="max-w-4xl mx-auto text-center mt-16">
-          <h2 className="text-2xl md:text-3xl font-bold drop-shadow-lg leading-snug text-black mb-4">
-            Vous pouvez nous aider
+          <h2 className="text-3xl md:text-4xl drop-shadow-lg leading-snug text-black mb-4 font-garamond">
+            Vous pouvez nous{" "}
+            <span className="shadow-underline text-white">aider</span>
           </h2>
           <p className="lettrine text-sm md:text-base leading-relaxed text-black mb-6">
             Chaque soutien compte. Que vous soyez mécène, bénévole, ou
@@ -92,7 +93,7 @@ export default function ActionPage() {
           </p>
           <button
             onClick={() => setShowContactModal(true)}
-            className="inline-block px-6 py-3 bg-[#ac1115] text-white rounded-sm shadow-md hover:bg-red-700 transition"
+            className="inline-block px-6 py-3 bg-[#ac1115] font-semibold text-white rounded-sm shadow-md hover:bg-red-700 transition"
           >
             Rejoindre notre action
           </button>

@@ -4,13 +4,13 @@ import { useState } from "react";
 import { useSiteData } from "@hooks/useSiteData";
 import FloatingHeader from "@components/FloatingHeader";
 import Footer from "@components/Footer";
-
+import PartnerSection from "@components/PartnerSection";
 import ContactModal from "@components/ContactModal";
 
 export default function PartnersPage() {
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
+  const { parametres_site, partenaires, error } = useSiteData(API_URL);
   const [showContactModal, setShowContactModal] = useState(false);
-  const { parametres_site, error } = useSiteData(API_URL);
 
   if (error) {
     return (
@@ -31,7 +31,7 @@ export default function PartnersPage() {
       />
 
       <main
-        className="min-h-screen bg-white pt-[150px] pb-20 px-6"
+        className="min-h-[60vh] bg-white pt-[150px] pb-20 px-6"
         style={{
           backgroundImage: 'url("/fond_pierre.jpg")',
           backgroundSize: "cover",
@@ -40,8 +40,8 @@ export default function PartnersPage() {
         }}
       >
         {/* ✅ Section incitative */}
-        <section className="max-w-4xl mx-auto text-center mb-20 font-garamond">
-          <h1 className="text-3xl md:text-3xl drop-shadow-lg leading-snug text-black mb-6">
+        <section className="max-w-4xl mx-auto text-center mb-20 ">
+          <h1 className="text-3xl md:text-4xl drop-shadow-lg leading-snug text-black mb-6 font-garamond ">
             Devenez partenaire de notre{" "}
             <span className="shadow-underline text-white">projet</span>
           </h1>
@@ -54,13 +54,14 @@ export default function PartnersPage() {
           <div className="mt-8">
             <button
               onClick={() => setShowContactModal(true)}
-              className="inline-block px-6 py-3 bg-[#ac1115] text-white rounded-sm shadow-md hover:bg-red-700 transition"
+              className="inline-block px-6 py-3 bg-[#ac1115] font-semibold text-white rounded-sm shadow-md hover:bg-red-700 transition"
             >
               Je souhaite devenir partenaire
             </button>
           </div>
         </section>
       </main>
+      {partenaires?.length > 0 && <PartnerSection partners={partenaires} />}
 
       <Footer site={parametres_site} API_URL={API_URL} />
 

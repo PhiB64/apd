@@ -14,9 +14,7 @@ export default function FloatingHeader({ site, onContactClick }) {
   const router = useRouter();
 
   const logoUrl =
-    site?.logo?.url ??
-    site?.logo?.data?.attributes?.url ??
-    "/fallback-logo.png";
+    site?.logo?.url ?? site?.logo?.data?.attributes?.url ?? "/logo.png";
 
   const navLinks = [
     {

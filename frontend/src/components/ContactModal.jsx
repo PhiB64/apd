@@ -112,8 +112,8 @@ export default function ContactModal({ isOpen, onClose }) {
           &times;
         </button>
 
-        <h2 className="text-3xl font-semibold mb-6 text-center">
-          Contactez-nous
+        <h2 className="text-3xl md:text-4xl mb-6 text-center font-garamond">
+          Contactez- <span className="shadow-underline text-white">nous</span>
         </h2>
 
         <form className="space-y-5" onSubmit={handleSubmit}>
@@ -163,7 +163,7 @@ export default function ContactModal({ isOpen, onClose }) {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-black text-white py-3 rounded-lg hover:bg-gray-900 transition disabled:opacity-50"
+            className="w-full bg-[#ac1115] font-semibold text-white py-3 rounded-lg hover:bg-gray-900 transition disabled:opacity-50"
           >
             {loading ? "Envoi en cours..." : "Envoyer le message"}
           </button>
