@@ -61,7 +61,7 @@ const DescriptionSection = forwardRef(({ eglise, interviewBlock }, ref) => {
           groupRef.current,
           { xPercent: 150, opacity: 1 },
           { xPercent: 0, opacity: 1, ease: "none", duration: 1000 },
-          "-=1000"
+          "-=200"
         );
       } else {
         tl.fromTo(
@@ -105,7 +105,7 @@ const DescriptionSection = forwardRef(({ eglise, interviewBlock }, ref) => {
           interviewRef.current,
           { xPercent: 100, opacity: 1 },
           { xPercent: 0, opacity: 1, ease: "none", duration: 1000 },
-          "-=2000"
+          "-=1500"
         );
       } else {
         tl.fromTo(

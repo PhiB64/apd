@@ -35,7 +35,7 @@ export default function PartnerSection({ partners }) {
         {
           xPercent: 0,
           opacity: 1,
-          duration: 5,
+          duration: 10,
           ease: "none",
         }
       );
@@ -47,10 +47,10 @@ export default function PartnerSection({ partners }) {
         {
           xPercent: 0,
           opacity: 1,
-          duration: 5,
+          duration: 10,
           ease: "none",
         },
-        "-=5"
+        "-=10"
       );
 
       tl.to(logoBlockRef.current, {
