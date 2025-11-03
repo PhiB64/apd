@@ -4,13 +4,13 @@ import { useState } from "react";
 import { useSiteData } from "@hooks/useSiteData";
 import FloatingHeader from "@components/FloatingHeader";
 import Footer from "@components/Footer";
-import PartnerSection from "@components/PartnerSection";
+
 import ContactModal from "@components/ContactModal";
 
 export default function PartnersPage() {
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
-  const { parametres_site, partenaires, error } = useSiteData(API_URL);
   const [showContactModal, setShowContactModal] = useState(false);
+  const { parametres_site, error } = useSiteData(API_URL);
 
   if (error) {
     return (
@@ -31,7 +31,7 @@ export default function PartnersPage() {
       />
 
       <main
-        className="min-h-[60vh] bg-white pt-[150px] pb-20 px-6"
+        className="min-h-screen bg-white pt-[150px] pb-20 px-6"
         style={{
           backgroundImage: 'url("/fond_pierre.jpg")',
           backgroundSize: "cover",
@@ -61,7 +61,6 @@ export default function PartnersPage() {
           </div>
         </section>
       </main>
-      {partenaires?.length > 0 && <PartnerSection partners={partenaires} />}
 
       <Footer site={parametres_site} API_URL={API_URL} />
 

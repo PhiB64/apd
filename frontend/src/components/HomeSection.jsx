@@ -81,8 +81,10 @@ const HomeSection = forwardRef(({ eglise }, ref) => {
           <br />
           {eglise?.nom && (
             <>
-              <span className=" font-garamond  text-4xl">{reste} </span>
-              <span className=" font-garamond shadow-underline text-4xl">
+              <span className=" text-4xl md:text-5xl font-garamond">
+                {reste}{" "}
+              </span>
+              <span className="text-4xl md:text-5xl font-garamond shadow-underline ">
                 {dernier}
               </span>
             </>

@@ -69,7 +69,7 @@ export default function FloatingHeader({ site, onContactClick }) {
             className="rounded-md flex-shrink-0 p-1"
             priority
           />
-          <nav className="flex items-center gap-4 sm:gap-6 lg:gap-8 text-gray-800 font-medium flex-wrap justify-end w-full">
+          <nav className="flex items-center gap-4 sm:gap-6 lg:gap-8 text-black flex-wrap justify-end w-full">
             {navLinks.map((link) => {
               const isActive = pathname === link.href;
               return link.href ? (
@@ -86,7 +86,7 @@ export default function FloatingHeader({ site, onContactClick }) {
                 <button
                   key={link.label}
                   onClick={link.action}
-                  className="transition hover:text-red-700 text-gray-800 font-medium cursor-pointer"
+                  className="transition hover:text-red-700 text-black cursor-pointer"
                 >
                   {link.label}
                 </button>
@@ -148,7 +148,7 @@ export default function FloatingHeader({ site, onContactClick }) {
           menuOpen ? "translate-x-0" : "translate-x-full"
         } md:hidden`}
       >
-        <div className="absolute inset-0 bg-white/95 backdrop-blur-md shadow-xl rounded-l-3xl px-8 py-12 flex flex-col items-center gap-6 text-gray-800 font-semibold">
+        <div className="absolute inset-0 bg-white/95 backdrop-blur-md shadow-xl rounded-l-3xl px-8 py-12 flex flex-col items-center gap-6 text-black ">
           <button
             onClick={() => setMenuOpen(false)}
             className="absolute top-4 right-4 p-2 rounded-full bg-white shadow-md"
