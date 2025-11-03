@@ -20,7 +20,7 @@ export default function PartnerSection({ partners }) {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top top",
-          end: "+=1000", // durée du scroll
+          end: "+=500", // durée du scroll
           scrub: 0.5,
           pin: sectionRef.current,
         },
@@ -33,7 +33,7 @@ export default function PartnerSection({ partners }) {
         {
           xPercent: 0,
           opacity: 1,
-          duration: 3,
+          duration: 5,
           ease: "none",
         }
       );
@@ -45,10 +45,10 @@ export default function PartnerSection({ partners }) {
         {
           xPercent: 0,
           opacity: 1,
-          duration: 3,
+          duration: 5,
           ease: "none",
         },
-        "-=1.5"
+        "-=5"
       );
 
       tl.to(logoBlockRef.current, {

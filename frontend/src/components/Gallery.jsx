@@ -68,10 +68,10 @@ export default function Gallery({ eglise }) {
 
       {selectedImage && (
         <div
-          className="fixed inset-0  z-[1999] flex items-center justify-center cursor-pointer"
+          className="fixed inset-0 w-full min-h-[80vh] z-[20] flex items-end justify-center cursor-pointer "
           onClick={() => setSelectedImage(null)}
         >
-          <div className="relative w-full max-w-4xl aspect-[4/3] max-h-[80vh]">
+          <div className="relative w-full max-w-4xl aspect-[4/3]  bg-black/60">
             <Image
               src={getImageUrl(selectedImage)}
               alt={selectedImage.name || "Image en grand"}

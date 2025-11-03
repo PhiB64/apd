@@ -44,7 +44,7 @@ const DescriptionSection = forwardRef(({ eglise, interviewBlock }, ref) => {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top top",
-          end: "top+=300%",
+          end: "top+=200%",
           pin: true,
           scrub: 0.5,
         },
@@ -53,14 +53,14 @@ const DescriptionSection = forwardRef(({ eglise, interviewBlock }, ref) => {
       tl.fromTo(
         backgroundRef.current,
         { xPercent: 100, opacity: 1 },
-        { xPercent: 0, opacity: 1, ease: "none", duration: 1.5 }
+        { xPercent: 0, opacity: 1, ease: "none", duration: 1 }
       );
 
       tl.fromTo(
         groupRef.current,
-        { xPercent: 300, opacity: 0 },
-        { xPercent: 0, opacity: 1, ease: "none", duration: 3 },
-        "-=1.5"
+        { xPercent: 150, opacity: 1 },
+        { xPercent: 0, opacity: 1, ease: "none", duration: 1 },
+        "-=1"
       );
 
       if (isMobile) {
@@ -91,23 +91,27 @@ const DescriptionSection = forwardRef(({ eglise, interviewBlock }, ref) => {
           interviewRef.current,
           { xPercent: 200, opacity: 1 },
           { xPercent: 0, opacity: 1, ease: "none", duration: 1 },
-          "-=5"
+          "-=7"
         );
       } else {
         tl.fromTo(
           interviewRef.current,
           { xPercent: 200, opacity: 1 },
           { xPercent: 0, opacity: 1, ease: "none", duration: 3 },
-          "-=3.5"
+          "-=3"
         );
       }
       if (isMobile) {
-        tl.to(interviewRef.current, {
-          yPercent: 0,
-          opacity: 1,
-          ease: "none",
-          duration: 0.1,
-        });
+        tl.to(
+          interviewRef.current,
+          {
+            yPercent: 0,
+            opacity: 1,
+            ease: "none",
+            duration: 0.2,
+          },
+          "-=1"
+        );
       } else {
         tl.to(interviewRef.current, {
           xPercent: 0,
@@ -129,7 +133,7 @@ const DescriptionSection = forwardRef(({ eglise, interviewBlock }, ref) => {
   return (
     <section
       ref={sectionRef}
-      className="relative h-screen w-screen overflow-hidden flex items-center justify-center "
+      className="relative h-screen w-screen overflow-hidden flex items-center justify-center pt-20 md:pt-0 "
     >
       <div
         ref={backgroundRef}
@@ -199,7 +203,7 @@ const DescriptionSection = forwardRef(({ eglise, interviewBlock }, ref) => {
         {hasInterviewContent && (
           <div
             ref={interviewRef}
-            className="absolute z-20 inset-0 flex items-start justify-center pt-120 md:pt-0 "
+            className="absolute z-20 inset-0 flex items-center justify-center pb-10"
           >
             <Interview
               titre={titreInterview}

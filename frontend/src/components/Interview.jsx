@@ -29,7 +29,7 @@ const Interview = forwardRef(({ titre, description, videoUrl }, ref) => {
   return (
     <div
       ref={ref}
-      className="w-full min-h-screen flex items-start justify-center px-4 md:px-6"
+      className="w-full min-h-screen flex items-center justify-center px-4 md:px-6 "
     >
       <div className="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         {/* Texte à gauche */}
