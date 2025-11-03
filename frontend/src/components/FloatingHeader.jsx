@@ -28,7 +28,7 @@ export default function FloatingHeader({ site, onContactClick }) {
         }
       },
     },
-    { label: "Notre action", href: "/action" },
+    { label: "L'association", href: "/association" },
     { label: "Devenez partenaire", href: "/partners" },
     { label: "Blog", href: "/blog" },
     { label: "Contact", action: onContactClick },

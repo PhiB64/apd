@@ -5,7 +5,7 @@ import Footer from "@components/Footer";
 import { useSiteData } from "@hooks/useSiteData";
 import ContactModal from "@components/ContactModal";
 
-export default function ActionPage() {
+export default function AssociationPage() {
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
   const { parametres_site, error } = useSiteData(API_URL);
 

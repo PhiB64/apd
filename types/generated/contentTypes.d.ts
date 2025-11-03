@@ -493,6 +493,33 @@ export interface ApiArticleArticle extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiAssociationAssociation extends Struct.SingleTypeSchema {
+  collectionName: 'associations';
+  info: {
+    displayName: 'Association';
+    pluralName: 'associations';
+    singularName: 'association';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::association.association'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiEgliseEglise extends Struct.SingleTypeSchema {
   collectionName: 'eglises';
   info: {
@@ -508,6 +535,7 @@ export interface ApiEgliseEglise extends Struct.SingleTypeSchema {
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     description: Schema.Attribute.Blocks & Schema.Attribute.Required;
+    histoire: Schema.Attribute.Blocks;
     image_principale: Schema.Attribute.Media<
       'images' | 'files' | 'videos' | 'audios'
     > &
@@ -1144,6 +1172,7 @@ declare module '@strapi/strapi' {
       'admin::user': AdminUser;
       'api::accueil.accueil': ApiAccueilAccueil;
       'api::article.article': ApiArticleArticle;
+      'api::association.association': ApiAssociationAssociation;
       'api::eglise.eglise': ApiEgliseEglise;
       'api::interview.interview': ApiInterviewInterview;
       'api::parametres-site.parametres-site': ApiParametresSiteParametresSite;

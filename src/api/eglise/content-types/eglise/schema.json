@@ -19,6 +19,9 @@
       "type": "blocks",
       "required": true
     },
+    "histoire": {
+      "type": "blocks"
+    },
     "image_principale": {
       "type": "media",
       "multiple": false,
