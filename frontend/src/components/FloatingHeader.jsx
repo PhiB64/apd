@@ -160,8 +160,8 @@ export default function FloatingHeader({ site, onContactClick }) {
           <Image
             src={logoUrl}
             alt="Logo"
-            width={100}
-            height={50}
+            width={150}
+            height={80}
             className="rounded-md mb-6"
             priority
           />
@@ -186,7 +186,7 @@ export default function FloatingHeader({ site, onContactClick }) {
                   setMenuOpen(false);
                   link.action?.();
                 }}
-                className="text-lg transition hover:text-red-700 text-gray-800 font-medium"
+                className="text-lg transition hover:text-red-700 text-black"
               >
                 {link.label}
               </button>

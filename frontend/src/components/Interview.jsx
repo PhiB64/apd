@@ -56,7 +56,7 @@ const Interview = forwardRef(({ titre, description, videoUrl }, ref) => {
         {/* Vidéo à droite avec masque SVG */}
         {videoUrl && (
           <div className="flex items-center justify-center px-2">
-            <div className="relative w-full max-w-[40rem] aspect-video overflow-hidden">
+            <div className="relative w-full max-w-[40rem] aspect-video overflow-none">
               {/* Masque SVG */}
               <svg width="0" height="0">
                 <defs>
