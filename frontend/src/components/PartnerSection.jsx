@@ -13,6 +13,8 @@ export default function PartnerSection({ partners }) {
   const logoBlockRef = useRef(null);
   const logosRef = useRef([]);
   const imagesRef = useRef([]);
+  const isMobile = window.innerWidth < 768;
+  const scrollEnd = isMobile ? "top+=20%" : "top+=50%";
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
@@ -20,7 +22,7 @@ export default function PartnerSection({ partners }) {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top top",
-          end: "+=500", // durée du scroll
+          end: scrollEnd, // durée du scroll
           scrub: 0.5,
           pin: sectionRef.current,
         },

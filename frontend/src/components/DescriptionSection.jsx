@@ -38,40 +38,54 @@ const DescriptionSection = forwardRef(({ eglise, interviewBlock }, ref) => {
 
   useLayoutEffect(() => {
     const isMobile = window.innerWidth < 768;
+    const scrollEnd = isMobile ? "top+=120%" : "top+=200%";
 
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top top",
-          end: "top+=200%",
+          end: scrollEnd,
           pin: true,
           scrub: 0.5,
         },
       });
+      if (isMobile) {
+        tl.fromTo(
+          backgroundRef.current,
+          { xPercent: 100, opacity: 1 },
+          { xPercent: 0, opacity: 1, ease: "none", duration: 1000 }
+        );
 
-      tl.fromTo(
-        backgroundRef.current,
-        { xPercent: 100, opacity: 1 },
-        { xPercent: 0, opacity: 1, ease: "none", duration: 1 }
-      );
+        tl.fromTo(
+          groupRef.current,
+          { xPercent: 150, opacity: 1 },
+          { xPercent: 0, opacity: 1, ease: "none", duration: 1000 },
+          "-=1000"
+        );
+      } else {
+        tl.fromTo(
+          backgroundRef.current,
+          { xPercent: 100, opacity: 1 },
+          { xPercent: 0, opacity: 1, ease: "none", duration: 3 }
+        );
 
-      tl.fromTo(
-        groupRef.current,
-        { xPercent: 150, opacity: 1 },
-        { xPercent: 0, opacity: 1, ease: "none", duration: 1 },
-        "-=1"
-      );
-
+        tl.fromTo(
+          groupRef.current,
+          { xPercent: 300, opacity: 1 },
+          { xPercent: 0, opacity: 1, ease: "none", duration: 3 },
+          "-=3"
+        );
+      }
       if (isMobile) {
         tl.to(
           groupRef.current,
           {
-            yPercent: -150,
+            yPercent: -100,
             ease: "none",
-            duration: 5,
+            duration: 5000,
           },
-          "+=0.5"
+          "+=2000"
         );
       }
 
@@ -89,9 +103,9 @@ const DescriptionSection = forwardRef(({ eglise, interviewBlock }, ref) => {
       if (isMobile) {
         tl.fromTo(
           interviewRef.current,
-          { xPercent: 200, opacity: 1 },
-          { xPercent: 0, opacity: 1, ease: "none", duration: 1 },
-          "-=7"
+          { xPercent: 100, opacity: 1 },
+          { xPercent: 0, opacity: 1, ease: "none", duration: 1000 },
+          "-=2000"
         );
       } else {
         tl.fromTo(
@@ -108,7 +122,7 @@ const DescriptionSection = forwardRef(({ eglise, interviewBlock }, ref) => {
             yPercent: 0,
             opacity: 1,
             ease: "none",
-            duration: 0.2,
+            duration: 0,
           },
           "-=1"
         );
@@ -133,7 +147,7 @@ const DescriptionSection = forwardRef(({ eglise, interviewBlock }, ref) => {
   return (
     <section
       ref={sectionRef}
-      className="relative h-screen w-screen overflow-hidden flex items-center justify-center pt-20 md:pt-0 "
+      className="relative h-screen w-screen flex items-center justify-center pt-20 md:pt-0 "
     >
       <div
         ref={backgroundRef}
@@ -203,7 +217,7 @@ const DescriptionSection = forwardRef(({ eglise, interviewBlock }, ref) => {
         {hasInterviewContent && (
           <div
             ref={interviewRef}
-            className="absolute z-20 inset-0 flex items-center justify-center pb-10"
+            className=" absolute z-10 inset-0 flex items-center justify-center "
           >
             <Interview
               titre={titreInterview}
