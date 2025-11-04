@@ -134,21 +134,13 @@ export default function FloatingHeader({ site, onContactClick }) {
         </div>
       </header>
 
-      {/* 🕶️ Overlay menu mobile */}
-      {menuOpen && (
-        <div
-          className="fixed inset-0 z-[59] bg-black/50"
-          onClick={() => setMenuOpen(false)}
-        />
-      )}
-
       {/* 📱 Menu mobile */}
       <div
         className={`fixed top-0 right-0 h-full w-full z-[60] transform transition-transform duration-500 ${
           menuOpen ? "translate-x-0" : "translate-x-full"
         } md:hidden`}
       >
-        <div className="absolute inset-0 bg-white/95 backdrop-blur-md shadow-xl rounded-l-3xl px-8 py-12 flex flex-col items-center gap-6 text-black ">
+        <div className="absolute inset-0 bg-white/95 backdrop-blur-md shadow-xl px-8 py-12 flex flex-col items-center gap-6 text-black ">
           <button
             onClick={() => setMenuOpen(false)}
             className="absolute top-4 right-4 p-2 rounded-full bg-white shadow-md"

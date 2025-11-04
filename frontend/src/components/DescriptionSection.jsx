@@ -53,28 +53,27 @@ const DescriptionSection = forwardRef(({ eglise, interviewBlock }, ref) => {
       if (isMobile) {
         tl.fromTo(
           backgroundRef.current,
-          { xPercent: 100, opacity: 1 },
-          { xPercent: 0, opacity: 1, ease: "none", duration: 1000 }
+          { yPercent: 100, opacity: 1 },
+          { yPercent: 0, opacity: 1, ease: "none", duration: 1000 }
         );
 
         tl.fromTo(
           groupRef.current,
           { xPercent: 150, opacity: 1 },
           { xPercent: 0, opacity: 1, ease: "none", duration: 1000 },
-          "-=200"
+          "+=1000"
         );
       } else {
         tl.fromTo(
           backgroundRef.current,
-          { xPercent: 100, opacity: 1 },
-          { xPercent: 0, opacity: 1, ease: "none", duration: 3 }
+          { yPercent: 100, opacity: 1 },
+          { yPercent: 0, opacity: 1, ease: "none", duration: 3 }
         );
 
         tl.fromTo(
           groupRef.current,
           { xPercent: 300, opacity: 1 },
-          { xPercent: 0, opacity: 1, ease: "none", duration: 3 },
-          "-=3"
+          { xPercent: 0, opacity: 1, ease: "none", duration: 5 }
         );
       }
       if (isMobile) {
@@ -97,7 +96,7 @@ const DescriptionSection = forwardRef(({ eglise, interviewBlock }, ref) => {
           ease: "none",
           duration: 3,
         },
-        "+=1"
+        "+=3"
       );
 
       if (isMobile) {

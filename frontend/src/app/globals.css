@@ -81,6 +81,7 @@ body {
 }
 .shadow-underline {
   box-shadow: inset 0 1.1em 0 #ac1115;
+  padding-left: 15px;
   display: inline;
 }
 .lettrine {
