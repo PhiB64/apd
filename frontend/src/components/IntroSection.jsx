@@ -197,7 +197,7 @@ export default function IntroSection({ accueil, eglise }) {
 
       {/* ⬇️ ScrollIndicator */}
       <div
-        className={`absolute bottom-10 z-40 pointer-events-none transition-opacity duration-500 ${
+        className={`absolute z-40  ${
           showScrollIndicator ? "opacity-100" : "opacity-0"
         }`}
         aria-hidden="true"
