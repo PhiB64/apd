@@ -63,8 +63,8 @@ export default function Home() {
 
   if (error) {
     return (
-      <main className="flex flex-col min-h-screen items-center justify-center bg-white">
-        <p className="text-red-600 text-lg">Erreur : {error}</p>
+      <main className="flex flex-col h-full w-full overflow-hidden items-center justify-center bg-black">
+        <p className="text-white text-lg">Erreur : {error}</p>
       </main>
     );
   }

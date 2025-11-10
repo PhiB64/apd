@@ -89,9 +89,9 @@ export default function PartnerSection({ partners }) {
   return (
     <section
       ref={sectionRef}
-      className="min-h-screen px-6 md:px-32 bg-[#ac1115] flex items-start justify-center"
+      className="min-h-screen w-full overflow-x-hidden px-6 md:px-32 bg-[#ac1115] flex items-start justify-center"
     >
-      <div className="max-w-6xl w-full h-[60vh] mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 mt-28 items-center text-[#f9f5ef]">
+      <div className="max-w-6xl w-full h-[60vh] mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 mt-28 items-center ">
         {/* Bloc texte */}
         <div ref={textBlockRef} className="space-y-6 px-2">
           <h2 className="text-3xl md:text-4xl font-garamond leading-snug drop-shadow-xl">

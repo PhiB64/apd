@@ -26,7 +26,7 @@ export default function Gallery({ images }) {
       );
 
       // 🖥️ Desktop animation
-      gsap.set(desktopItems, { opacity: 1, y: 1000 });
+      gsap.set(desktopItems, { opacity: 1, y: 800 });
       gsap.to(desktopItems, {
         opacity: 1,
         y: 0,
@@ -79,14 +79,14 @@ export default function Gallery({ images }) {
       className="relative w-screen min-h-screen overflow-hidden px-6 py-10"
     >
       {/* 🖼️ Desktop layout */}
-      <div className="hidden md:block w-full h-full absolute">
-        {images.slice(0, 9).map((img, index) => {
+      <div className="absolute hidden md:block w-full h-full overflow-hidden">
+        {images.slice(0, 4).map((img, index) => {
           const style = layoutStyles[index];
           return (
             <button
               key={index}
               onClick={() => setSelectedImage(img)}
-              className="gallery-item desktop absolute overflow-hidden border-5 border-white shadow-lg transition-transform duration-300 hover:scale-105 cursor-pointer focus:outline-none"
+              className="gallery-item desktop absolute overflow-hidden border-2 border-white shadow-lg transition-transform duration-300 hover:scale-105 cursor-pointer focus:outline-none"
               style={style}
             >
               <Image
@@ -117,7 +117,7 @@ export default function Gallery({ images }) {
       </div>
 
       {/* 📱 Mobile layout */}
-      <div className="md:hidden w-full h-full flex grid grid-cols-1 gap-6 ">
+      <div className="md:hidden w-full h-full grid grid-cols-1 gap-6 ">
         {images.slice(0, 4).map((img, index) => (
           <button
             key={index}

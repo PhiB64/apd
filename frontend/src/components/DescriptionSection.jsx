@@ -100,9 +100,7 @@ export default function DescriptionSection({
     <section
       ref={sectionRef}
       id="description-anchor"
-      className={`relative w-screen overflow-x-hidden ${
-        isMobile ? "min-h-screen overflow-y-auto" : "h-full"
-      }`}
+      className="relative w-full overflow-x-hidden h-full"
     >
       <div
         className="absolute inset-0 z-0 bg-cover bg-center"
