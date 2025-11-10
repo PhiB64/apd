@@ -29,7 +29,7 @@ export default function ScrollIndicator() {
       tabIndex={0}
       onClick={handleScroll}
       onKeyDown={(e) => e.key === "Enter" && handleScroll()}
-      className={`fixed bottom-10 left-1/2 z-40 pointer-events-auto curtain-content cursor-pointer transition-opacity duration-700 ${
+      className={`fixed bottom-16 left-1/2 z-40 pointer-events-auto curtain-content cursor-pointer transition-opacity duration-700 ${
         visible ? "opacity-100" : "opacity-0"
       }`}
       aria-label="Faites défiler vers la section suivante"
