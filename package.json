@@ -16,6 +16,7 @@
     "@strapi/provider-email-nodemailer": "^5.30.0",
     "@strapi/provider-upload-cloudinary": "^5.30.0",
     "@strapi/strapi": "^5.30.0",
+    "hamburgers": "^1.2.1",
     "leaflet": "^1.9.4",
     "nodemailer": "^7.0.9",
     "pg": "^8.16.3",

@@ -1,11 +1,26 @@
 "use client";
 
-import { forwardRef, useEffect, useRef, useState } from "react";
+import {
+  forwardRef,
+  useLayoutEffect,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 const Interview = forwardRef(({ titre, description, videoUrl }, ref) => {
   const videoRef = useRef(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
+  // 🔁 Réinitialise la vidéo au chargement
+  useLayoutEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.currentTime = 0;
+      videoRef.current.pause(); // facultatif si tu veux qu'elle ne démarre pas automatiquement
+    }
+  }, []);
+
+  // 🎯 Détecte le mode plein écran
   useEffect(() => {
     const handleFullscreen = () => {
       const fullscreenElement = document.fullscreenElement;
@@ -18,6 +33,7 @@ const Interview = forwardRef(({ titre, description, videoUrl }, ref) => {
     };
   }, []);
 
+  // 🖱️ Clic pour passer en plein écran
   const handleClick = () => {
     if (videoRef.current?.requestFullscreen) {
       videoRef.current.requestFullscreen();
@@ -29,10 +45,10 @@ const Interview = forwardRef(({ titre, description, videoUrl }, ref) => {
   return (
     <div
       ref={ref}
-      className="w-screen h-screen flex items-center justify-center px-4 md:px-6 "
+      className="w-screen h-screen flex items-center justify-center px-4 md:px-6"
     >
       <div className="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-        {/* Texte à gauche */}
+        {/* 📝 Texte à gauche */}
         <div className="flex flex-col justify-center space-y-6 text-black px-2">
           {titre &&
             (() => {
@@ -53,7 +69,7 @@ const Interview = forwardRef(({ titre, description, videoUrl }, ref) => {
           )}
         </div>
 
-        {/* Vidéo à droite avec masque SVG */}
+        {/* 🎥 Vidéo à droite avec masque SVG */}
         {videoUrl && (
           <div className="flex items-center justify-center px-2">
             <div className="relative w-screen max-w-[40rem] aspect-video overflow-none">
@@ -73,6 +89,8 @@ const Interview = forwardRef(({ titre, description, videoUrl }, ref) => {
                 controls
                 playsInline
                 preload="metadata"
+                autoPlay={false}
+                disableRemotePlayback
                 onClick={handleClick}
                 className="w-full h-full object-cover p-2 cursor-pointer"
                 style={{

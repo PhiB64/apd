@@ -1,6 +1,6 @@
 "use client";
 
-import { forwardRef, useLayoutEffect, useRef, useState } from "react";
+import { useRef, useLayoutEffect, useEffect, useState } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -9,24 +9,79 @@ import Interview from "./Interview";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const DescriptionSection = forwardRef(({ eglise, interviewBlock }, ref) => {
+export default function DescriptionSection({
+  eglise,
+  interviewBlock,
+  onEnter,
+  onLeave,
+}) {
   const sectionRef = useRef(null);
-  const backgroundRef = useRef(null);
-  const containerRef = useRef(null);
-  const textRef = useRef(null);
-  const imageRef = useRef(null);
+  const sliderRef = useRef(null);
+  const descriptionRef = useRef(null);
+  const architectureRef = useRef(null);
   const interviewRef = useRef(null);
-  const groupRef = useRef(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  useLayoutEffect(() => {
+    if (!sectionRef.current || isMobile) return;
+
+    const ctx = gsap.context(() => {
+      const slides = [
+        descriptionRef.current,
+        architectureRef.current,
+        interviewRef.current,
+      ];
+
+      gsap.set(sliderRef.current, {
+        width: "inherit",
+        display: "flex",
+      });
+
+      gsap.set(slides, {
+        width: "100%",
+        flexShrink: 0,
+      });
+
+      gsap.to(sliderRef.current, {
+        xPercent: -290,
+        ease: "none",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top top",
+          end: isMobile ? "top+=300%" : "top+=1000%",
+          scrub: true,
+          pin: true,
+          anticipatePin: 1,
+        },
+      });
+
+      ScrollTrigger.create({
+        trigger: sectionRef.current,
+        start: "top top",
+        onEnter: () => {
+          if (onEnter) onEnter();
+        },
+        onLeaveBack: () => {
+          if (onLeave) onLeave();
+        },
+      });
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, [isMobile, onEnter, onLeave]);
 
   const nom = eglise?.nom?.trim() || "";
   const mots = nom.split(" ");
   const premier = mots[0];
   const reste = mots.slice(1, -1).join(" ");
   const dernier = mots.slice(-1)[0];
-
-  const [selectedImage, setSelectedImage] = useState(
-    eglise?.image_principale ?? null
-  );
 
   const getImageUrl = (img) =>
     img?.formats?.large?.url ?? img?.formats?.medium?.url ?? img?.url;
@@ -36,108 +91,6 @@ const DescriptionSection = forwardRef(({ eglise, interviewBlock }, ref) => {
     interviewBlock?.description?.[0]?.children?.[0]?.text;
   const videoUrl = interviewBlock?.video?.url;
 
-  useLayoutEffect(() => {
-    const isMobile = window.innerWidth < 768;
-    const scrollEnd = isMobile ? "top+=120%" : "top+=200%";
-
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top top",
-          end: scrollEnd,
-          pin: true,
-          scrub: 0.5,
-        },
-      });
-      if (isMobile) {
-        tl.fromTo(
-          backgroundRef.current,
-          { yPercent: 100, opacity: 1 },
-          { yPercent: 0, opacity: 1, ease: "none", duration: 1000 }
-        );
-
-        tl.fromTo(
-          groupRef.current,
-          { xPercent: 150, opacity: 1 },
-          { xPercent: 0, opacity: 1, ease: "none", duration: 1000 },
-          "+=1000"
-        );
-      } else {
-        tl.fromTo(
-          backgroundRef.current,
-          { yPercent: 100, opacity: 1 },
-          { yPercent: 0, opacity: 1, ease: "none", duration: 3 }
-        );
-
-        tl.fromTo(
-          groupRef.current,
-          { xPercent: 300, opacity: 1 },
-          { xPercent: 0, opacity: 1, ease: "none", duration: 5 }
-        );
-      }
-      if (isMobile) {
-        tl.to(
-          groupRef.current,
-          {
-            yPercent: -100,
-            ease: "none",
-            duration: 5000,
-          },
-          "+=2000"
-        );
-      }
-
-      tl.to(
-        groupRef.current,
-        {
-          xPercent: -200,
-          opacity: 1,
-          ease: "none",
-          duration: 3,
-        },
-        "+=3"
-      );
-
-      if (isMobile) {
-        tl.fromTo(
-          interviewRef.current,
-          { xPercent: 100, opacity: 1 },
-          { xPercent: 0, opacity: 1, ease: "none", duration: 1000 },
-          "-=1500"
-        );
-      } else {
-        tl.fromTo(
-          interviewRef.current,
-          { xPercent: 200, opacity: 1 },
-          { xPercent: 0, opacity: 1, ease: "none", duration: 3 },
-          "-=3"
-        );
-      }
-      if (isMobile) {
-        tl.to(
-          interviewRef.current,
-          {
-            yPercent: 0,
-            opacity: 1,
-            ease: "none",
-            duration: 0,
-          },
-          "-=1"
-        );
-      } else {
-        tl.to(interviewRef.current, {
-          xPercent: 0,
-          opacity: 1,
-          ease: "none",
-          duration: 1,
-        });
-      }
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
-
   const hasInterviewContent =
     titreInterview || descriptionInterview || videoUrl;
 
@@ -146,35 +99,33 @@ const DescriptionSection = forwardRef(({ eglise, interviewBlock }, ref) => {
   return (
     <section
       ref={sectionRef}
-      className="relative h-screen w-screen flex items-center justify-center pt-20 md:pt-0 "
+      id="description-anchor"
+      className={`relative w-screen overflow-x-hidden ${
+        isMobile ? "min-h-screen overflow-y-auto" : "h-full"
+      }`}
     >
       <div
-        ref={backgroundRef}
-        className="absolute top-0 left-0 w-full min-h-full z-0 bg-cover bg-center "
-        style={{
-          backgroundImage: 'url("/fond_pierre.jpg")',
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-        }}
+        className="absolute inset-0 z-0 bg-cover bg-center"
+        style={{ backgroundImage: 'url("/fond_pierre.jpg")' }}
       />
 
-      <div ref={containerRef} className="relative z-10 w-full max-w-6xl ">
-        {/* Texte + image */}
+      <div
+        ref={sliderRef}
+        className={`relative z-10 ${isMobile ? "flex flex-col" : "h-full"}`}
+      >
+        {/* 🧱 Bloc description */}
         <div
-          ref={groupRef}
-          className="flex flex-col md:flex-row items-center justify-center gap-10 w-full h-auto px-6 pt-100 md:pt-0"
+          ref={descriptionRef}
+          className="flex items-center justify-center px-6 pt-10"
         >
-          <div ref={textRef} className="md:w-1/2 w-full text-black">
-            <div className="space-y-4">
-              {eglise?.nom && (
-                <h2 className="text-3xl md:text-4xl font-garamond leading-snug break-words">
-                  {premier}
-                  <br />
-                  {reste}{" "}
-                  <span className="text-white shadow-underline">{dernier}</span>
-                </h2>
-              )}
+          <div className="max-w-4xl w-full flex flex-col md:flex-row gap-10 items-center text-black">
+            <div className="md:w-1/2 space-y-4">
+              <h2 className="text-3xl md:text-4xl font-garamond leading-snug break-words">
+                {premier}
+                <br />
+                {reste}{" "}
+                <span className="text-white shadow-underline">{dernier}</span>
+              </h2>
               {Array.isArray(eglise?.description) && (
                 <div className="text-sm md:text-base lettrine space-y-2 leading-relaxed text-justify">
                   {eglise.description.map((para, index) => {
@@ -188,46 +139,65 @@ const DescriptionSection = forwardRef(({ eglise, interviewBlock }, ref) => {
                 </div>
               )}
             </div>
-            <button className="flex items-center justify-center px-6 py-2 rounded-sm bg-[#ac1115] text-white font-semibold shadow-md hover:bg-red-700 transition-all duration-300 w-fit sm:hidden lg:flex mt-5">
-              Découvrez son histoire
-            </button>
-          </div>
-
-          {selectedImage && (
-            <div
-              ref={imageRef}
-              className="md:w-1/2 w-full flex flex-col items-center gap-4"
-            >
-              <div className="relative w-full aspect-[4/3] rounded-t-full overflow-hidden shadow-xl">
-                <Image
-                  src={getImageUrl(selectedImage)}
-                  alt={selectedImage.name || "Image principale"}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                />
+            {eglise?.image_principale && (
+              <div className="md:w-1/2 w-full">
+                <div className="relative w-full h-[30em] aspect-[3/4] rounded-t-full overflow-hidden shadow-xl">
+                  <Image
+                    src={getImageUrl(eglise.image_principale)}
+                    alt="Image principale"
+                    fill
+                    className="object-cover scale-110 object-[45%_top]"
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                  />
+                </div>
               </div>
-              <Gallery eglise={eglise} />
-            </div>
-          )}
+            )}
+          </div>
         </div>
 
-        {/* Interview superposée */}
+        {/* 🖼️ Galerie */}
+        <div
+          className={`h-full flex items-center justify-center ${
+            isMobile ? "w-full" : "w-[50vw]"
+          }`}
+        >
+          <div>
+            <Gallery images={eglise?.images ?? []} />
+          </div>
+        </div>
+
+        {/* 🏛️ Architecture */}
+        <div
+          ref={architectureRef}
+          className="flex items-center justify-center px-6"
+        >
+          <div className="max-w-3xl text-black space-y-4">
+            <h3 className="text-2xl md:text-3xl font-semibold font-garamond">
+              Architecture
+            </h3>
+            <p className="text-sm md:text-base leading-relaxed text-justify">
+              {eglise?.architecture?.[0]?.children?.[0]?.text ??
+                "Découvrez les caractéristiques architecturales de cette église remarquable."}
+            </p>
+          </div>
+        </div>
+
+        {/* 🎤 Interview */}
         {hasInterviewContent && (
           <div
             ref={interviewRef}
-            className=" absolute z-10 inset-0 flex items-center justify-center "
+            className="flex items-center justify-center px-auto"
           >
-            <Interview
-              titre={titreInterview}
-              description={descriptionInterview}
-              videoUrl={videoUrl}
-            />
+            <div className="max-w-4xl w-full">
+              <Interview
+                titre={titreInterview}
+                description={descriptionInterview}
+                videoUrl={videoUrl}
+              />
+            </div>
           </div>
         )}
       </div>
     </section>
   );
-});
-
-export default DescriptionSection;
+}

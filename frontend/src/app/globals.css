@@ -1,4 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=EB+Garamond&display=swap");
 @import "tailwindcss";
 
 /* Thème clair/sombre */
@@ -14,15 +13,6 @@
   }
 }
 
-/* Variables personnalisées */
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-/* Typographie et couleurs globales */
 html {
   scroll-behavior: smooth;
   height: auto;
@@ -38,50 +28,9 @@ body {
   overflow-y: auto;
 }
 
-/* Scène immersive */
-.scene {
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  width: 100%;
-  overflow: hidden;
-  z-index: 10;
-}
-
-.scene-block {
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.6s ease;
-}
-
-.scene-block.active {
-  opacity: 1;
-  pointer-events: auto;
-}
-* {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-*::-webkit-scrollbar {
-  display: none;
-}
-.no-scrollbar {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-.scroll-touch {
-  -webkit-overflow-scrolling: touch;
-  touch-action: pan-x;
-}
-.font-garamond {
-  font-family: "EB Garamond", serif !important;
-}
 .shadow-underline {
-  box-shadow: inset 0 1.1em 0 #ac1115;
-  padding-left: 15px;
+  box-shadow: inset 0 1.061em 0 #ac1115;
+  padding-left: 0.5em;
   display: inline;
 }
 .lettrine {
@@ -90,7 +39,7 @@ body {
 }
 
 .lettrine::first-letter {
-  font-family: "EB Garamond", serif;
+  font-family: "olde", serif;
   font-size: clamp(3rem, 8vw, 6rem);
   color: black;
   float: left;
@@ -105,7 +54,7 @@ body {
 }
 
 .lettrine_w::first-letter {
-  font-family: "EB Garamond", serif;
+  font-family: "olde", serif;
   font-size: clamp(3rem, 8vw, 6rem);
   color: white;
   float: left;
@@ -113,4 +62,79 @@ body {
   margin-top: -0.1em; /* réduit l’espace au-dessus */
   margin-bottom: -0.1em; /* réduit l’espace en dessous */
   padding-right: 0.1em; /* espace entre la lettrine et le texte */
+}
+@font-face {
+  font-family: "cloister";
+  src: url("/fonts/CloisterBlack.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+.font-cloister {
+  font-family: cloister;
+}
+
+@font-face {
+  font-family: "olde";
+  src: url("../../public/fonts/OldeEnglish.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+.font-olde {
+  font-family: olde;
+}
+
+@font-face {
+  font-family: "ancient";
+  src: url("../../public/fonts/AncientMedium.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+.font-ancient {
+  font-family: ancient;
+}
+
+@font-face {
+  font-family: "garamond";
+  src: url("../../public/fonts/EBGaramond-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+.font-garamond {
+  font-family: garamond;
+}
+
+@keyframes pulse-heart {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.8;
+  }
+}
+
+.pulse-heart {
+  animation: pulse-heart 1.2s infinite ease-in-out;
+}
+@media (min-width: 769px) {
+  .max-md-only {
+    display: none !important;
+  }
+}
+@keyframes pulse-button {
+  0%,
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(172, 17, 21, 0.7);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 10px 4px rgba(172, 17, 21, 0.4);
+  }
+}
+
+.pulse-button {
+  animation: pulse-button 1.5s infinite ease-in-out;
 }

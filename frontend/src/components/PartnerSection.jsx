@@ -13,8 +13,6 @@ export default function PartnerSection({ partners }) {
   const logoBlockRef = useRef(null);
   const logosRef = useRef([]);
   const imagesRef = useRef([]);
-  const isMobile = window.innerWidth < 768;
-  const scrollEnd = isMobile ? "top+=20%" : "top+=50%";
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
@@ -22,13 +20,14 @@ export default function PartnerSection({ partners }) {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top top",
-          end: scrollEnd, // durée du scroll
+          end: "100%",
           scrub: 0.5,
           pin: sectionRef.current,
+          anticipatePin: 1,
         },
       });
 
-      // Bloc texte
+      // Animation texte
       tl.fromTo(
         textBlockRef.current,
         { xPercent: -200, opacity: 1 },
@@ -40,7 +39,7 @@ export default function PartnerSection({ partners }) {
         }
       );
 
-      // Bloc logos
+      // Animation logos
       tl.fromTo(
         logoBlockRef.current,
         { xPercent: 200, opacity: 1 },
@@ -60,7 +59,7 @@ export default function PartnerSection({ partners }) {
         ease: "none",
       });
 
-      // Animation au survol des images
+      // Effets de survol sur les logos
       imagesRef.current.forEach((img) => {
         if (!img) return;
         img.addEventListener("mouseenter", () => {
@@ -90,14 +89,11 @@ export default function PartnerSection({ partners }) {
   return (
     <section
       ref={sectionRef}
-      className=" min-h-screen px-6 md:px-32 bg-[#ac1115] flex items-start justify-center"
+      className="min-h-screen px-6 md:px-32 bg-[#ac1115] flex items-start justify-center"
     >
-      <div
-        className="max-w-6xl w-full h-[60vh] mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 mt-28
- items-center text-[#f9f5ef]"
-      >
-        {/* Bloc texte à gauche */}
-        <div ref={textBlockRef} className="space-y-6 px-2 ">
+      <div className="max-w-6xl w-full h-[60vh] mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 mt-28 items-center text-[#f9f5ef]">
+        {/* Bloc texte */}
+        <div ref={textBlockRef} className="space-y-6 px-2">
           <h2 className="text-3xl md:text-4xl font-garamond leading-snug drop-shadow-xl">
             Nos <span className="shadow-underline text-white">partenaires</span>
           </h2>
@@ -117,7 +113,7 @@ export default function PartnerSection({ partners }) {
           </a>
         </div>
 
-        {/* Bloc logos à droite */}
+        {/* Bloc logos */}
         <div
           ref={logoBlockRef}
           className="grid grid-cols-2 sm:grid-cols-3 gap-4 items-center justify-center"

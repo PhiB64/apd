@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useSiteData } from "@hooks/useSiteData";
-import FloatingHeader from "@components/FloatingHeader";
 import Footer from "@components/Footer";
 
 import ContactModal from "@components/ContactModal";
@@ -24,12 +23,6 @@ export default function PartnersPage() {
 
   return (
     <>
-      <FloatingHeader
-        site={parametres_site}
-        API_URL={API_URL}
-        onContactClick={() => setShowContactModal(true)}
-      />
-
       <main
         className="min-h-screen bg-white pt-[150px] pb-20 px-6"
         style={{

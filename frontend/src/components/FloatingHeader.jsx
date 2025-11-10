@@ -1,51 +1,29 @@
 "use client";
+
 import { useRouter } from "next/navigation";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
-import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
-import DonationButton from "@components/DonationButton";
-import gsap from "gsap";
 
-export default function FloatingHeader({ site, onContactClick }) {
+import DonationButton from "@components/DonationButton";
+import "hamburgers/dist/hamburgers.min.css";
+
+export default function FloatingHeader({ site, onContactClick, isVisible }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
-  const headerRef = useRef(null);
   const router = useRouter();
 
   const logoUrl =
     site?.logo?.url ?? site?.logo?.data?.attributes?.url ?? "/logo.png";
 
   const navLinks = [
-    {
-      label: "Accueil",
-      action: () => {
-        if (pathname === "/") {
-          const skipButton = document.getElementById("skipButton");
-          if (skipButton) skipButton.click();
-        } else {
-          router.push("/?triggerSkip=true");
-        }
-      },
-    },
+    { label: "Accueil", href: "/" },
     { label: "L'association", href: "/association" },
     { label: "Devenez partenaire", href: "/partners" },
     { label: "Blog", href: "/blog" },
     { label: "Contact", action: onContactClick },
   ];
 
-  // ✨ Animation d’apparition du header
-  useEffect(() => {
-    if (headerRef.current) {
-      gsap.fromTo(
-        headerRef.current,
-        { opacity: 0, y: -20 },
-        { opacity: 1, y: 0, duration: 1, ease: "power2.out" }
-      );
-    }
-  }, []);
-
-  // 🔒 Empêche le scroll quand le menu mobile est ouvert
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "auto";
     return () => {
@@ -57,10 +35,13 @@ export default function FloatingHeader({ site, onContactClick }) {
     <>
       {/* 🧭 Header desktop */}
       <header
-        ref={headerRef}
-        className="fixed top-3 left-0 right-0 z-50 flex justify-center pointer-events-none"
+        className={`fixed top-3 left-0 right-0 z-999 flex justify-center transition-opacity duration-500 ${
+          isVisible
+            ? "opacity-100 pointer-events-auto"
+            : "opacity-0 pointer-events-none"
+        }`}
       >
-        <div className="pointer-events-auto bg-white/60 backdrop-blur-md shadow-xl rounded-sm px-4 sm:px-6 lg:px-8 py-1 flex items-center justify-between w-full max-w-screen-lg mx-4 overflow-hidden min-h-[64px] hidden md:flex">
+        <div className="bg-white/60 backdrop-blur-md shadow-xl rounded-sm px-4 sm:px-6 lg:px-8 py-1 flex items-center justify-between w-full max-w-screen-lg mx-4 overflow-hidden min-h-[64px] hidden md:flex">
           <Image
             src={logoUrl}
             alt="Logo"
@@ -70,14 +51,13 @@ export default function FloatingHeader({ site, onContactClick }) {
             priority
           />
           <nav className="flex items-center gap-4 sm:gap-6 lg:gap-8 text-black flex-wrap justify-end w-full">
-            {navLinks.map((link) => {
-              const isActive = pathname === link.href;
-              return link.href ? (
+            {navLinks.map((link) =>
+              link.href ? (
                 <a
                   key={link.label}
                   href={link.href}
                   className={`transition hover:text-red-700 ${
-                    isActive ? "text-[#ac1115] font-semibold" : ""
+                    pathname === link.href ? "text-[#ac1115] font-semibold" : ""
                   }`}
                 >
                   {link.label}
@@ -90,15 +70,21 @@ export default function FloatingHeader({ site, onContactClick }) {
                 >
                   {link.label}
                 </button>
-              );
-            })}
+              )
+            )}
             <DonationButton href={site?.url_don} className="ml-2" />
           </nav>
         </div>
       </header>
 
-      {/* 🧭 Floating header mobile */}
-      <header className="fixed top-3 left-0 right-0 z-50 flex items-center justify-between px-4 py-2 bg-white/60 backdrop-blur-md shadow-md rounded-sm md:hidden">
+      {/* 🧭 Header mobile */}
+      <header
+        className={`fixed top-3 left-0 right-0 z-999 flex items-center justify-between px-4 py-2 bg-white/60 backdrop-blur-md shadow-md rounded-sm md:hidden transition-opacity duration-500 ${
+          isVisible
+            ? "opacity-100 pointer-events-auto"
+            : "opacity-0 pointer-events-none"
+        }`}
+      >
         <Image
           src={logoUrl}
           alt="Logo"
@@ -115,58 +101,47 @@ export default function FloatingHeader({ site, onContactClick }) {
             className="p-2 rounded-full text-[#ac1115] hover:text-red-700 transition"
             aria-label="Faire un don"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="currentColor"
-              viewBox="0 0 24 24"
-              className="w-5 h-5"
-            >
-              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-            </svg>
+            <DonationButton href={site?.url_don} variant="header" />
           </a>
           <button
-            onClick={() => setMenuOpen(true)}
-            className="p-2 rounded-full bg-white shadow-md text-black"
+            onClick={() => setMenuOpen(!menuOpen)}
+            className={`relative w-10 h-10 flex items-center justify-center 
+    rounded-full bg-white shadow-md transition duration-300 
+    focus:outline-none`}
             aria-label="Menu"
           >
-            <Bars3Icon className="h-6 w-6" />
+            <span
+              className={`hamburger hamburger--collapse ${menuOpen ? "is-active" : ""}`}
+              style={{
+                position: "absolute",
+                top: "55%",
+                left: "50%",
+                transform: "translate(-50%, -50%) scale(0.5)",
+              }}
+            >
+              <span className="hamburger-box">
+                <span className="hamburger-inner"></span>
+              </span>
+            </span>
           </button>
         </div>
       </header>
 
       {/* 📱 Menu mobile */}
       <div
-        className={`fixed top-0 right-0 h-full w-full z-[60] transform transition-transform duration-500 ${
+        className={`fixed top-0 left-0 w-full h-screen z-[60] flex items-center justify-center transform transition-transform duration-500 ${
           menuOpen ? "translate-x-0" : "translate-x-full"
         } md:hidden`}
       >
-        <div className="absolute inset-0 bg-white/95 backdrop-blur-md shadow-xl px-8 py-12 flex flex-col items-center gap-6 text-black ">
-          <button
-            onClick={() => setMenuOpen(false)}
-            className="absolute top-4 right-4 p-2 rounded-full bg-white shadow-md"
-            aria-label="Fermer"
-          >
-            <XMarkIcon className="h-6 w-6 text-black" />
-          </button>
-
-          <Image
-            src={logoUrl}
-            alt="Logo"
-            width={150}
-            height={80}
-            className="rounded-md mb-6"
-            priority
-          />
-
-          {navLinks.map((link) => {
-            const isActive = pathname === link.href;
-            return link.href ? (
+        <div className="w-full h-full bg-[#ac1115] backdrop-blur-md shadow-xl px-8 py-12 flex flex-col items-center justify-center gap-6 text-white">
+          {navLinks.map((link) =>
+            link.href ? (
               <a
                 key={link.label}
                 href={link.href}
                 onClick={() => setMenuOpen(false)}
-                className={`text-lg transition hover:text-red-700 ${
-                  isActive ? "text-[#ac1115] font-semibold" : ""
+                className={`text-lg transition  ${
+                  pathname === link.href ? "text-white" : ""
                 }`}
               >
                 {link.label}
@@ -178,14 +153,18 @@ export default function FloatingHeader({ site, onContactClick }) {
                   setMenuOpen(false);
                   link.action?.();
                 }}
-                className="text-lg transition hover:text-red-700 text-black"
+                className="text-lg transition text-white "
               >
                 {link.label}
               </button>
-            );
-          })}
+            )
+          )}
 
-          <DonationButton href={site?.url_don} className="mt-6" />
+          <DonationButton
+            href={site?.url_don}
+            variant="menu"
+            className="mt-6 border-white border pulse-button "
+          />
         </div>
       </div>
     </>

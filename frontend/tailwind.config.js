@@ -2,11 +2,7 @@
 export default {
   content: ["./app/**/*.{js,ts,jsx,tsx}", "./components/**/*.{js,ts,jsx,tsx}"],
   theme: {
-    extend: {
-      fontFamily: {
-        garamond: ['"EB Garamond"', "serif"],
-      },
-    },
+    extend: {},
   },
   plugins: [],
 };

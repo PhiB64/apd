@@ -58,12 +58,6 @@ export default function ArticlePage({ params }) {
 
   return (
     <>
-      <FloatingHeader
-        site={parametres_site}
-        API_URL={API_URL}
-        onContactClick={() => setShowContactModal(true)}
-      />
-
       <main
         className="min-h-screen pt-[150px] pb-20 px-6 "
         style={{

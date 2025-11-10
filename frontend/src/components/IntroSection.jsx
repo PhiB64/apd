@@ -1,144 +1,196 @@
 "use client";
 
-import { useRef, useEffect, useState } from "react";
+import { useRef, useLayoutEffect, useState } from "react";
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-export default function IntroSection({ onSkip }) {
-  const uiRef = useRef(null);
+import ScrollIndicator from "./ScrollIndicator";
+
+gsap.registerPlugin(ScrollTrigger);
+
+export default function IntroSection({ accueil, eglise }) {
+  const sectionRef = useRef(null);
+  const gsapContainerRef = useRef(null);
   const wordRef = useRef(null);
-  const [isMuted, setIsMuted] = useState(true);
+  const welcomeTitleRef = useRef(null);
+  const welcomeDescRef = useRef(null);
+  const welcomeRef = useRef(null);
 
-  useEffect(() => {
-    const tl = gsap.timeline({
-      defaults: { ease: "power2.out" },
-      delay: 4,
-    }); //  délai de 3s
+  const [showScrollIndicator, setShowScrollIndicator] = useState(true);
 
-    const words = wordRef.current?.querySelectorAll("span");
-    if (!words) return;
+  // 🔁 ScrollIndicator visible uniquement en haut
+  useLayoutEffect(() => {
+    const handleScroll = () => {
+      const isAtTop = window.scrollY < 100;
+      setShowScrollIndicator(isAtTop);
+    };
 
-    gsap.set(words, { y: 80, opacity: 0 });
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
 
-    tl.to(words, {
-      y: 0,
-      opacity: 1,
-      stagger: 0.2,
-      duration: 1,
-    });
-
-    tl.to(words, {
-      y: -40,
-      opacity: 0,
-      stagger: 0.2,
-      duration: 1,
-      delay: 1,
-    });
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, []);
 
-  const toggleMute = () => {
-    const video = document.querySelector("video");
-    if (video) {
-      video.muted = !video.muted;
-      setIsMuted(video.muted);
-    }
-  };
+  useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
+      if (!wordRef.current || !sectionRef.current || !welcomeRef.current)
+        return;
 
-  const skipVideo = () => {
-    const video = document.querySelector("video");
-    if (video) {
-      video.muted = true;
-    }
+      const words = wordRef.current.querySelectorAll("span");
+      if (!words.length) return;
 
-    if (uiRef.current) uiRef.current.style.display = "none";
-    if (onSkip) onSkip();
-  };
+      gsap.set(words, { opacity: 0, y: 80, scale: 0.9 });
+      gsap.set(welcomeRef.current, {
+        opacity: 0,
+        y: 0,
+        scale: 0.6,
+      });
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top top",
+          end: "+=2000", // durée du scroll
+          scrub: true,
+          pin: sectionRef.current,
+          anticipatePin: 1,
+          markers: false,
+        },
+      });
+
+      // Animation des mots
+      words.forEach((word, i) => {
+        tl.to(
+          word,
+          {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            duration: 2,
+            ease: "none",
+          },
+          i * 0.5
+        );
+      });
+      words.forEach((word, i) => {
+        tl.to(word, {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          ease: "none",
+        });
+      });
+      words.forEach((word, i) => {
+        tl.to(
+          word,
+          {
+            filter: "blur(16px)",
+            opacity: 0,
+            duration: 1,
+            ease: "none",
+          },
+          "+=" + (i * 0.2 + 0.3)
+        );
+      });
+      tl.to(
+        welcomeRef.current,
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 4,
+          ease: "none",
+        },
+        "-=0.6"
+      );
+
+      tl.to(welcomeRef.current, {
+        opacity: 1,
+        y: 0,
+        delay: 1,
+        duration: 4,
+        ease: "none",
+      });
+    }, gsapContainerRef);
+
+    return () => ctx.revert();
+  }, []);
+
+  const titre = accueil?.titre ?? "Art & Patrimoine de DOAZIT";
+  const nom = eglise?.nom?.trim() || "";
+  const motsNom = nom.split(" ");
+  const reste = motsNom.slice(0, -1).join(" ");
+  const dernier = motsNom.slice(-1)[0];
 
   return (
-    <div
-      ref={uiRef}
-      className="fixed inset-0 z-40 flex flex-col items-center justify-center text-center px-6"
+    <section
+      ref={sectionRef}
+      className="relative h-screen w-screen flex flex-col items-center text-center px-6 overflow-hidden"
     >
-      {/* Texte animé */}
-      <div className="pointer-events-none flex items-center justify-center">
+      {/* 🧠 Contenu animé */}
+      <div
+        ref={gsapContainerRef}
+        className="relative z-10 max-w-[90vw] px-4 min-h-screen flex-col flex justify-center items-center"
+      >
+        {/* Titre animé mot par mot */}
         <h1
           ref={wordRef}
-          className=" text-white text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-garamond leading-tight text-center w-full max-w-[90vw] px-4"
+          className="relative z-10 text-church text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-tight text-center"
         >
-          {["Art", "&", "Patrimoine", "de", "DOAZIT"].map((word, i) => (
+          {titre.split(" ").map((word, i) => (
             <span key={i} className="inline-block mx-2 opacity-0">
-              {word}
+              <span className="font-cloister">{word[0]}</span>
+              <span className="font-garamond">{word.slice(1)}</span>
             </span>
           ))}
         </h1>
-      </div>
 
-      {/* Contrôles audio + skip */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-4 z-50">
-        <button
-          onClick={toggleMute}
-          className="px-5 py-2 rounded-full bg-white/10 text-white text-sm backdrop-blur-md shadow-md hover:bg-white/20 transition flex items-center gap-2"
+        {/* Bloc Welcome animé dans la même timeline */}
+        <div
+          ref={welcomeRef}
+          className=" absolute z-20 text-white text-center max-w-4xl opacity-0 "
         >
-          {isMuted ? (
-            <>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 5v14l-5-5H4a1 1 0 01-1-1V9a1 1 0 011-1h1l5-5zM19 9l-2 2m0 0l-2 2m2-2l2 2m-2-2l-2-2"
-                />
-              </svg>
-              désactivé
-            </>
-          ) : (
-            <>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 5v14l-5-5H4a1 1 0 01-1-1V9a1 1 0 011-1h1l5-5zM15 9a3 3 0 010 6"
-                />
-              </svg>
-              activé
-            </>
-          )}
-        </button>
-
-        <button
-          id="skipButton"
-          onClick={skipVideo}
-          className="px-5 py-2 rounded-full bg-white/10 text-white text-sm backdrop-blur-md shadow-md hover:bg-white/20 transition flex items-center gap-2"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
+          <h2
+            ref={welcomeTitleRef}
+            className="font-extrabold leading-tight drop-shadow-xl "
+            style={{
+              fontSize: "clamp(2rem, 6vw, 4rem)",
+              lineHeight: "1.2",
+            }}
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M13 5l7 7-7 7M5 5v14"
-            />
-          </svg>
-          Passer
-        </button>
+            Aidez-nous à préserver
+            <br />
+            ce trésor du patrimoine
+          </h2>
+          <p
+            ref={welcomeDescRef}
+            className="mt-6 font-medium drop-shadow-lg "
+            style={{
+              fontSize: "clamp(1.4rem, 4vw, 2.2rem)",
+              lineHeight: "2",
+            }}
+          >
+            Chaque don contribue à restaurer
+            <br />
+            <span className="text-4xl md:text-5xl font-garamond">{reste} </span>
+            <span className="text-4xl md:text-5xl font-garamond shadow-underline">
+              {dernier}
+            </span>
+            <br />
+          </p>
+        </div>
       </div>
-    </div>
+      {/* ⬇️ ScrollIndicator */}
+      <div
+        className={`absolute bottom-6 sm:bottom-10 z-40 pointer-events-none transition-opacity duration-500 ${
+          showScrollIndicator ? "opacity-100" : "opacity-0"
+        }`}
+        aria-hidden="true"
+      >
+        <ScrollIndicator />
+      </div>
+    </section>
   );
 }

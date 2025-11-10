@@ -23,12 +23,6 @@ export default function BlogIndexPage() {
 
   return (
     <main className="flex flex-col min-h-screen bg-white">
-      <FloatingHeader
-        site={parametres_site}
-        API_URL={API_URL}
-        onContactClick={() => setShowContactModal(true)}
-      />
-
       {/* Marge pour éviter que le logo coupe le contenu */}
       <div className="flex-grow min-h-screen bg-white">
         <BlogSection API_URL={API_URL} />
