@@ -25,24 +25,22 @@ export default function Gallery({ images }) {
         ".gallery-item.mobile"
       );
 
-      // 🖥️ Desktop animation
-      gsap.set(desktopItems, { opacity: 1, y: 800 });
+      gsap.set(desktopItems, { opacity: 1, x: 1000 });
       gsap.to(desktopItems, {
         opacity: 1,
-        y: 0,
-        stagger: 1,
-        duration: 5,
+        x: 0,
+        stagger: 0.5,
+        duration: 0.1,
         ease: "none",
         scrollTrigger: {
           trigger: galleryRef.current,
           start: "80% top",
-          end: "300% top",
+          end: "200% top",
           scrub: true,
           markers: false,
         },
       });
 
-      // 📱 Mobile animation
       gsap.set(mobileItems, { opacity: 1, x: 300 });
 
       gsap.to(mobileItems, {
@@ -67,10 +65,17 @@ export default function Gallery({ images }) {
   if (!images || images.length === 0) return null;
 
   const layoutStyles = [
-    { top: "10%", left: "20%", width: "30%", height: "30%", zIndex: 1 },
-    { top: "35%", left: "25%", width: "20%", height: "55%", zIndex: 2 },
-    { top: "30%", left: "48%", width: "15%", height: "45%", zIndex: 3 },
-    { top: "55%", left: "60%", width: "25%", height: "40%", zIndex: 4 },
+    { top: "10%", left: "10%", width: "20%", height: "30%", zIndex: 1 },
+    { top: "35%", left: "13%", width: "21%", height: "33%", zIndex: 2 },
+    { top: "12%", left: "32%", width: "18%", height: "43%", zIndex: 3 },
+    { top: "65%", left: "10%", width: "15%", height: "25%", zIndex: 4 },
+    { top: "60%", left: "30%", width: "15%", height: "30%", zIndex: 5 },
+    { top: "40%", left: "47%", width: "15%", height: "45%", zIndex: 6 },
+    { top: "10%", left: "52%", width: "20%", height: "27%", zIndex: 7 },
+    { top: "63%", left: "60%", width: "20%", height: "27%", zIndex: 8 },
+    { top: "33%", left: "64%", width: "20%", height: "27%", zIndex: 9 },
+    { top: "12%", left: "74%", width: "22%", height: "25%", zIndex: 10 },
+    { top: "40%", left: "80%", width: "22%", height: "50%", zIndex: 11 },
   ];
 
   return (
@@ -78,22 +83,22 @@ export default function Gallery({ images }) {
       ref={galleryRef}
       className="relative w-screen min-h-screen overflow-hidden px-6 py-10"
     >
-      {/* 🖼️ Desktop layout */}
+      {/* Desktop */}
       <div className="absolute hidden md:block w-full h-full overflow-hidden">
-        {images.slice(0, 4).map((img, index) => {
+        {images.slice(0, 11).map((img, index) => {
           const style = layoutStyles[index];
           return (
             <button
               key={index}
               onClick={() => setSelectedImage(img)}
-              className="gallery-item desktop absolute overflow-hidden border-2 border-white shadow-lg transition-transform duration-300 hover:scale-105 cursor-pointer focus:outline-none"
+              className="gallery-item desktop absolute overflow-hidden border-3 border-white shadow-lg transition-transform duration-1000"
               style={style}
             >
               <Image
                 src={getImageUrl(img)}
                 alt={img.name || `Image ${index + 1}`}
                 fill
-                className="object-cover"
+                className="object-cover transition-transform duration-300 hover:scale-105 cursor-pointer focus:outline-none"
               />
             </button>
           );
@@ -104,7 +109,7 @@ export default function Gallery({ images }) {
             className="absolute inset-0 z-[10] flex items-center justify-center cursor-pointer"
             onClick={() => setSelectedImage(null)}
           >
-            <div className="relative w-full max-w-4xl aspect-[4/3] bg-black rounded-lg overflow-hidden shadow-xl border-4 border-black">
+            <div className=" relative w-full max-w-4xl aspect-[16/9] overflow-hidden shadow-xl bg-black/60 border-3 border-white">
               <Image
                 src={getImageUrl(selectedImage)}
                 alt={selectedImage.name || "Image agrandie"}
@@ -116,13 +121,12 @@ export default function Gallery({ images }) {
         )}
       </div>
 
-      {/* 📱 Mobile layout */}
-      <div className="md:hidden w-full h-full grid grid-cols-1 gap-6 ">
+      {/* Mobile */}
+      <div className="md:hidden w-full grid grid-cols-1 gap-6">
         {images.slice(0, 4).map((img, index) => (
-          <button
+          <div
             key={index}
-            onClick={() => setSelectedImage(img)}
-            className="gallery-item mobile relative h-[200px] rounded-lg overflow-hidden shadow-lg transition-transform duration-300 hover:scale-105 focus:outline-none"
+            className="gallery-item.mobile relative h-[200px] overflow-hidden shadow-lg transition-transform duration-300 hover:scale-105 border-3 border-white"
           >
             <Image
               src={getImageUrl(img)}
@@ -130,24 +134,8 @@ export default function Gallery({ images }) {
               fill
               className="object-cover"
             />
-          </button>
-        ))}
-
-        {selectedImage && (
-          <div
-            className="absolute inset-0 z-[10] flex items-center justify-center bg-black/80 cursor-pointer"
-            onClick={() => setSelectedImage(null)}
-          >
-            <div className="relative w-full max-w-4xl aspect-[4/3] bg-black rounded-lg overflow-hidden shadow-xl border-4 border-black">
-              <Image
-                src={getImageUrl(selectedImage)}
-                alt={selectedImage.name || "Image agrandie"}
-                fill
-                className="object-contain"
-              />
-            </div>
           </div>
-        )}
+        ))}
       </div>
     </section>
   );

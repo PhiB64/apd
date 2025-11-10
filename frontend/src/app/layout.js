@@ -1,6 +1,7 @@
 import "./globals.css";
 
 import HeaderWrapper from "@components/HeaderWrapper";
+import Footer from "@components/Footer"; // Assure-toi que le chemin est correct
 
 export const metadata = {
   title: "Église Saint-Jean-Baptiste d’Aulès",
@@ -12,6 +13,7 @@ export default function RootLayout({ children }) {
     <html lang="fr">
       <body>
         <HeaderWrapper>{children}</HeaderWrapper>
+        <Footer />
       </body>
     </html>
   );

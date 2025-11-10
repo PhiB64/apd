@@ -39,14 +39,13 @@ body {
 }
 
 .lettrine::first-letter {
-  font-family: "olde", serif;
+  font-family: "annStone", serif;
   font-size: clamp(3rem, 8vw, 6rem);
-  color: black;
+  color: #ac1115;
   float: left;
   line-height: 0.9;
   margin-top: -0.1em; /* réduit l’espace au-dessus */
-  margin-bottom: -0.1em; /* réduit l’espace en dessous */
-  padding-right: 0.1em; /* espace entre la lettrine et le texte */
+  padding-right: 0.02em; /* espace entre la lettrine et le texte */
 }
 .lettrine_w {
   font-family: Arial, Helvetica, sans-serif;
@@ -54,14 +53,13 @@ body {
 }
 
 .lettrine_w::first-letter {
-  font-family: "olde", serif;
+  font-family: "annStone", serif;
   font-size: clamp(3rem, 8vw, 6rem);
   color: white;
   float: left;
   line-height: 0.9;
   margin-top: -0.1em; /* réduit l’espace au-dessus */
-  margin-bottom: -0.1em; /* réduit l’espace en dessous */
-  padding-right: 0.1em; /* espace entre la lettrine et le texte */
+  padding-right: 0.02em; /* espace entre la lettrine et le texte */
 }
 @font-face {
   font-family: "cloister";
@@ -84,13 +82,13 @@ body {
 }
 
 @font-face {
-  font-family: "ancient";
-  src: url("../../public/fonts/AncientMedium.ttf") format("truetype");
+  font-family: "annStone";
+  src: url("../../public/fonts/AnnStone.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
 .font-ancient {
-  font-family: ancient;
+  font-family: annStone;
 }
 
 @font-face {

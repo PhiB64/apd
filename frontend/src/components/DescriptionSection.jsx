@@ -1,11 +1,12 @@
 "use client";
 
-import { useRef, useLayoutEffect, useEffect, useState } from "react";
+import { useRef, useLayoutEffect } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Gallery from "./Gallery";
 import Interview from "./Interview";
+import useIsMobile from "@hooks/useIsMobile";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -20,14 +21,9 @@ export default function DescriptionSection({
   const descriptionRef = useRef(null);
   const architectureRef = useRef(null);
   const interviewRef = useRef(null);
-  const [isMobile, setIsMobile] = useState(false);
+  const imageRef = useRef(null);
 
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
+  const isMobile = useIsMobile();
 
   useLayoutEffect(() => {
     if (!sectionRef.current || isMobile) return;
@@ -55,21 +51,10 @@ export default function DescriptionSection({
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top top",
-          end: isMobile ? "top+=300%" : "top+=1000%",
+          end: "top+=800%",
           scrub: true,
           pin: true,
           anticipatePin: 1,
-        },
-      });
-
-      ScrollTrigger.create({
-        trigger: sectionRef.current,
-        start: "top top",
-        onEnter: () => {
-          if (onEnter) onEnter();
-        },
-        onLeaveBack: () => {
-          if (onLeave) onLeave();
         },
       });
     }, sectionRef);
@@ -111,7 +96,7 @@ export default function DescriptionSection({
         ref={sliderRef}
         className={`relative z-10 ${isMobile ? "flex flex-col" : "h-full"}`}
       >
-        {/* 🧱 Bloc description */}
+        {/* Bloc description */}
         <div
           ref={descriptionRef}
           className="flex items-center justify-center px-6 pt-10"
@@ -139,7 +124,7 @@ export default function DescriptionSection({
             </div>
             {eglise?.image_principale && (
               <div className="md:w-1/2 w-full">
-                <div className="relative w-full h-[30em] aspect-[3/4] rounded-t-full overflow-hidden shadow-xl">
+                <div className="relative w-full h-[20em] md:h-[30em] aspect-[3/4] rounded-t-full overflow-hidden shadow-xl border-3 border-white">
                   <Image
                     src={getImageUrl(eglise.image_principale)}
                     alt="Image principale"
@@ -153,7 +138,7 @@ export default function DescriptionSection({
           </div>
         </div>
 
-        {/* 🖼️ Galerie */}
+        {/*Galerie */}
         <div
           className={`h-full flex items-center justify-center ${
             isMobile ? "w-full" : "w-[50vw]"
@@ -164,7 +149,7 @@ export default function DescriptionSection({
           </div>
         </div>
 
-        {/* 🏛️ Architecture */}
+        {/* Architecture */}
         <div
           ref={architectureRef}
           className="flex items-center justify-center px-6"
@@ -180,7 +165,7 @@ export default function DescriptionSection({
           </div>
         </div>
 
-        {/* 🎤 Interview */}
+        {/* Interview */}
         {hasInterviewContent && (
           <div
             ref={interviewRef}

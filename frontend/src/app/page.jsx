@@ -2,7 +2,6 @@
 import { useState, useLayoutEffect, useEffect } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Volume2, VolumeX } from "lucide-react";
 
 import { useSiteData } from "@hooks/useSiteData";
 import { useHeaderVisibility } from "@components/HeaderWrapper";
@@ -12,7 +11,7 @@ import IntroSection from "@components/IntroSection";
 import DescriptionSection from "@components/DescriptionSection";
 import PartnerSection from "@components/PartnerSection";
 import BlogSection from "@components/BlogSection";
-import Footer from "@components/Footer";
+
 import ContactModal from "@components/ContactModal";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -26,7 +25,7 @@ export default function Home() {
   const firstInterview = Array.isArray(interviews) ? interviews[0] : null;
 
   const [showContactModal, setShowContactModal] = useState(false);
-  const [showSoundButton, setShowSoundButton] = useState(true);
+
   const [isMuted, setIsMuted] = useState(true);
 
   const { setHideHeader } = useHeaderVisibility();
@@ -93,27 +92,11 @@ export default function Home() {
       {/* 📰 Blog */}
       <BlogSection API_URL={API_URL} limit={4} />
 
-      {/* 🧭 Footer */}
-      <Footer site={parametres_site} />
-
       {/* 📬 Modal contact */}
       <ContactModal
         isOpen={showContactModal}
         onClose={() => setShowContactModal(false)}
       />
-
-      {/* 🔊 Bouton son fixe */}
-      {showSoundButton && (
-        <div className="fixed bottom-6 right-6 z-50 transition-opacity duration-500">
-          <button
-            onClick={toggleMute}
-            className="w-12 h-12 rounded-full bg-white/10 text-white backdrop-blur-md shadow-md hover:bg-white/20 transition flex items-center justify-center"
-            aria-label="Activer/Désactiver le son"
-          >
-            {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
-          </button>
-        </div>
-      )}
     </main>
   );
 }
