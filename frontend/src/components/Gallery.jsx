@@ -38,6 +38,7 @@ export default function Gallery({ images }) {
           start: "80% top",
           end: "300% top",
           scrub: true,
+          markers: false,
         },
       });
 
@@ -55,7 +56,7 @@ export default function Gallery({ images }) {
           start: "bottom center",
           end: "150% top",
           scrub: true,
-          markers: true, // utile pour tester
+          markers: false,
         },
       });
     }, galleryRef);

@@ -52,7 +52,7 @@ export default function IntroSection({ accueil, eglise }) {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top top",
-          end: "+=2000", // durée du scroll
+          end: isMobile ? "+=1000" : "+=2000", // durée adaptée
           scrub: true,
           pin: sectionRef.current,
           anticipatePin: 1,
