@@ -120,8 +120,10 @@ export default function IntroSection({ eglise }) {
           un trésor du patrimoine
         </h2>
         <p className="mt-6">
-          <span className="text-4xl md:text-5xl font-garamond">{reste} </span>
-          <span className="text-4xl md:text-5xl font-garamond shadow-underline">
+          <span className="text-4xl md:text-5xl leading-relaxed font-garamond">
+            {reste}{" "}
+          </span>
+          <span className="text-4xl md:text-5xl leading-relaxed font-garamond shadow-underline">
             {dernier}
           </span>
         </p>
