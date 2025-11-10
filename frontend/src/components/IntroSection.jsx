@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useLayoutEffect, useState } from "react";
+import { useRef, useLayoutEffect, useEffect, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -17,6 +17,15 @@ export default function IntroSection({ accueil, eglise }) {
   const welcomeRef = useRef(null);
 
   const [showScrollIndicator, setShowScrollIndicator] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // 📱 Détection mobile
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   // 🔁 ScrollIndicator visible uniquement en haut
   useLayoutEffect(() => {
@@ -74,6 +83,7 @@ export default function IntroSection({ accueil, eglise }) {
           i * 0.5
         );
       });
+
       words.forEach((word, i) => {
         tl.to(word, {
           opacity: 1,
@@ -82,6 +92,7 @@ export default function IntroSection({ accueil, eglise }) {
           ease: "none",
         });
       });
+
       words.forEach((word, i) => {
         tl.to(
           word,
@@ -94,6 +105,7 @@ export default function IntroSection({ accueil, eglise }) {
           "+=" + (i * 0.2 + 0.3)
         );
       });
+
       tl.to(
         welcomeRef.current,
         {
@@ -116,7 +128,7 @@ export default function IntroSection({ accueil, eglise }) {
     }, gsapContainerRef);
 
     return () => ctx.revert();
-  }, []);
+  }, [isMobile]);
 
   const titre = accueil?.titre ?? "Art & Patrimoine de DOAZIT";
   const nom = eglise?.nom?.trim() || "";
@@ -150,11 +162,11 @@ export default function IntroSection({ accueil, eglise }) {
         {/* Bloc Welcome animé dans la même timeline */}
         <div
           ref={welcomeRef}
-          className=" absolute z-20 text-white text-center max-w-4xl opacity-0 "
+          className="absolute z-20 text-white text-center max-w-4xl opacity-0"
         >
           <h2
             ref={welcomeTitleRef}
-            className="font-extrabold leading-tight drop-shadow-xl "
+            className="font-extrabold leading-tight drop-shadow-xl"
             style={{
               fontSize: "clamp(2rem, 6vw, 4rem)",
               lineHeight: "1.2",
@@ -166,7 +178,7 @@ export default function IntroSection({ accueil, eglise }) {
           </h2>
           <p
             ref={welcomeDescRef}
-            className="mt-6 font-medium drop-shadow-lg "
+            className="mt-6 font-medium drop-shadow-lg"
             style={{
               fontSize: "clamp(1.4rem, 4vw, 2.2rem)",
               lineHeight: "2",
@@ -182,9 +194,10 @@ export default function IntroSection({ accueil, eglise }) {
           </p>
         </div>
       </div>
+
       {/* ⬇️ ScrollIndicator */}
       <div
-        className={`absolute bottom-6 sm:bottom-10 z-40 pointer-events-none transition-opacity duration-500 ${
+        className={`absolute bottom-10 z-40 pointer-events-none transition-opacity duration-500 ${
           showScrollIndicator ? "opacity-100" : "opacity-0"
         }`}
         aria-hidden="true"
