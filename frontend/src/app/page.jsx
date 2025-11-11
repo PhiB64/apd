@@ -21,6 +21,11 @@ export default function Home() {
   const { eglise, accueil, parametres_site, interviews, partenaires, error } =
     useSiteData(API_URL);
 
+  const backgroundUrl =
+    parametres_site?.attributes?.background?.formats?.large?.url ??
+    parametres_site?.attributes?.background?.url ??
+    null;
+
   const videoUrl = accueil?.video?.url ?? null;
   const firstInterview = Array.isArray(interviews) ? interviews[0] : null;
 

@@ -6,14 +6,19 @@ import Image from "next/image";
 const Architecture = forwardRef(({ styleArchitectural, plan }, ref) => {
   if (!styleArchitectural || styleArchitectural.length === 0) return null;
 
-  const planUrl = plan?.data?.url;
+  // ✅ Récupère l'URL du plan depuis les formats Cloudinary
+  const planUrl =
+    plan?.formats?.medium?.url ??
+    plan?.formats?.small?.url ??
+    plan?.url ??
+    null;
 
   return (
     <div
       ref={ref}
-      className="w-full h-full flex items-center justify-center px-6 pt-20"
+      className="w-full h-full flex items-center justify-center px-6 pt-20 border-2 "
     >
-      <div className="max-w-6xl w-full flex flex-row gap-10 items-start text-black">
+      <div className="max-w-6xl w-full flex flex-col md:flex-row gap-10 items-start text-black">
         {/* 📝 Texte à gauche */}
         <div className="w-full md:w-1/2 space-y-4">
           <h2 className="text-3xl md:text-4xl font-garamond leading-snug break-words">
@@ -34,8 +39,8 @@ const Architecture = forwardRef(({ styleArchitectural, plan }, ref) => {
 
         {/* 🖼️ Plan à droite */}
         {planUrl && (
-          <div className="w-full md:w-1/2 flex justify-center items-start">
-            <div className="relative w-full max-w-[24rem] aspect-[3/4] rounded-t-full overflow-hidden shadow-xl border-3 border-white self-stretch">
+          <div className="w-full md:w-1/2 flex justify-center items-center pt-20">
+            <div className="relative w-full max-w-[24rem] aspect-[3/4] overflow-hidden shadow-xl border-3 border-white self-stretch">
               <Image
                 src={planUrl}
                 alt="Plan architectural de l’église"
