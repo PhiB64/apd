@@ -48,7 +48,6 @@ const Interview = forwardRef(({ titre, description, videoUrl }, ref) => {
       className="w-screen h-screen flex items-center justify-center px-4 md:px-6"
     >
       <div className="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-        {/* 📝 Texte à gauche */}
         <div className="flex flex-col justify-center space-y-6 text-black px-2">
           {titre &&
             (() => {
@@ -69,7 +68,6 @@ const Interview = forwardRef(({ titre, description, videoUrl }, ref) => {
           )}
         </div>
 
-        {/* 🎥 Vidéo à droite avec masque SVG */}
         {videoUrl && (
           <div className="flex items-center justify-center px-2">
             <div className="relative w-screen max-w-[40rem] aspect-video overflow-none">

@@ -1,5 +1,5 @@
 "use client";
-import { useState, useLayoutEffect, useEffect } from "react";
+import { useState, useEffect } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -26,18 +26,7 @@ export default function Home() {
 
   const [showContactModal, setShowContactModal] = useState(false);
 
-  const [isMuted, setIsMuted] = useState(true);
-
   const { setHideHeader } = useHeaderVisibility();
-
-  // 🔁 Réinitialise le mute au chargement
-  useLayoutEffect(() => {
-    const video = document.querySelector("video");
-    if (video) {
-      video.muted = true;
-      setIsMuted(true);
-    }
-  }, []);
 
   // ⏱️ Masque le header au chargement, puis l'affiche au scroll
   useEffect(() => {
@@ -51,14 +40,6 @@ export default function Home() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [setHideHeader]);
-
-  const toggleMute = () => {
-    const video = document.querySelector("video");
-    if (video) {
-      video.muted = !video.muted;
-      setIsMuted(video.muted);
-    }
-  };
 
   if (error) {
     return (
@@ -75,7 +56,6 @@ export default function Home() {
         videoUrl={
           "https://res.cloudinary.com/dkidpfpm1/video/upload/v1759917787/video_accueil_6c4adf0ce7.mp4"
         }
-        isMuted={isMuted}
       />
 
       {/* 🏁 Intro avec fond vidéo + titre animé */}

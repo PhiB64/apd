@@ -16,13 +16,13 @@ export default function DescriptionSection({
   interviewBlock,
   onEnter,
   onLeave,
+  backgroundUrl,
 }) {
   const sectionRef = useRef(null);
   const sliderRef = useRef(null);
   const descriptionRef = useRef(null);
   const architectureRef = useRef(null);
   const interviewRef = useRef(null);
-  const imageRef = useRef(null);
 
   const isMobile = useIsMobile();
 
@@ -80,19 +80,22 @@ export default function DescriptionSection({
   const hasInterviewContent =
     titreInterview || descriptionInterview || videoUrl;
 
-  console.log("eglise", eglise);
   if (!eglise && !hasInterviewContent) return null;
 
   return (
     <section
       ref={sectionRef}
       id="description-anchor"
-      className="relative w-full overflow-x-hidden h-full"
+      className="relative w-full overflow-x-hidden"
     >
-      <div
-        className="absolute inset-0 z-0 bg-cover bg-center"
-        style={{ backgroundImage: 'url("/fond_pierre.jpg")' }}
-      />
+      {backgroundUrl && (
+        <div
+          className="absolute inset-0 z-0 h-screen w-screen bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage: `url(${backgroundUrl}?f_auto,q_auto)`,
+          }}
+        />
+      )}
 
       <div
         ref={sliderRef}
@@ -124,6 +127,7 @@ export default function DescriptionSection({
                 </div>
               )}
             </div>
+
             {eglise?.image_principale && (
               <div className="md:w-1/2 w-full">
                 <div className="relative w-full h-[20em] md:h-[30em] aspect-[3/4] rounded-t-full overflow-hidden shadow-xl border-3 border-white">
