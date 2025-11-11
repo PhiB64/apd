@@ -507,6 +507,7 @@ export interface ApiAssociationAssociation extends Struct.SingleTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    description: Schema.Attribute.Blocks;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -514,6 +515,7 @@ export interface ApiAssociationAssociation extends Struct.SingleTypeSchema {
     > &
       Schema.Attribute.Private;
     publishedAt: Schema.Attribute.DateTime;
+    titre: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -552,6 +554,7 @@ export interface ApiEgliseEglise extends Struct.SingleTypeSchema {
     > &
       Schema.Attribute.Private;
     nom: Schema.Attribute.String & Schema.Attribute.Required;
+    plan: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
     publishedAt: Schema.Attribute.DateTime;
     style_architectural: Schema.Attribute.Blocks;
     updatedAt: Schema.Attribute.DateTime;

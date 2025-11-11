@@ -6,6 +6,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Gallery from "./Gallery";
 import Interview from "./Interview";
+import Architecture from "./Architecture";
 import useIsMobile from "@hooks/useIsMobile";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -79,6 +80,7 @@ export default function DescriptionSection({
   const hasInterviewContent =
     titreInterview || descriptionInterview || videoUrl;
 
+  console.log("eglise", eglise);
   if (!eglise && !hasInterviewContent) return null;
 
   return (
@@ -138,10 +140,9 @@ export default function DescriptionSection({
           </div>
         </div>
 
-        {/*Galerie */}
         <div
           className={`h-full flex items-center justify-center ${
-            isMobile ? "w-full" : "w-[50vw]"
+            isMobile ? "w-full" : "w-[80vw]"
           }`}
         >
           <div>
@@ -149,21 +150,11 @@ export default function DescriptionSection({
           </div>
         </div>
 
-        {/* Architecture */}
-        <div
+        <Architecture
           ref={architectureRef}
-          className="flex items-center justify-center px-6"
-        >
-          <div className="max-w-3xl text-black space-y-4">
-            <h3 className="text-2xl md:text-3xl font-semibold font-garamond">
-              Architecture
-            </h3>
-            <p className="text-sm md:text-base leading-relaxed text-justify">
-              {eglise?.architecture?.[0]?.children?.[0]?.text ??
-                "Découvrez les caractéristiques architecturales de cette église remarquable."}
-            </p>
-          </div>
-        </div>
+          styleArchitectural={eglise?.style_architectural}
+          imageUrl={eglise?.plan?.url}
+        />
 
         {/* Interview */}
         {hasInterviewContent && (

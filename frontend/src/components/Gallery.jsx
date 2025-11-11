@@ -65,23 +65,23 @@ export default function Gallery({ images }) {
   if (!images || images.length === 0) return null;
 
   const layoutStyles = [
-    { top: "10%", left: "10%", width: "20%", height: "30%", zIndex: 1 },
-    { top: "35%", left: "13%", width: "21%", height: "33%", zIndex: 2 },
-    { top: "12%", left: "32%", width: "18%", height: "43%", zIndex: 3 },
-    { top: "65%", left: "10%", width: "15%", height: "25%", zIndex: 4 },
-    { top: "60%", left: "30%", width: "15%", height: "30%", zIndex: 5 },
-    { top: "40%", left: "47%", width: "15%", height: "45%", zIndex: 6 },
-    { top: "10%", left: "52%", width: "20%", height: "27%", zIndex: 7 },
-    { top: "63%", left: "60%", width: "20%", height: "27%", zIndex: 8 },
-    { top: "33%", left: "64%", width: "20%", height: "27%", zIndex: 9 },
-    { top: "12%", left: "74%", width: "22%", height: "25%", zIndex: 10 },
-    { top: "40%", left: "80%", width: "22%", height: "50%", zIndex: 11 },
+    { top: "10%", left: "0%", width: "20%", height: "30%", zIndex: 1 },
+    { top: "35%", left: "3%", width: "21%", height: "33%", zIndex: 2 },
+    { top: "12%", left: "22%", width: "18%", height: "43%", zIndex: 3 },
+    { top: "65%", left: "0%", width: "15%", height: "25%", zIndex: 4 },
+    { top: "60%", left: "20%", width: "15%", height: "30%", zIndex: 5 },
+    { top: "40%", left: "37%", width: "15%", height: "45%", zIndex: 6 },
+    { top: "10%", left: "42%", width: "20%", height: "27%", zIndex: 7 },
+    { top: "63%", left: "50%", width: "20%", height: "27%", zIndex: 8 },
+    { top: "33%", left: "54%", width: "20%", height: "27%", zIndex: 9 },
+    { top: "12%", left: "64%", width: "22%", height: "25%", zIndex: 10 },
+    { top: "40%", left: "70%", width: "22%", height: "50%", zIndex: 11 },
   ];
 
   return (
     <section
       ref={galleryRef}
-      className="relative w-screen min-h-screen overflow-hidden px-6 py-10"
+      className="relative w-screen min-h-screen overflow-hidden py-10"
     >
       {/* Desktop */}
       <div className="absolute hidden md:block w-full h-full overflow-hidden">

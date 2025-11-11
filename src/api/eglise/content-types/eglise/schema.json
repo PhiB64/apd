@@ -19,9 +19,6 @@
       "type": "blocks",
       "required": true
     },
-    "histoire": {
-      "type": "blocks"
-    },
     "image_principale": {
       "type": "media",
       "multiple": false,
@@ -44,6 +41,19 @@
       ]
     },
     "style_architectural": {
+      "type": "blocks"
+    },
+    "plan": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "histoire": {
       "type": "blocks"
     },
     "localisation": {
