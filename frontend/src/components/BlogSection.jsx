@@ -26,7 +26,7 @@ export default function BlogSection({ limit = 4 }) {
   const displayedArticles = articles.slice(0, limit);
 
   return (
-    <section className="relative w-full px-6 md:px-32 py-20 text-black overflow-hidden">
+    <section className="relative w-full h-full px-6 md:px-32 py-20 text-black overflow-hidden">
       {/* ✅ Fond pierre comme dans DescriptionSection */}
       <div
         className="absolute inset-0 z-0 bg-repeat bg-center bg-[length:100vw_100vh] "

@@ -109,7 +109,7 @@ export default function DescriptionSection({
     <section
       ref={sectionRef}
       id="description-anchor"
-      className="relative w-full  overflow-x-hidden"
+      className="relative w-full h-full overflow-hidden"
     >
       <div
         className="absolute inset-0 z-0 bg-repeat bg-[length:100vw_100vh]"
@@ -181,8 +181,8 @@ export default function DescriptionSection({
 
         {/* Interview */}
         {hasInterviewContent && (
-          <div ref={interviewRef} className="relative w-full ">
-            <div className="max-w-4xl w-full ">
+          <div ref={interviewRef} className=" w-full ">
+            <div className="  max-w-4xl w-full ">
               <Interview
                 titre={titreInterview}
                 description={descriptionInterview}

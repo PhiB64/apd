@@ -20,10 +20,9 @@ export default function PartnerSection({ partners }) {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top top",
-          end: "70%",
-          scrub: 0.5,
-          pin: sectionRef.current,
-          anticipatePin: 1,
+          end: "+70%",
+          scrub: true,
+          pin: true,
           markers: false,
         },
       });
@@ -90,15 +89,15 @@ export default function PartnerSection({ partners }) {
   return (
     <section
       ref={sectionRef}
-      className="min-h-screen w-full overflow-x-hidden px-6 md:px-32 bg-[#ac1115] flex items-start justify-center"
+      className=" relative min-h-screen w-full overflow-hidden bg-[#ac1115] flex items-center justify-center pt-20"
     >
-      <div className="max-w-6xl w-full h-[60vh] mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 mt-28 items-center ">
+      <div className="max-w-6xl w-full h-full mx-auto grid grid-cols-1 md:grid-cols-2 items-center">
         {/* Bloc texte */}
-        <div ref={textBlockRef} className="space-y-6 px-2">
-          <h2 className="text-3xl md:text-4xl font-garamond leading-snug drop-shadow-xl">
+        <div ref={textBlockRef} className="space-y-4 px-4">
+          <h2 className="text-3xl sm:text-4xl font-garamond leading-snug drop-shadow-xl text-white">
             Nos <span className="shadow-underline text-white">partenaires</span>
           </h2>
-          <div className="text-sm md:text-base lettrine_w space-y-1 leading-relaxed text-justify font-garamond">
+          <div className="text-base sm:text-lg lettrine_w space-y-2 leading-relaxed text-justify font-garamond text-white/90">
             <p className="lettrine_w">
               Ils accompagnent notre démarche patrimoniale et soutiennent la
               transmission des mémoires locales. Leur engagement contribue à
@@ -106,9 +105,11 @@ export default function PartnerSection({ partners }) {
               composent l’identité vivante de notre territoire.
             </p>
           </div>
+
+          {/* ✅ Bouton rapproché des logos */}
           <a
             href="/partners"
-            className="inline-block mt-6 px-6 py-2 rounded-sm bg-white text-[#ac1115] font-semibold shadow-md hover:bg-[#f9f5ef] transition-all duration-300 w-fit"
+            className="inline-block px-6 py-2 rounded-sm bg-white text-[#ac1115] font-semibold shadow-md hover:bg-[#f9f5ef] transition-all duration-300 w-fit mt-4"
           >
             Devenez partenaire
           </a>
@@ -117,7 +118,7 @@ export default function PartnerSection({ partners }) {
         {/* Bloc logos */}
         <div
           ref={logoBlockRef}
-          className="grid grid-cols-2 sm:grid-cols-3 gap-4 items-center justify-center"
+          className="grid grid-cols-2 sm:grid-cols-3 gap-3 items-center justify-center px-4"
         >
           {partners.map((partner, index) => {
             const logo = partner.logo?.[0];
