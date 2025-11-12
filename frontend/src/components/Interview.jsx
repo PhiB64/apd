@@ -12,15 +12,13 @@ const Interview = forwardRef(({ titre, description, videoUrl }, ref) => {
   const videoRef = useRef(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
-  // 🔁 Réinitialise la vidéo au chargement
   useLayoutEffect(() => {
     if (videoRef.current) {
       videoRef.current.currentTime = 0;
-      videoRef.current.pause(); // facultatif si tu veux qu'elle ne démarre pas automatiquement
+      videoRef.current.pause();
     }
   }, []);
 
-  // 🎯 Détecte le mode plein écran
   useEffect(() => {
     const handleFullscreen = () => {
       const fullscreenElement = document.fullscreenElement;
@@ -33,21 +31,22 @@ const Interview = forwardRef(({ titre, description, videoUrl }, ref) => {
     };
   }, []);
 
-  // 🖱️ Clic pour passer en plein écran
   const handleClick = () => {
     if (videoRef.current?.requestFullscreen) {
       videoRef.current.requestFullscreen();
     }
   };
 
-  if (!titre && !description && !videoUrl) return null;
+  if (!titre && (!description || description.length === 0) && !videoUrl)
+    return null;
 
   return (
     <div
       ref={ref}
-      className="w-screen h-screen flex items-center justify-center px-4 md:px-6 "
+      className="w-screen h-screen flex items-center justify-center px-4 md:px-6"
     >
       <div className="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        {/* Texte à gauche */}
         <div className="flex flex-col justify-center space-y-6 text-black px-2">
           {titre &&
             (() => {
@@ -61,17 +60,28 @@ const Interview = forwardRef(({ titre, description, videoUrl }, ref) => {
                 </h2>
               );
             })()}
-          {description && (
-            <div className="text-sm md:text-base space-y-2 leading-relaxed text-justify font-garamond">
-              <p className="lettrine">{description}</p>
+
+          {Array.isArray(description) && (
+            <div className="text-sm md:text-base space-y-2 leading-relaxed text-justify">
+              {description.map((para, index) => {
+                const text = para?.children
+                  ?.map((c) => c?.text)
+                  .join("")
+                  .trim();
+                return text ? (
+                  <p key={index} className={index === 0 ? "lettrine" : ""}>
+                    {text}
+                  </p>
+                ) : null;
+              })}
             </div>
           )}
         </div>
 
+        {/* Vidéo à droite */}
         {videoUrl && (
           <div className="flex items-center justify-center px-2">
             <div className="relative w-screen max-w-[40rem] aspect-video overflow-none">
-              {/* Masque SVG */}
               <svg width="0" height="0">
                 <defs>
                   <clipPath id="videoMask" clipPathUnits="objectBoundingBox">
@@ -80,7 +90,6 @@ const Interview = forwardRef(({ titre, description, videoUrl }, ref) => {
                 </defs>
               </svg>
 
-              {/* Vidéo masquée + clic plein écran */}
               <video
                 ref={videoRef}
                 src={videoUrl}

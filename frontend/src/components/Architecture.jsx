@@ -8,7 +8,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 const Architecture = forwardRef(({ styleArchitectural, plan }, ref) => {
-  const imageRef = useRef(null); // ✅ ref pour l’image
+  const imageRef = useRef(null);
 
   if (!styleArchitectural || styleArchitectural.length === 0) return null;
 
@@ -18,7 +18,7 @@ const Architecture = forwardRef(({ styleArchitectural, plan }, ref) => {
     plan?.url ??
     null;
 
-  // ✅ Animation GSAP au scroll
+  // Animation GSAP au scroll
   useLayoutEffect(() => {
     if (!imageRef.current) return;
 

@@ -26,42 +26,41 @@ export default function Gallery({ images }) {
       );
 
       if (desktopItems.length > 0) {
-        gsap.set(desktopItems, { opacity: 0, x: 100 });
+        gsap.set(desktopItems, { opacity: 1, x: 1000 });
         gsap.to(desktopItems, {
           opacity: 1,
           x: 0,
-          stagger: 0.2,
-          duration: 0.6,
-          ease: "power2.out",
+          stagger: 0.5,
+          duration: 0.1,
+          ease: "none",
           scrollTrigger: {
             trigger: galleryRef.current,
-            start: "top center",
-            end: "bottom center",
-            scrub: false,
-            toggleActions: "play none none reverse",
+            start: "80% top",
+            end: "200% top",
+            scrub: true,
+            markers: false,
           },
         });
       }
 
       if (mobileItems.length > 0) {
-        gsap.set(mobileItems, { opacity: 0, y: 50 });
+        gsap.set(mobileItems, { opacity: 1, x: 300 });
         gsap.to(mobileItems, {
           opacity: 1,
-          y: 0,
+          x: 0,
           stagger: 0.1,
-          duration: 0.4,
-          delay: 0.3,
-          ease: "power2.out",
+          duration: 0.2,
+          ease: "none",
           scrollTrigger: {
             trigger: galleryRef.current,
-            start: "top center",
-            end: "bottom center",
-            scrub: false,
-            toggleActions: "play none none reverse",
+            start: "bottom center",
+            end: "150% top",
+            scrub: true,
+            markers: false,
           },
         });
       }
-    }, galleryRef);
+    }, galleryRef.current); // ✅ use ref.current
 
     return () => ctx.revert();
   }, [images]);
@@ -83,12 +82,9 @@ export default function Gallery({ images }) {
   ];
 
   return (
-    <div
-      ref={galleryRef}
-      className="relative w-full min-h-[600px] md:h-screen "
-    >
+    <div ref={galleryRef} className="relative w-screen h-screen">
       {/* Desktop */}
-      <div className="absolute hidden md:block w-full h-full overflow-hidden">
+      <div className="absolute hidden md:block w-full h-full overflow-hidden ">
         {images.slice(0, 11).map((img, index) => {
           const style = layoutStyles[index];
           return (
@@ -126,7 +122,7 @@ export default function Gallery({ images }) {
       </div>
 
       {/* Mobile */}
-      <div className="md:hidden w-full grid grid-cols-1 gap-6 pt-6">
+      <div className="md:hidden w-full grid grid-cols-1 gap-6 px-6">
         {images.slice(0, 4).map((img, index) => (
           <div
             key={index}

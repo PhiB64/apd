@@ -97,8 +97,7 @@ export default function DescriptionSection({
     img?.formats?.large?.url ?? img?.formats?.medium?.url ?? img?.url;
 
   const titreInterview = interviewBlock?.titre;
-  const descriptionInterview =
-    interviewBlock?.description?.[0]?.children?.[0]?.text;
+  const descriptionInterview = interviewBlock?.description ?? [];
   const videoUrl = interviewBlock?.video?.url;
 
   const hasInterviewContent =
