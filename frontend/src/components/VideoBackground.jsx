@@ -1,16 +1,16 @@
-"use client";
-
-export default function VideoBackground({ videoUrl, isMuted = true }) {
+export default function VideoBackground({ videoUrl }) {
   if (!videoUrl) return null;
 
   return (
-    <video
-      src={videoUrl}
-      className="fixed inset-0 w-full h-full object-cover z-[-1]"
-      autoPlay
-      loop
-      muted={isMuted}
-      playsInline
-    />
+    <div className="fixed inset-0 z-0 w-full h-full overflow-hidden pointer-events-none">
+      <video
+        src={videoUrl}
+        autoPlay
+        loop
+        muted
+        playsInline
+        className="w-full h-full object-cover"
+      />
+    </div>
   );
 }

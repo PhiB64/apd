@@ -11,37 +11,25 @@ import IntroSection from "@components/IntroSection";
 import DescriptionSection from "@components/DescriptionSection";
 import PartnerSection from "@components/PartnerSection";
 import BlogSection from "@components/BlogSection";
-
 import ContactModal from "@components/ContactModal";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Home() {
-  const API_URL = process.env.NEXT_PUBLIC_API_URL;
-  const { eglise, accueil, parametres_site, interviews, partenaires, error } =
-    useSiteData(API_URL);
+  const { eglise, accueil, interviews, partenaires, articles, error } =
+    useSiteData();
 
-  const backgroundUrl =
-    parametres_site?.attributes?.background?.formats?.large?.url ??
-    parametres_site?.attributes?.background?.url ??
-    null;
-
-  const videoUrl = accueil?.video?.url ?? null;
   const firstInterview = Array.isArray(interviews) ? interviews[0] : null;
-
   const [showContactModal, setShowContactModal] = useState(false);
-
   const { setHideHeader } = useHeaderVisibility();
 
   // ⏱️ Masque le header au chargement, puis l'affiche au scroll
   useEffect(() => {
-    setHideHeader(true); // Masquer le header au chargement
-
+    setHideHeader(true);
     const handleScroll = () => {
       setHideHeader(false);
       window.removeEventListener("scroll", handleScroll);
     };
-
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [setHideHeader]);
@@ -54,17 +42,17 @@ export default function Home() {
     );
   }
 
+  const videoUrl = accueil?.video?.url?.startsWith("http")
+    ? accueil.video.url
+    : `${process.env.NEXT_PUBLIC_API_URL}${accueil?.video?.url}`;
+
   return (
     <main className="relative w-full min-h-screen overflow-x-hidden overflow-y-auto">
-      {/* 🎥 Fond vidéo */}
-      <VideoBackground
-        videoUrl={
-          "https://res.cloudinary.com/dkidpfpm1/video/upload/v1759917787/video_accueil_6c4adf0ce7.mp4"
-        }
-      />
+      {/* 🎥 Fond vidéo permanent */}
+      {videoUrl && <VideoBackground videoUrl={videoUrl} />}
 
-      {/* 🏁 Intro avec fond vidéo + titre animé */}
-      <IntroSection accueil={accueil} eglise={eglise} />
+      {/* 🏁 Intro */}
+      <IntroSection eglise={eglise} />
 
       {/* 📖 Description + interview */}
       {eglise && firstInterview && (
@@ -75,7 +63,7 @@ export default function Home() {
       {partenaires?.length > 0 && <PartnerSection partners={partenaires} />}
 
       {/* 📰 Blog */}
-      <BlogSection API_URL={API_URL} limit={4} />
+      <BlogSection articles={articles} limit={4} />
 
       {/* 📬 Modal contact */}
       <ContactModal

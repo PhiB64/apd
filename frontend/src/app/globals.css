@@ -61,25 +61,6 @@ body {
   margin-top: -0.1em; /* réduit l’espace au-dessus */
   padding-right: 0.02em; /* espace entre la lettrine et le texte */
 }
-@font-face {
-  font-family: "cloister";
-  src: url("/fonts/CloisterBlack.ttf") format("truetype");
-  font-weight: normal;
-  font-style: normal;
-}
-.font-cloister {
-  font-family: cloister;
-}
-
-@font-face {
-  font-family: "olde";
-  src: url("../../public/fonts/OldeEnglish.ttf") format("truetype");
-  font-weight: normal;
-  font-style: normal;
-}
-.font-olde {
-  font-family: olde;
-}
 
 @font-face {
   font-family: "annStone";

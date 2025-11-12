@@ -1,33 +1,52 @@
 import { useEffect, useState } from "react";
 
-export function useSiteData(API_URL) {
-  const [eglise, setEglise] = useState(null);
-  const [accueil, setAccueil] = useState(null);
-  const [parametres_site, setParametres_site] = useState(null);
-  const [articles, setArticles] = useState([]);
-  const [interviews, setInterviews] = useState(null);
-  const [partenaires, setPartenaires] = useState(null);
+export function useSiteData() {
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
+  const [data, setData] = useState({
+    eglise: null,
+    accueil: null,
+    parametres_site: null,
+    articles: [],
+    interviews: null,
+    partenaires: null,
+  });
+
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    if (!API_URL) {
+      setError("API_URL est undefined");
+      setIsLoading(false);
+      return;
+    }
+
+    const fetchJson = async (url, label) => {
+      const res = await fetch(url);
+      const contentType = res.headers.get("content-type");
+      if (!contentType?.includes("application/json")) {
+        throw new Error(`Réponse non JSON pour ${label}`);
+      }
+      return res.json();
+    };
+
     const fetchData = async () => {
       try {
-        const [
-          egliseRes,
-          accueilRes,
-          siteRes,
-          articlesRes,
-          interviewsRes,
-          partenairesRes,
-        ] = await Promise.all([
-          fetch(`${API_URL}/api/eglise?populate=*`),
-          fetch(`${API_URL}/api/accueil?populate=*`),
-          fetch(`${API_URL}/api/parametres-site?populate=*`),
-          fetch(`${API_URL}/api/articles?populate=image`),
-          fetch(`${API_URL}/api/interviews?populate=*`),
-          fetch(`${API_URL}/api/partenaires?populate=*`),
-        ]);
+        const endpoints = [
+          ["eglise", "/api/eglise?populate=*"],
+          ["accueil", "/api/accueil?populate=*"],
+          ["parametres_site", "/api/parametres-site?populate=*"],
+          ["articles", "/api/articles?populate=image"],
+          ["interviews", "/api/interviews?populate=*"],
+          ["partenaires", "/api/partenaires?populate=*"],
+        ];
+
+        const results = await Promise.all(
+          endpoints.map(([label, path]) =>
+            fetchJson(`${API_URL}${path}`, label)
+          )
+        );
 
         const [
           egliseJson,
@@ -36,32 +55,25 @@ export function useSiteData(API_URL) {
           articlesJson,
           interviewsJson,
           partenairesJson,
-        ] = await Promise.all([
-          egliseRes.json(),
-          accueilRes.json(),
-          siteRes.json(),
-          articlesRes.json(),
-          interviewsRes.json(),
-          partenairesRes.json(),
-        ]);
+        ] = results;
 
-        const publishedSortedArticles = (articlesJson?.data ?? [])
+        const sortedArticles = (articlesJson?.data ?? [])
           .filter((a) => a?.publishedAt)
-          .sort((a, b) => {
-            const dateA = new Date(a.date_publication);
-            const dateB = new Date(b.date_publication);
-            return dateB - dateA;
-          });
+          .sort(
+            (a, b) =>
+              new Date(b.date_publication) - new Date(a.date_publication)
+          );
 
-        setEglise(egliseJson?.data ?? null);
-        setAccueil(accueilJson?.data ?? null);
-        setParametres_site(siteJson?.data ?? null);
-        setArticles(publishedSortedArticles);
-        setInterviews(interviewsJson?.data ?? null);
-        setPartenaires(partenairesJson?.data ?? null);
+        setData({
+          eglise: egliseJson?.data ?? null,
+          accueil: accueilJson?.data ?? null,
+          parametres_site: siteJson?.data ?? null,
+          articles: sortedArticles,
+          interviews: interviewsJson?.data ?? null,
+          partenaires: partenairesJson?.data ?? null,
+        });
       } catch (err) {
-        setError(`Erreur détaillée: ${err.message}`);
-        console.error("Erreur de chargement :", err);
+        setError(`Erreur : ${err.message}`);
       } finally {
         setIsLoading(false);
       }
@@ -70,14 +82,5 @@ export function useSiteData(API_URL) {
     fetchData();
   }, [API_URL]);
 
-  return {
-    eglise,
-    accueil,
-    parametres_site,
-    articles,
-    interviews,
-    partenaires,
-    error,
-    isLoading,
-  };
+  return { ...data, error, isLoading };
 }

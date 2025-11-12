@@ -1,10 +1,10 @@
 "use client";
 
-import { useRef, useLayoutEffect, useEffect, useState } from "react";
+import { useRef, useLayoutEffect, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Volume2, VolumeX } from "lucide-react";
-
+import Image from "next/image";
 import ScrollIndicator from "./ScrollIndicator";
 import useIsMobile from "@hooks/useIsMobile";
 
@@ -13,14 +13,13 @@ gsap.registerPlugin(ScrollTrigger);
 export default function IntroSection({ eglise }) {
   const sectionRef = useRef(null);
   const welcomeRef = useRef(null);
+  const gsapScope = useRef(null);
 
   const [isMuted, setIsMuted] = useState(true);
   const [showScrollIndicator, setShowScrollIndicator] = useState(true);
-  const [showSoundButton, setShowSoundButton] = useState(true);
 
   const isMobile = useIsMobile();
 
-  // 🔁 ScrollIndicator visible uniquement en haut
   useLayoutEffect(() => {
     const handleScroll = () => {
       setShowScrollIndicator(window.scrollY < 100);
@@ -30,7 +29,6 @@ export default function IntroSection({ eglise }) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // 🔊 Réinitialise le mute au chargement
   useLayoutEffect(() => {
     const video = document.querySelector("video");
     if (video) {
@@ -39,12 +37,11 @@ export default function IntroSection({ eglise }) {
     }
   }, []);
 
-  // 🎬 Animation GSAP + mute à la sortie
   useLayoutEffect(() => {
-    const ctx = gsap.context(() => {
-      if (!sectionRef.current || !welcomeRef.current) return;
+    if (!sectionRef.current || !welcomeRef.current) return;
 
-      gsap.set(welcomeRef.current, { opacity: 0, y: 0, scale: 0.6 });
+    const ctx = gsap.context(() => {
+      gsap.set(welcomeRef.current, { opacity: 0, y: 0, scale: 0.2 });
 
       const tl = gsap.timeline({
         scrollTrigger: {
@@ -54,7 +51,6 @@ export default function IntroSection({ eglise }) {
           scrub: true,
           pin: sectionRef.current,
           anticipatePin: 1,
-          markers: false,
         },
       });
 
@@ -62,19 +58,10 @@ export default function IntroSection({ eglise }) {
         opacity: 1,
         y: 0,
         scale: 1,
-        duration: 4,
-        ease: "none",
+        duration: 9, // ⬅️ durée augmentée pour ralentir l’apparition
+        ease: "power2.out", // ⬅️ transition plus douce
       });
 
-      tl.to(welcomeRef.current, {
-        opacity: 1,
-        y: 0,
-        delay: 1,
-        duration: 4,
-        ease: "none",
-      });
-
-      // 🔇 Mute automatique à la sortie de la section
       ScrollTrigger.create({
         trigger: sectionRef.current,
         start: "top top",
@@ -87,7 +74,7 @@ export default function IntroSection({ eglise }) {
           }
         },
       });
-    }, sectionRef);
+    }, gsapScope);
 
     return () => ctx.revert();
   }, [isMobile]);
@@ -107,26 +94,37 @@ export default function IntroSection({ eglise }) {
 
   return (
     <section
-      ref={sectionRef}
-      className="relative h-screen w-screen flex items-center justify-center text-center px-6 overflow-hidden"
+      ref={(el) => {
+        sectionRef.current = el;
+        gsapScope.current = el;
+      }}
+      className="relative h-screen w-screen flex flex-col items-center justify-center text-center px-4 overflow-hidden"
     >
+      {/* 🪧 Titre animé */}
       <div
         ref={welcomeRef}
-        className="z-20 text-white text-center w-full max-w-[80vw] opacity-0 px-4"
+        className="z-20 text-white flex flex-col items-center justify-center w-full px-4 "
       >
-        <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight drop-shadow-xl">
-          Aidez-nous à préserver
-          <br />
-          un trésor du patrimoine
-        </h2>
-        <p className="mt-6">
-          <span className="text-4xl md:text-5xl leading-relaxed font-garamond">
+        <div className="bg-black/40 backdrop-blur-sm rounded-lg p-4 sm:p-6 w-full max-w-3xl">
+          <div className="relative w-32 h-32 sm:w-48 sm:h-48 mx-auto ">
+            <Image
+              src="/whiteLogo.png"
+              alt="Logo blanc"
+              fill
+              className="object-contain"
+              priority
+            />
+          </div>
+          <h1 className="text-xl sm:text-3xl md:text-5xl font-extrabold leading-tight tracking-tight drop-shadow-xl text-white text-center">
+            Aidez-nous à préserver
+            <br />
+            ce trésor du patrimoine
+          </h1>
+          <p className="mt-4 sm:mt-6 text-lg sm:text-4xl md:text-5xl font-garamond leading-relaxed text-white/90 text-center">
             {reste}{" "}
-          </span>
-          <span className="text-4xl md:text-5xl leading-relaxed font-garamond shadow-underline">
-            {dernier}
-          </span>
-        </p>
+            <span className="shadow-underline text-white ">{dernier}</span>
+          </p>
+        </div>
       </div>
 
       {/* ⬇️ Scroll Indicator */}
@@ -139,18 +137,16 @@ export default function IntroSection({ eglise }) {
         <ScrollIndicator />
       </div>
 
-      {/* 🔊 Bouton son fixe */}
-      {showSoundButton && (
-        <div className="fixed bottom-6 right-6 z-50 transition-opacity duration-500">
-          <button
-            onClick={toggleMute}
-            className="w-12 h-12 rounded-full bg-white/10 text-white backdrop-blur-md shadow-md hover:bg-white/20 transition flex items-center justify-center"
-            aria-label="Activer/Désactiver le son"
-          >
-            {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
-          </button>
-        </div>
-      )}
+      {/* 🔊 Bouton son */}
+      <div className="fixed bottom-6 right-6 z-50 transition-opacity duration-500">
+        <button
+          onClick={toggleMute}
+          className="w-12 h-12 rounded-full bg-white/10 text-white backdrop-blur-md shadow-md hover:bg-white/20 transition flex items-center justify-center"
+          aria-label="Activer/Désactiver le son"
+        >
+          {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
+        </button>
+      </div>
     </section>
   );
 }

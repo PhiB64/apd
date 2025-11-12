@@ -13,8 +13,12 @@ export default function FloatingHeader({ site, onContactClick, isVisible }) {
   const pathname = usePathname();
   const router = useRouter();
 
-  const logoUrl =
+  const rawLogoUrl =
     site?.logo?.url ?? site?.logo?.data?.attributes?.url ?? "/logo.png";
+
+  const logoUrl = rawLogoUrl.startsWith("http")
+    ? rawLogoUrl
+    : `${process.env.NEXT_PUBLIC_API_URL}${rawLogoUrl}`;
 
   const navLinks = [
     { label: "Accueil", href: "/" },
@@ -55,8 +59,8 @@ export default function FloatingHeader({ site, onContactClick, isVisible }) {
               link.href ? (
                 <a
                   key={link.label}
-                  href={link.href}
-                  className={`transition hover:text-red-700 ${
+                  onClick={() => router.push(link.href)}
+                  className={`cursor-pointer transition hover:text-red-700 ${
                     pathname === link.href ? "text-[#ac1115] font-semibold" : ""
                   }`}
                 >

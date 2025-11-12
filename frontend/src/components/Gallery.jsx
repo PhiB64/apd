@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -14,7 +14,7 @@ export default function Gallery({ images }) {
   const getImageUrl = (img) =>
     img?.formats?.large?.url ?? img?.formats?.medium?.url ?? img?.url;
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!galleryRef.current || !images || images.length === 0) return;
 
     const ctx = gsap.context(() => {
@@ -25,38 +25,42 @@ export default function Gallery({ images }) {
         ".gallery-item.mobile"
       );
 
-      gsap.set(desktopItems, { opacity: 1, x: 1000 });
-      gsap.to(desktopItems, {
-        opacity: 1,
-        x: 0,
-        stagger: 0.5,
-        duration: 0.1,
-        ease: "none",
-        scrollTrigger: {
-          trigger: galleryRef.current,
-          start: "80% top",
-          end: "200% top",
-          scrub: true,
-          markers: false,
-        },
-      });
+      if (desktopItems.length > 0) {
+        gsap.set(desktopItems, { opacity: 0, x: 100 });
+        gsap.to(desktopItems, {
+          opacity: 1,
+          x: 0,
+          stagger: 0.2,
+          duration: 0.6,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: galleryRef.current,
+            start: "top center",
+            end: "bottom center",
+            scrub: false,
+            toggleActions: "play none none reverse",
+          },
+        });
+      }
 
-      gsap.set(mobileItems, { opacity: 1, x: 300 });
-
-      gsap.to(mobileItems, {
-        opacity: 1,
-        x: 0,
-        stagger: 0.1,
-        duration: 0.2,
-        ease: "none",
-        scrollTrigger: {
-          trigger: galleryRef.current,
-          start: "bottom center",
-          end: "150% top",
-          scrub: true,
-          markers: false,
-        },
-      });
+      if (mobileItems.length > 0) {
+        gsap.set(mobileItems, { opacity: 0, y: 50 });
+        gsap.to(mobileItems, {
+          opacity: 1,
+          y: 0,
+          stagger: 0.1,
+          duration: 0.4,
+          delay: 0.3,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: galleryRef.current,
+            start: "top center",
+            end: "bottom center",
+            scrub: false,
+            toggleActions: "play none none reverse",
+          },
+        });
+      }
     }, galleryRef);
 
     return () => ctx.revert();
@@ -79,9 +83,9 @@ export default function Gallery({ images }) {
   ];
 
   return (
-    <section
+    <div
       ref={galleryRef}
-      className="relative w-screen min-h-screen overflow-hidden py-10 px-6"
+      className="relative w-full min-h-[600px] md:h-screen "
     >
       {/* Desktop */}
       <div className="absolute hidden md:block w-full h-full overflow-hidden">
@@ -109,7 +113,7 @@ export default function Gallery({ images }) {
             className="absolute inset-0 z-[10] flex items-center justify-center cursor-pointer"
             onClick={() => setSelectedImage(null)}
           >
-            <div className=" relative w-full max-w-4xl aspect-[16/9] overflow-hidden shadow-xl bg-black/60 border-3 border-white">
+            <div className="relative w-full max-w-4xl aspect-[16/9] overflow-hidden shadow-xl bg-black/60 border-3 border-white">
               <Image
                 src={getImageUrl(selectedImage)}
                 alt={selectedImage.name || "Image agrandie"}
@@ -122,11 +126,11 @@ export default function Gallery({ images }) {
       </div>
 
       {/* Mobile */}
-      <div className="md:hidden w-full grid grid-cols-1 gap-6">
+      <div className="md:hidden w-full grid grid-cols-1 gap-6 pt-6">
         {images.slice(0, 4).map((img, index) => (
           <div
             key={index}
-            className="gallery-item.mobile relative h-[200px] overflow-hidden shadow-lg transition-transform duration-300 hover:scale-105 border-3 border-white"
+            className="gallery-item mobile relative h-[200px] overflow-hidden shadow-lg transition-transform duration-300 hover:scale-105 border-3 border-white"
           >
             <Image
               src={getImageUrl(img)}
@@ -137,6 +141,6 @@ export default function Gallery({ images }) {
           </div>
         ))}
       </div>
-    </section>
+    </div>
   );
 }
