@@ -123,7 +123,7 @@ export default function DescriptionSection({
         {/* Bloc description */}
         <div
           ref={descriptionRef}
-          className="w-full px-6 pt-12 flex items-center justify-center"
+          className="relative w-full px-6 pt-12 flex items-center justify-center"
         >
           <div className="max-w-4xl w-full flex flex-col md:flex-row gap-10 items-center text-black">
             <div className="md:w-1/2 space-y-4">
@@ -167,12 +167,12 @@ export default function DescriptionSection({
         </div>
 
         {/* Galerie */}
-        <div className="w-full w-screen ">
+        <div className="relative w-full w-screen ">
           <Gallery images={eglise?.images ?? []} />
         </div>
 
         {/* Architecture */}
-        <div className="w-full px-6" ref={architectureRef}>
+        <div className="relative w-full px-6" ref={architectureRef}>
           <Architecture
             styleArchitectural={eglise?.style_architectural}
             plan={eglise?.plan}
@@ -181,7 +181,7 @@ export default function DescriptionSection({
 
         {/* Interview */}
         {hasInterviewContent && (
-          <div ref={interviewRef} className="w-full ">
+          <div ref={interviewRef} className="relative w-full ">
             <div className="max-w-4xl w-full ">
               <Interview
                 titre={titreInterview}

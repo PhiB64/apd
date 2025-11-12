@@ -103,10 +103,11 @@ export default function IntroSection({ eglise }) {
       {/* 🪧 Titre animé */}
       <div
         ref={welcomeRef}
-        className="z-20 text-white flex flex-col items-center justify-center w-full px-4 "
+        className="z-20 text-white flex flex-col items-center justify-center w-full px-4"
       >
-        <div className="bg-black/40 backdrop-blur-sm rounded-lg p-4 sm:p-6 w-full max-w-3xl">
-          <div className="relative w-32 h-32 sm:w-48 sm:h-48 mx-auto ">
+        <div className="bg-black/40 backdrop-blur-sm rounded-lg p-6 sm:p-4 w-full max-w-4xl">
+          {/* Logo */}
+          <div className="relative w-32 h-32 sm:w-36 sm:h-36 md:w-40 md:h-40 mx-auto">
             <Image
               src="/whiteLogo.png"
               alt="Logo blanc"
@@ -115,14 +116,18 @@ export default function IntroSection({ eglise }) {
               priority
             />
           </div>
-          <h1 className="text-xl sm:text-4xl md:text-5xl font-extrabold leading-tight tracking-tight drop-shadow-xl text-white text-center">
+
+          {/* Titre principal */}
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight tracking-tight drop-shadow-xl text-white text-center mt-6">
             Aidez-nous à préserver
             <br />
             ce trésor du patrimoine
           </h1>
-          <p className="mt-4 sm:mt-6 text-lg sm:text-7xl md:text-5xl font-garamond leading-relaxed text-white/90 text-center">
+
+          {/* Sous-titre */}
+          <p className="mt-4 sm:mt-6 text-4xl  md:text-5xl font-garamond leading-relaxed text-white/90 text-center">
             {reste}{" "}
-            <span className="shadow-underline text-white ">{dernier}</span>
+            <span className="shadow-underline text-white">{dernier}</span>
           </p>
         </div>
       </div>
