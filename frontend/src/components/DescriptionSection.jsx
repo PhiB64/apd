@@ -167,7 +167,7 @@ export default function DescriptionSection({
         </div>
 
         {/* Galerie */}
-        <div className="w-full px-6">
+        <div className="w-full my-15">
           <Gallery images={eglise?.images ?? []} />
         </div>
 
