@@ -106,15 +106,15 @@ export default function Gallery({ images }) {
 
         {selectedImage && (
           <div
-            className="absolute inset-0 z-[10] flex items-center justify-center cursor-pointer"
+            className="absolute inset-0 z-[999] flex items-center justify-center cursor-pointer"
             onClick={() => setSelectedImage(null)}
           >
-            <div className="relative w-full max-w-4xl aspect-[16/9] overflow-hidden shadow-xl bg-black/60 border-3 border-white">
+            <div className="relative w-full max-w-4xl aspect-[16/9] overflow-hidden shadow-xl bg-black/60 border-10 border-white">
               <Image
                 src={getImageUrl(selectedImage)}
                 alt={selectedImage.name || "Image agrandie"}
                 fill
-                className="object-contain"
+                className="object-fill"
               />
             </div>
           </div>
