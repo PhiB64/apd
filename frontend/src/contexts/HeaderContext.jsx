@@ -16,7 +16,7 @@ export function useHeaderVisibility() {
   return context;
 }
 
-export default function HeaderWrapper({ children }) {
+export default function HeaderProvider({ children }) {
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
   const { parametres_site } = useSiteData(API_URL);
 

@@ -2,16 +2,15 @@
 import { useState, useEffect } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-
+import Footer from "@components/Footer";
 import { useSiteData } from "@hooks/useSiteData";
-import { useHeaderVisibility } from "@components/HeaderWrapper";
+import { useHeaderVisibility } from "contexts/HeaderContext";
 
 import VideoBackground from "@components/VideoBackground";
 import IntroSection from "@components/IntroSection";
 import DescriptionSection from "@components/DescriptionSection";
 import PartnerSection from "@components/PartnerSection";
 import BlogSection from "@components/BlogSection";
-import ContactModal from "@components/ContactModal";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -20,7 +19,7 @@ export default function Home() {
     useSiteData();
 
   const firstInterview = Array.isArray(interviews) ? interviews[0] : null;
-  const [showContactModal, setShowContactModal] = useState(false);
+
   const { setHideHeader } = useHeaderVisibility();
 
   // ⏱️ Masque le header au chargement, puis l'affiche au scroll
@@ -47,7 +46,7 @@ export default function Home() {
     : `${process.env.NEXT_PUBLIC_API_URL}${accueil?.video?.url}`;
 
   return (
-    <main className="relative w-full min-h-screen overflow-x-hidden overflow-y-auto">
+    <main className="relative w-full min-h-screen overflow-x-hidden overflow-y-hidden">
       {/* 🎥 Fond vidéo permanent */}
       {videoUrl && <VideoBackground videoUrl={videoUrl} />}
 
@@ -63,13 +62,7 @@ export default function Home() {
       {partenaires?.length > 0 && <PartnerSection partners={partenaires} />}
 
       {/* 📰 Blog */}
-      <BlogSection articles={articles} limit={4} />
-
-      {/* 📬 Modal contact */}
-      <ContactModal
-        isOpen={showContactModal}
-        onClose={() => setShowContactModal(false)}
-      />
+      <BlogSection limit={3} />
     </main>
   );
 }

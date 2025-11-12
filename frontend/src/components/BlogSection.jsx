@@ -1,40 +1,61 @@
 "use client";
 
+import { useSiteData } from "@hooks/useSiteData";
 import Link from "next/link";
 import Image from "next/image";
-import { useSiteData } from "@hooks/useSiteData";
 
-export default function BlogSection({ API_URL, limit = 3 }) {
-  const { articles, isLoading, error } = useSiteData(API_URL);
+export default function BlogSection({ limit = 4 }) {
+  const { articles, error } = useSiteData();
 
-  if (isLoading || error) return null;
+  if (error) {
+    return (
+      <section className="w-full px-6 py-20 text-center text-red-600">
+        <p>Erreur lors du chargement des articles : {error}</p>
+      </section>
+    );
+  }
+
+  if (!articles || articles.length === 0) {
+    return (
+      <section className="w-full px-6 py-20 text-center text-gray-600">
+        <p>Aucun article disponible pour le moment.</p>
+      </section>
+    );
+  }
 
   const displayedArticles = articles.slice(0, limit);
 
   return (
-    <section className="w-full px-6 md:px-32 py-20 bg-[#f9f5ef] text-black">
-      <div className="max-w-6xl mx-auto space-y-12">
-        {/* 📰 Titre */}
+    <section className="relative w-full px-6 md:px-32 py-20 text-black overflow-hidden">
+      {/* ✅ Fond pierre comme dans DescriptionSection */}
+      <div
+        className="absolute inset-0 z-0 bg-repeat bg-center bg-[length:100vw_100vh] "
+        style={{ backgroundImage: 'url("/fond_pierre.jpg")' }}
+      />
+
+      <div className="relative z-10 max-w-6xl mx-auto space-y-12">
+        {/* 📰 Titre principal */}
         <div className="text-center">
-          <h2 className="text-3xl md:text-4xl font-garamond leading-snug">
-            Derniers{" "}
-            <span className="text-[#ac1115] shadow-underline">articles</span>
+          <h2 className="text-3xl md:text-4xl font-garamond text-black leading-snug">
+            Nos derniers{" "}
+            <span className="text-white shadow-underline">articles</span>
           </h2>
         </div>
 
         {/* 🖋️ Liste des articles */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="flex flex-wrap justify-center gap-8">
           {displayedArticles.map((article) => {
-            const { id, attributes } = article;
-            if (!attributes) return null;
+            const {
+              id,
+              titre,
+              slug,
+              image,
+              date_publication,
+              contenu,
+              auteur,
+            } = article;
 
-            const { titre, slug, image, date_publication, contenu, auteur } =
-              attributes;
-
-            const imageUrl =
-              image?.data?.attributes?.formats?.medium?.url ??
-              image?.data?.attributes?.url ??
-              null;
+            const imageUrl = image?.formats?.medium?.url ?? image?.url ?? null;
 
             const extrait =
               contenu?.[0]?.children?.[0]?.text?.slice(0, 180) ?? "";
@@ -43,9 +64,9 @@ export default function BlogSection({ API_URL, limit = 3 }) {
               <Link
                 key={id}
                 href={`/blog/${slug}`}
-                className="group block space-y-2"
+                className="group block w-full max-w-[320px]"
               >
-                <div className="p-6 bg-white rounded shadow-md hover:shadow-lg transition-shadow duration-300">
+                <div className="flex flex-col justify-between h-full min-h-[500px] p-6 bg-white bg-opacity-90 backdrop-blur-sm rounded shadow-md hover:shadow-lg transition-shadow duration-300">
                   {imageUrl && (
                     <div className="relative w-full h-48 mb-4 rounded overflow-hidden">
                       <Image
@@ -57,21 +78,23 @@ export default function BlogSection({ API_URL, limit = 3 }) {
                       />
                     </div>
                   )}
-                  <h3 className="text-xl font-semibold font-garamond group-hover:text-[#ac1115]">
-                    {titre}
-                  </h3>
-                  <p className="text-sm text-gray-600 italic">
-                    Publié le{" "}
-                    {new Date(date_publication).toLocaleDateString("fr-FR", {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    })}{" "}
-                    par {auteur}
-                  </p>
-                  <p className="mt-2 text-sm text-justify text-gray-800">
-                    {extrait}...
-                  </p>
+                  <div className="flex-grow space-y-2">
+                    <h3 className="text-xl font-semibold font-garamond group-hover:text-[#ac1115]">
+                      {titre}
+                    </h3>
+                    <p className="text-sm text-gray-600 italic">
+                      Publié le{" "}
+                      {new Date(date_publication).toLocaleDateString("fr-FR", {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      })}{" "}
+                      par {auteur ?? "Auteur inconnu"}
+                    </p>
+                    <p className="text-sm text-justify text-gray-800">
+                      {extrait}...
+                    </p>
+                  </div>
                   <span className="inline-block mt-4 text-[#ac1115] font-semibold">
                     Lire l’article →
                   </span>

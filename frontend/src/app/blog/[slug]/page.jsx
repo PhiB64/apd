@@ -2,10 +2,8 @@
 
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import FloatingHeader from "@components/FloatingHeader";
-import Footer from "@components/Footer";
+
 import { useSiteData } from "@hooks/useSiteData";
-import ContactModal from "@components/ContactModal";
 
 async function getArticle(slug) {
   const res = await fetch(
@@ -20,7 +18,7 @@ export default function ArticlePage({ params }) {
   const { slug } = params;
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
   const { parametres_site, isLoading, error } = useSiteData(API_URL);
-  const [showContactModal, setShowContactModal] = useState(false);
+
   const [article, setArticle] = useState(null);
   const [loadingArticle, setLoadingArticle] = useState(true);
 
@@ -57,58 +55,49 @@ export default function ArticlePage({ params }) {
   const imageUrl = image?.url || image?.data?.attributes?.url;
 
   return (
-    <>
-      <main
-        className="min-h-screen pt-[150px] pb-20 px-6 "
-        style={{
-          backgroundImage: 'url("/fond_pierre.jpg")',
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-        }}
-      >
-        <div className="max-w-3xl mx-auto">
-          <h1 className="text-2xl md:text-3xl font-bold drop-shadow-lg leading-snug text-gray-900 text-center mb-6">
-            {titre}
-          </h1>
+    <main
+      className="min-h-screen pt-[150px] pb-20 px-6 "
+      style={{
+        backgroundImage: 'url("/fond_pierre.jpg")',
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }}
+    >
+      <div className="max-w-3xl mx-auto">
+        <h1 className="text-2xl md:text-3xl font-bold drop-shadow-lg leading-snug text-gray-900 text-center mb-6">
+          {titre}
+        </h1>
 
-          <p className="text-sm md:text-base font-normal drop-shadow-sm leading-relaxed text-gray-500 text-center mb-2">
-            {date_publication
-              ? new Date(date_publication).toLocaleDateString("fr-FR")
-              : "Date inconnue"}
-          </p>
+        <p className="text-sm md:text-base font-normal drop-shadow-sm leading-relaxed text-gray-500 text-center mb-2">
+          {date_publication
+            ? new Date(date_publication).toLocaleDateString("fr-FR")
+            : "Date inconnue"}
+        </p>
 
-          <p className="text-sm md:text-base font-normal drop-shadow-sm leading-relaxed text-gray-600 text-center italic mb-8">
-            {auteur ?? "Auteur inconnu"}
-          </p>
+        <p className="text-sm md:text-base font-normal drop-shadow-sm leading-relaxed text-gray-600 text-center italic mb-8">
+          {auteur ?? "Auteur inconnu"}
+        </p>
 
-          {imageUrl && (
-            <div className="mb-8 rounded-lg overflow-hidden shadow-lg relative w-full h-80">
-              <Image
-                src={imageUrl}
-                alt={titre}
-                fill
-                className="object-cover"
-                sizes="(max-width: 768px) 100vw, 700px"
-              />
-            </div>
-          )}
-
-          <div className="space-y-4 text-sm md:text-base font-normal drop-shadow-sm leading-relaxed text-gray-800">
-            {contenu?.map((block, i) => {
-              const text = block.children?.[0]?.text?.trim();
-              return text ? <p key={i}>{text}</p> : null;
-            })}
+        {imageUrl && (
+          <div className="mb-8 rounded-lg overflow-hidden shadow-lg relative w-full h-80">
+            <Image
+              src={imageUrl}
+              alt={titre}
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 700px"
+            />
           </div>
-        </div>
-      </main>
+        )}
 
-      <Footer site={parametres_site} API_URL={API_URL} />
-      {/* 📬 Modale contact */}
-      <ContactModal
-        isOpen={showContactModal}
-        onClose={() => setShowContactModal(false)}
-      />
-    </>
+        <div className="space-y-4 text-sm md:text-base font-normal drop-shadow-sm leading-relaxed text-gray-800">
+          {contenu?.map((block, i) => {
+            const text = block.children?.[0]?.text?.trim();
+            return text ? <p key={i}>{text}</p> : null;
+          })}
+        </div>
+      </div>
+    </main>
   );
 }

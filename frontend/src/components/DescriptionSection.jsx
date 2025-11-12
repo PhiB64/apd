@@ -109,10 +109,10 @@ export default function DescriptionSection({
     <section
       ref={sectionRef}
       id="description-anchor"
-      className="relative w-full overflow-x-hidden"
+      className="relative w-full  overflow-x-hidden"
     >
       <div
-        className="absolute inset-0 z-0 bg-cover bg-center"
+        className="absolute inset-0 z-0 bg-repeat bg-[length:100vw_100vh]"
         style={{ backgroundImage: 'url("/fond_pierre.jpg")' }}
       />
 
@@ -167,7 +167,7 @@ export default function DescriptionSection({
         </div>
 
         {/* Galerie */}
-        <div className="w-full my-15">
+        <div className="w-full w-screen ">
           <Gallery images={eglise?.images ?? []} />
         </div>
 

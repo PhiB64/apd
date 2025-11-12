@@ -123,11 +123,11 @@ export default function Gallery({ images }) {
 
       {/* Mobile */}
       <div className="md:hidden w-full h-screen flex items-center justify-center px-6">
-        <div className="w-full grid grid-cols-1 gap-6 ">
+        <div className="w-full grid grid-cols-1 gap-4 ">
           {images.slice(0, 4).map((img, index) => (
             <div
               key={index}
-              className="gallery-item mobile relative h-[200px] overflow-hidden shadow-lg transition-transform duration-300 hover:scale-105 border-3 border-white"
+              className="gallery-item mobile relative h-[180px] overflow-hidden shadow-lg transition-transform duration-300 hover:scale-105 border-3 border-white"
             >
               <Image
                 src={getImageUrl(img)}

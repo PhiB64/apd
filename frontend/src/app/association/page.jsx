@@ -1,15 +1,14 @@
 "use client";
-import { useState } from "react";
-import FloatingHeader from "@components/FloatingHeader";
-import Footer from "@components/Footer";
-import { useSiteData } from "@hooks/useSiteData";
-import ContactModal from "@components/ContactModal";
+
+import { useHeaderVisibility } from "../../contexts/HeaderContext";
+import FloatingHeader from "../../components/FloatingHeader";
+
+import { useSiteData } from "../../hooks/useSiteData";
 
 export default function AssociationPage() {
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
   const { parametres_site, error } = useSiteData(API_URL);
-
-  const [showContactModal, setShowContactModal] = useState(false);
+  const { setShowContactModal } = useHeaderVisibility();
 
   if (error) {
     return (
@@ -29,7 +28,7 @@ export default function AssociationPage() {
       />
 
       <main
-        className="min-h-screen bg-white pt-28 pb-10 px-6 "
+        className="min-h-screen bg-white pt-28 pb-10 px-6"
         style={{
           backgroundImage: 'url("/fond_pierre.jpg")',
           backgroundSize: "cover",
@@ -39,7 +38,7 @@ export default function AssociationPage() {
       >
         {/* Intro */}
         <section className="max-w-4xl mx-auto text-center mb-16">
-          <h1 className="text-3xl md:text-4xl  drop-shadow-lg leading-snug text-black mb-6 font-garamond">
+          <h1 className="text-3xl md:text-4xl drop-shadow-lg leading-snug text-black mb-6 font-garamond">
             Notre action pour Saint-Jean-Baptiste{" "}
             <span className="shadow-underline text-white">d’Aulès</span>
           </h1>
@@ -99,14 +98,6 @@ export default function AssociationPage() {
           </button>
         </section>
       </main>
-
-      <Footer site={parametres_site} API_URL={API_URL} />
-
-      {/* 📬 Modale contact */}
-      <ContactModal
-        isOpen={showContactModal}
-        onClose={() => setShowContactModal(false)}
-      />
     </>
   );
 }

@@ -115,12 +115,12 @@ export default function IntroSection({ eglise }) {
               priority
             />
           </div>
-          <h1 className="text-xl sm:text-3xl md:text-5xl font-extrabold leading-tight tracking-tight drop-shadow-xl text-white text-center">
+          <h1 className="text-xl sm:text-4xl md:text-5xl font-extrabold leading-tight tracking-tight drop-shadow-xl text-white text-center">
             Aidez-nous à préserver
             <br />
             ce trésor du patrimoine
           </h1>
-          <p className="mt-4 sm:mt-6 text-lg sm:text-4xl md:text-5xl font-garamond leading-relaxed text-white/90 text-center">
+          <p className="mt-4 sm:mt-6 text-lg sm:text-7xl md:text-5xl font-garamond leading-relaxed text-white/90 text-center">
             {reste}{" "}
             <span className="shadow-underline text-white ">{dernier}</span>
           </p>

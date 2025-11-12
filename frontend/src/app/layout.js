@@ -1,7 +1,6 @@
 import "./globals.css";
-
-import HeaderWrapper from "@components/HeaderWrapper";
-import Footer from "@components/Footer"; // Assure-toi que le chemin est correct
+import Footer from "../components/Footer";
+import HeaderProvider from "../contexts/HeaderContext";
 
 export const metadata = {
   title: "Église Saint-Jean-Baptiste d’Aulès",
@@ -12,8 +11,11 @@ export default function RootLayout({ children }) {
   return (
     <html lang="fr">
       <body>
-        <HeaderWrapper>{children}</HeaderWrapper>
-        <Footer />
+        {/*Fournit le header flottant + modale de contact + contexte global */}
+        <HeaderProvider>
+          {children}
+          <Footer />
+        </HeaderProvider>
       </body>
     </html>
   );

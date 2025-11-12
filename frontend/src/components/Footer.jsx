@@ -7,7 +7,7 @@ export default function Footer({ site }) {
   const reseaux = site?.reseaux_sociaux ?? [];
 
   return (
-    <footer className="bg-black text-white px-6 py-16 min-h-[150px]">
+    <footer className="relative bg-black text-white px-6 py-16 min-h-[150px]">
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center md:items-start justify-between gap-10">
         <LogoBlock logoUrl={logoUrl} />
         <SocialBlock reseaux={reseaux} />
