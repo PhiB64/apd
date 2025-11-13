@@ -19,11 +19,11 @@ export default function PartnerSection({ partners }) {
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({
         scrollTrigger: {
-          trigger: divRef.current,
+          trigger: sectionRef.current,
           start: "top top",
           end: "+70%",
           scrub: true,
-          pin: divRef.current,
+          pin: sectionRef.current,
           anticipatePin: 2,
           markers: false,
         },
@@ -91,11 +91,11 @@ export default function PartnerSection({ partners }) {
   return (
     <section
       ref={sectionRef}
-      className=" relative min-h-screen w-full overflow-hidden bg-[#ac1115] flex items-start justify-center pt-20"
+      className=" relative min-h-screen w-full overflow-hidden bg-[#ac1115] flex items-center justify-center"
     >
       <div
         ref={divRef}
-        className="absolute max-w-6xl w-full h-full mx-auto grid grid-cols-1 md:grid-cols-2 items-start"
+        className="absolute max-w-6xl w-full h-full mx-auto grid grid-cols-1 md:grid-cols-2 items-center"
       >
         {/* Bloc texte */}
         <div ref={textBlockRef} className="space-y-4 px-4">
