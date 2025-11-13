@@ -109,7 +109,7 @@ export default function DescriptionSection({
     <section
       ref={sectionRef}
       id="description-anchor"
-      className="relative w-full h-full overflow-hidden"
+      className="relative w-full min-h-screen overflow-hidden"
     >
       <div
         className="absolute inset-0 z-0 bg-repeat bg-[length:100vw_100vh]"
@@ -118,12 +118,12 @@ export default function DescriptionSection({
 
       <div
         ref={sliderRef}
-        className={`relative z-10 ${isMobile ? "flex flex-col" : "h-full"}`}
+        className={` w-full h-full z-10 ${isMobile ? "flex flex-col" : "h-full"}`}
       >
         {/* Bloc description */}
         <div
           ref={descriptionRef}
-          className="relative w-full px-6 pt-12 flex items-center justify-center"
+          className="relative w-full h-full px-6 pt-12 flex items-center justify-center"
         >
           <div className="max-w-4xl w-full flex flex-col md:flex-row gap-10 items-center text-black">
             <div className="md:w-1/2 space-y-4">
@@ -167,12 +167,12 @@ export default function DescriptionSection({
         </div>
 
         {/* Galerie */}
-        <div className="relative w-full w-screen ">
+        <div className="relative w-full w-full ">
           <Gallery images={eglise?.images ?? []} />
         </div>
 
         {/* Architecture */}
-        <div className="relative w-full px-6" ref={architectureRef}>
+        <div className="relative w-full w-full px-6" ref={architectureRef}>
           <Architecture
             styleArchitectural={eglise?.style_architectural}
             plan={eglise?.plan}
@@ -181,7 +181,7 @@ export default function DescriptionSection({
 
         {/* Interview */}
         {hasInterviewContent && (
-          <div ref={interviewRef} className=" w-full ">
+          <div ref={interviewRef} className=" relative w-full h-full ">
             <div className="  max-w-4xl w-full ">
               <Interview
                 titre={titreInterview}

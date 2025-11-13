@@ -13,16 +13,18 @@ export default function PartnerSection({ partners }) {
   const logoBlockRef = useRef(null);
   const logosRef = useRef([]);
   const imagesRef = useRef([]);
+  const divRef = useRef([]);
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({
         scrollTrigger: {
-          trigger: sectionRef.current,
+          trigger: divRef.current,
           start: "top top",
           end: "+70%",
           scrub: true,
-          pin: true,
+          pin: divRef.current,
+          anticipatePin: 2,
           markers: false,
         },
       });
@@ -89,9 +91,12 @@ export default function PartnerSection({ partners }) {
   return (
     <section
       ref={sectionRef}
-      className=" relative min-h-screen w-full overflow-hidden bg-[#ac1115] flex items-center justify-center pt-20"
+      className=" relative min-h-screen w-full overflow-hidden bg-[#ac1115] flex items-start justify-center pt-20"
     >
-      <div className="absolute max-w-6xl w-full h-full mx-auto grid grid-cols-1 md:grid-cols-2 items-center">
+      <div
+        ref={divRef}
+        className="absolute max-w-6xl w-full h-full mx-auto grid grid-cols-1 md:grid-cols-2 items-start"
+      >
         {/* Bloc texte */}
         <div ref={textBlockRef} className="space-y-4 px-4">
           <h2 className="text-3xl sm:text-4xl font-garamond leading-snug drop-shadow-xl text-white">
