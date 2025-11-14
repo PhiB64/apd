@@ -56,6 +56,7 @@ export default function DescriptionSection({
           end: "top+=500%",
           scrub: true,
           pin: true,
+          pinSpacing: 100,
         },
       });
     }, sectionRef);
