@@ -1,53 +1,43 @@
 "use client";
 
+import { useSiteData } from "@hooks/useSiteData";
+
 export default function DonationButton({
-  href,
-  label = "Soutenez-nous",
   className = "",
-  variant = "header", // "header" ou "menu"
+  variant = "header", // "header" ou "intro"
 }) {
-  if (!href) return null;
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
+  const { parametres_site } = useSiteData(API_URL);
+
+  // Valeurs par défaut si les données ne sont pas encore chargées
+  const href = encodeURI(parametres_site?.url_don ?? "/don");
+  const label = parametres_site?.bouton_don?.label ?? "Soutenez-nous";
+
+  const baseClasses =
+    "pulse-button flex items-center justify-center rounded-sm bg-[#ac1115] text-white shadow-md hover:brightness-120 transition-all duration-300 w-fit ";
 
   return (
     <>
       {variant === "header" && (
-        <>
-          {/* 🟥 Bouton texte visible uniquement >768px */}
-          <a
-            href={href}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`hidden md:flex items-center justify-center px-6 py-2 rounded-sm bg-[#ac1115] text-white font-semibold shadow-md hover:brightness-120 transition-all duration-300 w-fit ${className}`}
-          >
-            {label}
-          </a>
-
-          {/* ❤️ Icône cœur visible uniquement ≤768px */}
-          <a
-            href={href}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`flex md:hidden items-center justify-center text-[#ac1115] hover:brightness-120 transition p-2 rounded-full ${className}`}
-            aria-label="Faire un don"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="currentColor"
-              viewBox="0 0 24 24"
-              className="w-5 h-5 text-[#ac1115] pulse-heart"
-            >
-              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-            </svg>
-          </a>
-        </>
-      )}
-
-      {variant === "menu" && (
         <a
           href={href}
           target="_blank"
           rel="noopener noreferrer"
-          className={`flex items-center justify-center px-6 py-2 rounded-sm bg-[#ac1115] text-white font-semibold shadow-md hover:brightness-120 transition-all duration-300 w-fit ${className}`}
+          className={`${baseClasses}
+            px-4 py-1.5 text-sm font-medium
+            md:px-6 md:py-2 md:text-base md:font-semibold
+            ${className}`}
+        >
+          {label}
+        </a>
+      )}
+
+      {variant === "intro" && (
+        <a
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={`${baseClasses} text-xl px-8 py-4 font-semibold ${className}`}
         >
           {label}
         </a>

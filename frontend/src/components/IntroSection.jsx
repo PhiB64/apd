@@ -1,34 +1,45 @@
 "use client";
 
-import { useRef, useLayoutEffect, useState } from "react";
+import { useRef, useLayoutEffect, useEffect, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Volume2, VolumeX } from "lucide-react";
-import Image from "next/image";
 import ScrollIndicator from "./ScrollIndicator";
+import DonationButton from "@components/DonationButton";
 import useIsMobile from "@hooks/useIsMobile";
+import { useHeaderDonation } from "@contexts/HeaderDonationContext";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function IntroSection({ eglise }) {
   const sectionRef = useRef(null);
   const welcomeRef = useRef(null);
+  const buttonRef = useRef(null);
   const gsapScope = useRef(null);
 
   const [isMuted, setIsMuted] = useState(true);
   const [showScrollIndicator, setShowScrollIndicator] = useState(true);
 
   const isMobile = useIsMobile();
+  const { setShowDonationButton } = useHeaderDonation();
 
+  //  Initialisation à false au montage
+  useEffect(() => {
+    setShowDonationButton(false);
+  }, [setShowDonationButton]);
+
+  //  Scroll indicator uniquement
   useLayoutEffect(() => {
     const handleScroll = () => {
-      setShowScrollIndicator(window.scrollY < 100);
+      const isTop = window.scrollY < 100;
+      setShowScrollIndicator(isTop);
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Mute vidéo au chargement
   useLayoutEffect(() => {
     const video = document.querySelector("video");
     if (video) {
@@ -37,47 +48,70 @@ export default function IntroSection({ eglise }) {
     }
   }, []);
 
+  // Animation GSAP + déclenchement du bouton Header
   useLayoutEffect(() => {
-    if (!sectionRef.current || !welcomeRef.current) return;
+    if (!sectionRef.current || !welcomeRef.current || !buttonRef.current)
+      return;
 
     const ctx = gsap.context(() => {
-      gsap.set(welcomeRef.current, { opacity: 0, y: 0, scale: 0.2 });
+      gsap.set([welcomeRef.current, buttonRef.current], {
+        opacity: 0,
+        scale: 0.5,
+      });
 
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top top",
-          end: isMobile ? "+=500" : "+=1000",
+          end: isMobile ? "+=1000" : "+=2000",
           scrub: true,
-          pin: sectionRef.current,
+          pin: true,
           anticipatePin: 1,
         },
       });
 
       tl.to(welcomeRef.current, {
         opacity: 1,
-        y: 0,
         scale: 1,
-        duration: 9, // ⬅️ durée augmentée pour ralentir l’apparition
-        ease: "power2.out", // ⬅️ transition plus douce
-      });
+        ease: "none",
+      })
+        .to(
+          buttonRef.current,
+          {
+            opacity: 1,
+            scale: 1,
+            ease: "none",
+          },
+          "+=0.3"
+        )
+        .to(
+          buttonRef.current,
+          {
+            opacity: 0,
+            scale: 0.6,
+            ease: "none",
+            onComplete: () => setShowDonationButton(true), //  Affiche le bouton Header
+          },
+          "+=0.6"
+        );
 
       ScrollTrigger.create({
         trigger: sectionRef.current,
         start: "top top",
-        end: "bottom top",
+        end: isMobile ? "+=100" : "+=2000",
+        onLeaveBack: () => setShowDonationButton(false),
         onLeave: () => {
           const video = document.querySelector("video");
           if (video) {
             video.muted = true;
-            setIsMuted(true);
+            setIsMuted(true); // pour mettre à jour l’icône
           }
         },
       });
     }, gsapScope);
 
     return () => ctx.revert();
-  }, [isMobile]);
+  }, [isMobile, setShowDonationButton]);
 
   const toggleMute = () => {
     const video = document.querySelector("video");
@@ -100,41 +134,27 @@ export default function IntroSection({ eglise }) {
       }}
       className="relative h-screen w-screen flex flex-col items-center justify-center text-center px-4 overflow-hidden"
     >
-      {/* 🪧 Titre animé */}
       <div
         ref={welcomeRef}
         className="z-20 text-white flex flex-col items-center justify-center w-full px-4"
       >
-        <div className="bg-black/40 backdrop-blur-sm rounded-lg p-6 sm:p-4 w-full max-w-4xl">
-          {/* Logo */}
-          <div className="relative w-32 h-32 sm:w-36 sm:h-36 md:w-40 md:h-40 mx-auto">
-            <Image
-              src="/whiteLogo.png"
-              alt="Logo blanc"
-              fill
-              className="object-contain"
-              priority
-            />
-          </div>
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight tracking-tight drop-shadow-xl text-white text-center mt-6">
+          Aidez-nous à préserver
+          <br />
+          ce trésor du patrimoine
+        </h1>
 
-          {/* Titre principal */}
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight tracking-tight drop-shadow-xl text-white text-center mt-6">
-            Aidez-nous à préserver
-            <br />
-            ce trésor du patrimoine
-          </h1>
+        <p className="mt-4 sm:mt-6 text-4xl md:text-5xl font-garamond leading-relaxed text-white/90 text-center">
+          {reste} <span className="shadow-underline text-white">{dernier}</span>
+        </p>
 
-          {/* Sous-titre */}
-          <p className="mt-4 sm:mt-6 text-4xl  md:text-5xl font-garamond leading-relaxed text-white/90 text-center">
-            {reste}{" "}
-            <span className="shadow-underline text-white">{dernier}</span>
-          </p>
+        <div ref={buttonRef} className="mt-8">
+          <DonationButton variant="intro" />
         </div>
       </div>
 
-      {/* ⬇️ Scroll Indicator */}
       <div
-        className={`absolute bottom-6 sm:bottom-10 z-40 pointer-events-none transition-opacity duration-500 ${
+        className={`absolute bottom-6 sm:bottom-15 z-40 pointer-events-none transition-opacity duration-500 ${
           showScrollIndicator ? "opacity-100" : "opacity-0"
         }`}
         aria-hidden="true"
@@ -142,7 +162,6 @@ export default function IntroSection({ eglise }) {
         <ScrollIndicator />
       </div>
 
-      {/* 🔊 Bouton son */}
       <div className="fixed bottom-6 right-6 z-50 transition-opacity duration-500">
         <button
           onClick={toggleMute}

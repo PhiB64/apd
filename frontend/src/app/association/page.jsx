@@ -1,14 +1,10 @@
 "use client";
 
-import { useHeaderVisibility } from "../../contexts/HeaderContext";
-import FloatingHeader from "../../components/FloatingHeader";
-
 import { useSiteData } from "../../hooks/useSiteData";
 
 export default function AssociationPage() {
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
   const { parametres_site, error } = useSiteData(API_URL);
-  const { setShowContactModal } = useHeaderVisibility();
 
   if (error) {
     return (
@@ -22,11 +18,6 @@ export default function AssociationPage() {
 
   return (
     <>
-      <FloatingHeader
-        site={parametres_site}
-        onContactClick={() => setShowContactModal(true)}
-      />
-
       <main
         className="min-h-screen bg-white pt-28 pb-10 px-6"
         style={{

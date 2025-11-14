@@ -1,6 +1,5 @@
 "use client";
 
-import React, { useState } from "react";
 import { useSiteData } from "@hooks/useSiteData";
 
 import BlogSection from "@components/BlogSection";

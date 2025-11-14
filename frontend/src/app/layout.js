@@ -1,6 +1,7 @@
 import "./globals.css";
 import Footer from "../components/Footer";
-import HeaderProvider from "../contexts/HeaderContext";
+import HeaderWrapper from "@components/HeaderWapper";
+import { HeaderDonationProvider } from "../contexts/HeaderDonationContext";
 
 export const metadata = {
   title: "Église Saint-Jean-Baptiste d’Aulès",
@@ -11,11 +12,11 @@ export default function RootLayout({ children }) {
   return (
     <html lang="fr">
       <body>
-        {/*Fournit le header flottant + modale de contact + contexte global */}
-        <HeaderProvider>
+        <HeaderDonationProvider>
+          <HeaderWrapper />
           {children}
           <Footer />
-        </HeaderProvider>
+        </HeaderDonationProvider>
       </body>
     </html>
   );

@@ -1,6 +1,7 @@
 "use client";
 
-import { useLayoutEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -26,16 +27,20 @@ export default function Gallery({ images }) {
       );
 
       if (desktopItems.length > 0) {
-        gsap.set(desktopItems, { opacity: 1, x: 1000 });
+        gsap.set(desktopItems, { opacity: 1, x: 500 });
         gsap.to(desktopItems, {
           opacity: 1,
           x: 0,
-          stagger: 0.5,
-          duration: 0.1,
+          stagger: (index, target) => {
+            // Lire l'ordre d'animation depuis l'attribut data-order
+            return parseFloat(target.getAttribute("data-order")) * 1.5;
+          },
+          duration: 1.5,
           ease: "none",
+
           scrollTrigger: {
             trigger: galleryRef.current,
-            start: "80% top",
+            start: "50% top",
             end: "200% top",
             scrub: true,
             markers: false,
@@ -44,20 +49,19 @@ export default function Gallery({ images }) {
       }
 
       if (mobileItems.length > 0) {
-        mobileItems.forEach((item) => {
-          gsap.set(item, { opacity: 0, y: 50 });
-          gsap.to(item, {
-            opacity: 1,
-            y: 0,
-            duration: 0.6,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: item,
-              start: "top 80%",
-              end: "bottom center",
-              toggleActions: "play none none reverse",
-            },
-          });
+        gsap.set(mobileItems, { opacity: 0, y: 50 });
+        gsap.to(mobileItems, {
+          opacity: 1,
+          y: 0,
+          stagger: 0.6,
+          duration: 1.5,
+          ease: "power3.out",
+          delay: 0.2,
+          scrollTrigger: {
+            trigger: galleryRef.current,
+            start: "top center",
+            toggleActions: "play none none reverse",
+          },
         });
       }
     }, galleryRef.current);
@@ -65,60 +69,76 @@ export default function Gallery({ images }) {
     return () => ctx.revert();
   }, [images]);
 
+  useEffect(() => {
+    let previousOverflow;
+    const onKey = (e) => {
+      if (e.key === "Escape") setSelectedImage(null);
+    };
+
+    if (selectedImage) {
+      previousOverflow = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      globalThis.addEventListener("keydown", onKey);
+    }
+
+    return () => {
+      document.body.style.overflow = previousOverflow || "";
+      globalThis.removeEventListener("keydown", onKey);
+    };
+  }, [selectedImage]);
+
   if (!images || images.length === 0) return null;
 
   const layoutStyles = [
-    { top: "10%", left: "0%", width: "20%", height: "30%", zIndex: 1 },
-    { top: "35%", left: "3%", width: "21%", height: "33%", zIndex: 2 },
-    { top: "12%", left: "22%", width: "18%", height: "43%", zIndex: 3 },
-    { top: "65%", left: "0%", width: "15%", height: "25%", zIndex: 4 },
-    { top: "60%", left: "20%", width: "15%", height: "30%", zIndex: 5 },
-    { top: "40%", left: "37%", width: "15%", height: "45%", zIndex: 6 },
-    { top: "10%", left: "42%", width: "20%", height: "27%", zIndex: 7 },
-    { top: "63%", left: "50%", width: "20%", height: "27%", zIndex: 8 },
-    { top: "33%", left: "54%", width: "20%", height: "27%", zIndex: 9 },
-    { top: "12%", left: "64%", width: "22%", height: "25%", zIndex: 10 },
-    { top: "40%", left: "70%", width: "22%", height: "50%", zIndex: 11 },
+    { top: "0%", left: "0%", width: "22%", height: "37%", order: 0 },
+    { top: "0%", left: "24%", width: "22%", height: "66%", order: 1 },
+    { top: "0%", left: "48%", width: "25%", height: "26%", order: 2 },
+    { top: "0%", left: "75%", width: "25%", height: "36%", order: 3 },
+    { top: "29%", left: "48%", width: "25%", height: "37%", order: 4 },
+    { top: "39%", left: "75%", width: "25%", height: "27%", order: 5 },
+    { top: "40%", left: "0%", width: "22%", height: "60%", order: 6 },
+    { top: "69%", left: "60%", width: "40%", height: "31%", order: 7 },
+    { top: "69%", left: "24%", width: "34%", height: "31%", order: 8 },
   ];
 
   return (
-    <div ref={galleryRef} className="relative w-screen h-screen">
+    <div
+      ref={galleryRef}
+      className="relative w-screen h-screen flex items-center justify-center"
+    >
       {/* Desktop */}
-      <div className="absolute hidden md:block w-full h-full overflow-hidden">
-        {images.slice(0, 11).map((img, index) => {
-          const style = layoutStyles[index];
+      <div className="hidden md:block relative w-[50vw] h-[60vh]  mx-auto">
+        {images.slice(0, 9).map((img, index) => {
+          const style = layoutStyles[index] || {
+            top: "0%",
+            left: "0%",
+            width: "20%",
+            height: "33%",
+          };
           return (
             <button
-              key={index}
+              key={img.id || index}
               onClick={() => setSelectedImage(img)}
-              className="gallery-item desktop absolute overflow-hidden border-3 border-white shadow-lg transition-transform duration-1000"
-              style={style}
+              className="gallery-item desktop absolute overflow-hidden border-3 border-white shadow-lg transition-transform duration-500"
+              data-order={style.order}
+              style={{
+                top: style.top,
+                left: style.left,
+                width: style.width,
+                height: style.height,
+              }}
             >
-              <Image
-                src={getImageUrl(img)}
-                alt={img.name || `Image ${index + 1}`}
-                fill
-                className="object-cover transition-transform duration-300 hover:scale-105 cursor-pointer focus:outline-none"
-              />
+              <div className="relative w-full h-full">
+                <Image
+                  src={getImageUrl(img)}
+                  alt={img.name || `Image ${index + 1}`}
+                  fill
+                  className="object-cover transition-transform duration-300 hover:scale-105 cursor-pointer"
+                />
+              </div>
             </button>
           );
         })}
-
-        {selectedImage && (
-          <div
-            className="absolute inset-0 z-[999] flex items-center justify-center cursor-pointer"
-            onClick={() => setSelectedImage(null)}
-          >
-            <div className="relative w-full max-w-4xl aspect-[16/9] overflow-hidden shadow-xl bg-black/60 border-10 border-white">
-              <Image
-                src={getImageUrl(selectedImage)}
-                alt={selectedImage.name || "Image agrandie"}
-                fill
-                className="object-fill"
-              />
-            </div>
-          </div>
-        )}
       </div>
 
       {/* Mobile */}
@@ -126,7 +146,7 @@ export default function Gallery({ images }) {
         <div className="w-full grid grid-cols-1 gap-4 ">
           {images.slice(0, 4).map((img, index) => (
             <div
-              key={index}
+              key={img.id || index}
               className="gallery-item mobile relative h-[180px] overflow-hidden shadow-lg transition-transform duration-300 hover:scale-105 border-3 border-white"
             >
               <Image
@@ -139,6 +159,35 @@ export default function Gallery({ images }) {
           ))}
         </div>
       </div>
+
+      {typeof document !== "undefined" && selectedImage
+        ? createPortal(
+            <div
+              role="dialog"
+              aria-modal="true"
+              tabIndex={-1}
+              className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
+              onClick={() => setSelectedImage(null)}
+            >
+              <div
+                className="relative w-full max-w-[80vw] max-h-[80vh] p-4"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className="w-full h-full flex items-center justify-center">
+                  <Image
+                    src={getImageUrl(selectedImage)}
+                    alt={selectedImage.name || "Image agrandie"}
+                    width={1000}
+                    height={700}
+                    onClick={() => setSelectedImage(null)}
+                    className="object-contain max-w-full max-h-full cursor-pointer"
+                  />
+                </div>
+              </div>
+            </div>,
+            document.body
+          )
+        : null}
     </div>
   );
 }

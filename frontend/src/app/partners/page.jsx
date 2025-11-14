@@ -1,12 +1,14 @@
 "use client";
 
-import { useHeaderVisibility } from "../../contexts/HeaderContext";
+import { useState } from "react";
 import { useSiteData } from "@hooks/useSiteData";
+import ContactModal from "@components/ContactModal";
 
 export default function PartnersPage() {
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
   const { parametres_site, error } = useSiteData(API_URL);
-  const { setShowContactModal } = useHeaderVisibility();
+
+  const [showContactModal, setShowContactModal] = useState(false);
 
   if (error) {
     return (
@@ -49,6 +51,12 @@ export default function PartnersPage() {
           </button>
         </div>
       </section>
+
+      {/* 📩 Modale de contact */}
+      <ContactModal
+        isOpen={showContactModal}
+        onClose={() => setShowContactModal(false)}
+      />
     </main>
   );
 }
