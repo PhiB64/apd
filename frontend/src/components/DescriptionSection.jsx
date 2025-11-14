@@ -53,10 +53,9 @@ export default function DescriptionSection({
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top top",
-          end: "top+=500%",
+          end: "+=500%",
           scrub: true,
           pin: true,
-          pinSpacing: 100,
         },
       });
     }, sectionRef);

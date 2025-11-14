@@ -40,8 +40,8 @@ export default function Gallery({ images }) {
 
           scrollTrigger: {
             trigger: galleryRef.current,
-            start: "50% top",
-            end: "200% top",
+            start: "top center",
+            end: "+=100% ",
             scrub: true,
             markers: false,
           },
@@ -59,7 +59,7 @@ export default function Gallery({ images }) {
           delay: 0.2,
           scrollTrigger: {
             trigger: galleryRef.current,
-            start: "top center",
+            start: "+=80%",
             toggleActions: "play none none reverse",
           },
         });

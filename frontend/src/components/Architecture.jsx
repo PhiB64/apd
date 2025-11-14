@@ -31,11 +31,11 @@ const Architecture = forwardRef(({ styleArchitectural, plan }, ref) => {
         duration: 1,
         ease: "power2.out",
         scrollTrigger: {
-          trigger: imageContainerRef.current, // ✅ déclencheur précis
-          start: "top top",
+          trigger: imageContainerRef.current,
+          start: "top center",
           end: "bottom top",
           toggleActions: "play none none reverse",
-          markers: false, // passe à true pour debug
+          markers: false,
         },
       });
     }, scopeRef);

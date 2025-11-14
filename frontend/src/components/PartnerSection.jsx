@@ -9,6 +9,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 export default function PartnerSection({ partners }) {
   const scopeRef = useRef(null);
+  const blockRef = useRef(null);
   const textBlockRef = useRef(null);
   const logoBlockRef = useRef(null);
   const imagesRef = useRef([]);
@@ -19,10 +20,10 @@ export default function PartnerSection({ partners }) {
         scrollTrigger: {
           trigger: scopeRef.current,
           start: "top top",
-          end: "+=70%",
-          scrub: true,
+          end: "bottom center",
           pin: true,
-          markers: true,
+          scrub: true,
+          markers: false,
         },
       });
 
@@ -30,14 +31,14 @@ export default function PartnerSection({ partners }) {
       tl.fromTo(
         textBlockRef.current,
         { xPercent: -50, opacity: 0 },
-        { xPercent: 0, opacity: 1, ease: "power2.out" }
+        { xPercent: 0, opacity: 1, ease: "power2.out", duration: 0.6 }
       );
 
       // Animation logos
       tl.fromTo(
         logoBlockRef.current,
         { scale: 0.5, opacity: 0 },
-        { scale: 1, opacity: 1, ease: "power2.out" },
+        { scale: 1, opacity: 1, ease: "power2.out", duration: 0.6 },
         "<" // démarre en même temps que le texte
       );
 
@@ -71,9 +72,12 @@ export default function PartnerSection({ partners }) {
   return (
     <section
       ref={scopeRef}
-      className="relative min-h-screen w-full overflow-y-hidden bg-[#ac1115] flex items-center justify-center"
+      className="relative z-50 min-h-screen w-full bg-[#ac1115] flex items-center justify-center"
     >
-      <div className="  max-w-6xl h-100vh mx-auto grid grid-cols-1 md:grid-cols-2 items-center">
+      <div
+        ref={blockRef}
+        className="relative max-w-6xl h-100vh mx-auto grid grid-cols-1 md:grid-cols-2 items-center"
+      >
         {/* Bloc texte */}
         <div ref={textBlockRef} className="space-y-4 px-6 pt-28 md:pt-0">
           <h2 className="text-3xl sm:text-4xl font-garamond leading-snug drop-shadow-xl text-white">
