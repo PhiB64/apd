@@ -22,8 +22,6 @@ export default function PartnerSection({ partners }) {
           end: "+=70%",
           scrub: true,
           pin: true,
-          anticipatePin: 4,
-          pinSpacing: true,
           markers: true,
         },
       });
@@ -75,7 +73,7 @@ export default function PartnerSection({ partners }) {
       ref={scopeRef}
       className="relative min-h-screen w-full overflow-y-hidden bg-[#ac1115] flex items-center justify-center"
     >
-      <div className=" max-w-6xl w-full h-full mx-auto grid grid-cols-1 md:grid-cols-2 items-center">
+      <div className="  max-w-6xl h-100vh mx-auto grid grid-cols-1 md:grid-cols-2 items-center">
         {/* Bloc texte */}
         <div ref={textBlockRef} className="space-y-4 px-6 pt-28 md:pt-0">
           <h2 className="text-3xl sm:text-4xl font-garamond leading-snug drop-shadow-xl text-white">
