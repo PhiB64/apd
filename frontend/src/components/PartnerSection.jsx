@@ -8,58 +8,40 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 export default function PartnerSection({ partners }) {
-  const sectionRef = useRef(null);
+  const scopeRef = useRef(null);
   const textBlockRef = useRef(null);
   const logoBlockRef = useRef(null);
-  const logosRef = useRef([]);
   const imagesRef = useRef([]);
-  const divRef = useRef([]);
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({
         scrollTrigger: {
-          trigger: sectionRef.current,
+          trigger: scopeRef.current,
           start: "top top",
-          end: "+70%",
+          end: "+=70%",
           scrub: true,
-          pin: sectionRef.current,
-          anticipatePin: 2,
-          markers: false,
+          pin: true,
+          anticipatePin: 4,
+          pinSpacing: true,
+          markers: true,
         },
       });
 
       // Animation texte
       tl.fromTo(
         textBlockRef.current,
-        { xPercent: -200, opacity: 1 },
-        {
-          xPercent: 0,
-          opacity: 1,
-          duration: 10,
-          ease: "none",
-        }
+        { xPercent: -50, opacity: 0 },
+        { xPercent: 0, opacity: 1, ease: "power2.out" }
       );
 
       // Animation logos
       tl.fromTo(
         logoBlockRef.current,
-        { xPercent: 200, opacity: 1 },
-        {
-          xPercent: 0,
-          opacity: 1,
-          duration: 10,
-          ease: "none",
-        },
-        "-=10"
+        { scale: 0.5, opacity: 0 },
+        { scale: 1, opacity: 1, ease: "power2.out" },
+        "<" // démarre en même temps que le texte
       );
-
-      tl.to(logoBlockRef.current, {
-        xPercent: 0,
-        opacity: 1,
-        duration: 3,
-        ease: "none",
-      });
 
       // Effets de survol sur les logos
       imagesRef.current.forEach((img) => {
@@ -81,7 +63,7 @@ export default function PartnerSection({ partners }) {
           });
         });
       });
-    }, sectionRef);
+    }, scopeRef);
 
     return () => ctx.revert();
   }, []);
@@ -90,15 +72,12 @@ export default function PartnerSection({ partners }) {
 
   return (
     <section
-      ref={sectionRef}
-      className=" relative min-h-screen w-full overflow-hidden bg-[#ac1115] flex items-center justify-center"
+      ref={scopeRef}
+      className="relative min-h-screen w-full overflow-y-hidden bg-[#ac1115] flex items-center justify-center"
     >
-      <div
-        ref={divRef}
-        className="absolute max-w-6xl w-full h-full mx-auto grid grid-cols-1 md:grid-cols-2 items-center"
-      >
+      <div className=" max-w-6xl w-full h-full mx-auto grid grid-cols-1 md:grid-cols-2 items-center">
         {/* Bloc texte */}
-        <div ref={textBlockRef} className="space-y-4 px-4">
+        <div ref={textBlockRef} className="space-y-4 px-6 pt-28 md:pt-0">
           <h2 className="text-3xl sm:text-4xl font-garamond leading-snug drop-shadow-xl text-white">
             Nos <span className="shadow-underline text-white">partenaires</span>
           </h2>
@@ -110,8 +89,6 @@ export default function PartnerSection({ partners }) {
               composent l’identité vivante de notre territoire.
             </p>
           </div>
-
-          {/* ✅ Bouton rapproché des logos */}
           <a
             href="/partners"
             className="inline-block px-6 py-2 rounded-sm bg-white text-[#ac1115] font-semibold shadow-md hover:bg-[#f9f5ef] transition-all duration-300 w-fit mt-4"
@@ -123,7 +100,7 @@ export default function PartnerSection({ partners }) {
         {/* Bloc logos */}
         <div
           ref={logoBlockRef}
-          className="grid grid-cols-2 sm:grid-cols-3 gap-3 items-center justify-center px-4"
+          className="grid grid-cols-1 sm:grid-cols-2 gap-5 items-center justify-center px-12 py-10"
         >
           {partners.map((partner, index) => {
             const logo = partner.logo?.[0];
@@ -140,7 +117,6 @@ export default function PartnerSection({ partners }) {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="block transition-transform"
-                ref={(el) => (logosRef.current[index] = el)}
               >
                 <div className="flex items-center justify-center bg-[#f9f5ef] rounded-lg shadow-md aspect-[4/3] overflow-hidden">
                   {imageUrl && (

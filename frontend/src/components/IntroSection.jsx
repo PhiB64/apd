@@ -63,7 +63,7 @@ export default function IntroSection({ eglise }) {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top top",
-          end: isMobile ? "+=1000" : "+=2000",
+          end: isMobile ? "+=500" : "+=1000",
           scrub: true,
           pin: true,
           anticipatePin: 1,
@@ -98,7 +98,7 @@ export default function IntroSection({ eglise }) {
       ScrollTrigger.create({
         trigger: sectionRef.current,
         start: "top top",
-        end: isMobile ? "+=100" : "+=2000",
+        end: isMobile ? "+=500" : "+=1000",
         onLeaveBack: () => setShowDonationButton(false),
         onLeave: () => {
           const video = document.querySelector("video");

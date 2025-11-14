@@ -22,7 +22,7 @@ export default function DescriptionSection({
   const descriptionRef = useRef(null);
   const architectureRef = useRef(null);
   const interviewRef = useRef(null);
-  const imageContainerRef = useRef(null); // ✅ ref pour l’image principale
+  const imageContainerRef = useRef(null);
 
   const isMobile = useIsMobile();
 
@@ -53,10 +53,11 @@ export default function DescriptionSection({
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top top",
-          end: "top+=800%",
+          end: "top+=600%",
           scrub: true,
           pin: true,
           anticipatePin: 1,
+          pinSpacing: true,
         },
       });
     }, sectionRef);
@@ -64,7 +65,7 @@ export default function DescriptionSection({
     return () => ctx.revert();
   }, [isMobile, onEnter, onLeave]);
 
-  // ✅ Animation GSAP mobile sur image principale
+  //  Animation  sur image principale
   useLayoutEffect(() => {
     if (!isMobile || !imageContainerRef.current) return;
 
@@ -151,7 +152,7 @@ export default function DescriptionSection({
               <div className="md:w-1/2 w-full">
                 <div
                   ref={imageContainerRef}
-                  className="relative w-full h-[20em] md:h-[30em] aspect-[3/4] rounded-t-full overflow-hidden shadow-xl border-3 border-white gallery-item mobile"
+                  className="relative w-full h-[25em] md:h-[30em] aspect-[3/4] rounded-t-full overflow-hidden shadow-xl border-3 border-white gallery-item mobile"
                 >
                   <Image
                     src={getImageUrl(eglise.image_principale)}
