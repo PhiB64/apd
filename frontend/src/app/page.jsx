@@ -27,23 +27,31 @@ export default function Home() {
     : `${process.env.NEXT_PUBLIC_API_URL}${accueil?.video?.url}`;
 
   return (
-    <main className="relative w-full min-h-screen overflow-x-hidden overflow-y-hidden">
+    <main className="relative w-full min-h-screen overflow-x-hidden">
       {/* 🎥 Fond vidéo permanent */}
       {videoUrl && <VideoBackground videoUrl={videoUrl} />}
 
       {/* 🏁 Intro */}
-      <IntroSection eglise={eglise} />
+      <div className="relative w-screen h-[200vh] overflow-x-hidden">
+        <IntroSection eglise={eglise} />
+      </div>
 
-      {/* 📖 Description + interview */}
-      {eglise && firstInterview && (
-        <DescriptionSection eglise={eglise} interviewBlock={firstInterview} />
-      )}
+      <div className="relative w-[400vw] w-screen overflow-x-hidden">
+        {/* 📖 Description + interview */}
+        {eglise && firstInterview && (
+          <DescriptionSection eglise={eglise} interviewBlock={firstInterview} />
+        )}
+      </div>
 
-      {/* 🤝 Partenaires */}
-      {partenaires?.length > 0 && <PartnerSection partners={partenaires} />}
+      <div className="relative w-[100vw]overflow-x-hidden">
+        {/* 🤝 Partenaires */}
+        {partenaires?.length > 0 && <PartnerSection partners={partenaires} />}
+      </div>
 
-      {/* 📰 Blog */}
-      <BlogSection limit={3} />
+      <div className="relative  overflow-x-hidden">
+        {/* 📰 Blog */}
+        <BlogSection limit={3} />
+      </div>
     </main>
   );
 }

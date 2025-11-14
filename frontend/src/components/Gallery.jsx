@@ -40,10 +40,11 @@ export default function Gallery({ images }) {
 
           scrollTrigger: {
             trigger: galleryRef.current,
-            start: "top center",
-            end: "+=100% ",
+            start: "top+=30%",
+            end: "+=80%",
+
             scrub: true,
-            markers: false,
+            markers: true,
           },
         });
       }
@@ -59,7 +60,7 @@ export default function Gallery({ images }) {
           delay: 0.2,
           scrollTrigger: {
             trigger: galleryRef.current,
-            start: "+=80%",
+            start: "+=100%",
             toggleActions: "play none none reverse",
           },
         });
