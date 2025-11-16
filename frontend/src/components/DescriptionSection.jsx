@@ -90,8 +90,8 @@ export default function DescriptionSection({
         scrollTrigger: {
           id: "sliderScroll",
           trigger: sectionRef.current,
-          start: "top top",
-          end: () => `${sliderRef.current.scrollWidth - window.innerWidth}px`,
+          start: "top",
+          end: "bottom+=100% center",
           scrub: true,
           pin: true,
           anticipatePin: 1,

@@ -48,13 +48,13 @@ export default function PartnerSection({ partners, error, isLoading }) {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: scopeRef.current,
-          start: "top top",
-          end: () => `${scopeRef.current.offsetHeight}px`,
+          start: "top",
+          end: "bottom+=100% center",
           pin: true,
           pinSpacing: true,
           anticipatePin: 1,
           scrub: true,
-          markers: true,
+          markers: false,
         },
       });
 
