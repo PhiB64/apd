@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useSiteData } from "@hooks/useSiteData";
 import ContactModal from "@components/ContactModal";
+import ErrorMessage from "@components/ErrorMessage";
 
 export default function PartnersPage() {
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -11,25 +12,11 @@ export default function PartnersPage() {
   const [showContactModal, setShowContactModal] = useState(false);
 
   if (error) {
-    return (
-      <main className="min-h-screen flex items-center justify-center bg-white text-red-600">
-        <p className="text-sm md:text-base font-normal drop-shadow-sm leading-relaxed">
-          Erreur : {error}
-        </p>
-      </main>
-    );
+    return <ErrorMessage type="error" message={`Erreur : ${error}`} />;
   }
 
   return (
-    <main
-      className="min-h-screen bg-white pt-[150px] pb-20 px-6"
-      style={{
-        backgroundImage: 'url("/fond_pierre.jpg")',
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-      }}
-    >
+    <main className="min-h-screen w-full pt-[150px] pb-20 px-6 bg-pierre">
       {/* ✅ Section incitative */}
       <section className="max-w-4xl mx-auto text-center mb-20">
         <h1 className="text-3xl md:text-4xl drop-shadow-lg leading-snug text-black mb-6 font-garamond">

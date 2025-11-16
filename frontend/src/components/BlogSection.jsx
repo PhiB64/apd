@@ -3,36 +3,34 @@
 import { useSiteData } from "@hooks/useSiteData";
 import Link from "next/link";
 import Image from "next/image";
+import ErrorMessage from "@components/ErrorMessage";
 
 export default function BlogSection({ limit = 4 }) {
   const { articles, error } = useSiteData();
+  const isLoading = !articles && !error;
 
-  if (error) {
+  if (isLoading) {
     return (
-      <section className="w-full px-6 py-20 text-center text-red-600">
-        <p>Erreur lors du chargement des articles : {error}</p>
-      </section>
+      <ErrorMessage
+        type="loading"
+        message="Chargement des récits en cours..."
+      />
     );
   }
 
-  if (!articles || articles.length === 0) {
+  if (error) {
     return (
-      <section className="w-full px-6 py-20 text-center text-gray-600">
-        <p>Aucun article disponible pour le moment.</p>
-      </section>
+      <ErrorMessage
+        type="error"
+        message={`Erreur lors du chargement des articles : ${error}`}
+      />
     );
   }
 
   const displayedArticles = articles.slice(0, limit);
 
   return (
-    <section className="relative w-full h-full px-6 md:px-32 py-20 text-black overflow-hidden">
-      {/* ✅ Fond pierre comme dans DescriptionSection */}
-      <div
-        className="absolute inset-0 z-0 bg-repeat bg-center bg-[length:100vw_100vh] overflow-hidden pointer-events-none"
-        style={{ backgroundImage: 'url("/fond_pierre.jpg")' }}
-      />
-
+    <section className="relative w-full min-h-screen bg-pierre px-6 md:px-32 py-20 text-black overflow-hidden">
       <div className="relative z-10 max-w-6xl mx-auto space-y-12">
         {/* 📰 Titre principal */}
         <div className="text-center">

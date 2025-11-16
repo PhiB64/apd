@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 
 export function useSiteData() {
   const API_URL = process.env.NEXT_PUBLIC_API_URL;

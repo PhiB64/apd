@@ -4,9 +4,11 @@ import { useRef, useLayoutEffect } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Gallery from "./Gallery";
-import Interview from "./Interview";
-import Architecture from "./Architecture";
+
+import Gallery from "@components/Gallery";
+import Interview from "@components/Interview";
+import Architecture from "@components/Architecture";
+import ErrorMessage from "@components/ErrorMessage";
 import useIsMobile from "@hooks/useIsMobile";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -16,6 +18,8 @@ export default function DescriptionSection({
   interviewBlock,
   onEnter,
   onLeave,
+  isLoading,
+  error,
 }) {
   const sectionRef = useRef(null);
   const sliderRef = useRef(null);
@@ -26,7 +30,39 @@ export default function DescriptionSection({
 
   const isMobile = useIsMobile();
 
-  // Animation GSAP desktop scroll horizontal
+  // ✅ Gestion des états
+  if (isLoading) {
+    return (
+      <ErrorMessage
+        type="loading"
+        message="Chargement de la section en cours..."
+      />
+    );
+  }
+
+  if (error) {
+    return <ErrorMessage type="error" message={`Erreur : ${error}`} />;
+  }
+
+  const nom = eglise?.nom?.trim() || "";
+  const mots = nom.split(" ");
+  const premier = mots[0];
+  const reste = mots.slice(1, -1).join(" ");
+  const dernier = mots.slice(-1)[0];
+
+  const getImageUrl = (img) =>
+    img?.formats?.large?.url ?? img?.formats?.medium?.url ?? img?.url;
+
+  const titreInterview = interviewBlock?.titre;
+  const descriptionInterview = interviewBlock?.description ?? [];
+  const videoUrl = interviewBlock?.video?.url;
+
+  const hasInterviewContent =
+    titreInterview || descriptionInterview || videoUrl;
+
+  if (!eglise && !hasInterviewContent) return null;
+
+  // ✅ GSAP animations
   useLayoutEffect(() => {
     if (!sectionRef.current || isMobile) return;
 
@@ -63,7 +99,6 @@ export default function DescriptionSection({
     return () => ctx.revert();
   }, [isMobile, onEnter, onLeave]);
 
-  //  Animation  sur image principale
   useLayoutEffect(() => {
     if (!isMobile || !imageContainerRef.current) return;
 
@@ -86,38 +121,15 @@ export default function DescriptionSection({
     return () => ctx.revert();
   }, [isMobile]);
 
-  const nom = eglise?.nom?.trim() || "";
-  const mots = nom.split(" ");
-  const premier = mots[0];
-  const reste = mots.slice(1, -1).join(" ");
-  const dernier = mots.slice(-1)[0];
-
-  const getImageUrl = (img) =>
-    img?.formats?.large?.url ?? img?.formats?.medium?.url ?? img?.url;
-
-  const titreInterview = interviewBlock?.titre;
-  const descriptionInterview = interviewBlock?.description ?? [];
-  const videoUrl = interviewBlock?.video?.url;
-
-  const hasInterviewContent =
-    titreInterview || descriptionInterview || videoUrl;
-
-  if (!eglise && !hasInterviewContent) return null;
-
   return (
     <section
       ref={sectionRef}
       id="description-anchor"
-      className="relative w-full min-h-screen overflow-hidden"
+      className="relative w-full min-h-screen overflow-hidden bg-pierre z-10"
     >
       <div
-        className="absolute inset-0 z-0 bg-repeat bg-[length:100vw_100vh]"
-        style={{ backgroundImage: 'url("/fond_pierre.jpg")' }}
-      />
-
-      <div
         ref={sliderRef}
-        className={` w-full h-full z-10 ${isMobile ? "flex flex-col" : "h-full"}`}
+        className={`w-full h-full z-10 ${isMobile ? "flex flex-col" : "h-full"}`}
       >
         {/* Bloc description */}
         <div
@@ -147,18 +159,35 @@ export default function DescriptionSection({
             </div>
 
             {eglise?.image_principale && (
-              <div className="md:w-1/2 w-full">
-                <div
-                  ref={imageContainerRef}
-                  className="relative w-full h-[25em] md:h-[30em] aspect-[3/4] rounded-t-full overflow-hidden shadow-xl border-3 border-white gallery-item mobile"
-                >
+              <div
+                ref={imageContainerRef}
+                className="md:w-1/2 w-full relative flex justify-center items-center"
+              >
+                {/* Image principale */}
+                <div className="relative w-[17em] md:w-[20em] h-[25em] md:h-[32em] aspect-[9/16] rounded-t-full overflow-hidden shadow-xl border-white gallery-item mobile z-10 group">
+                  {/* Voile + flou initial */}
+                  <div className="absolute inset-0 z-20 pointer-events-none transition-all duration-500 group-hover:opacity-0 group-hover:backdrop-blur-0 backdrop-blur-sm bg-black/60" />
+
+                  {/* Image principale */}
                   <Image
                     src={getImageUrl(eglise.image_principale)}
                     alt="Image principale"
                     fill
-                    className="object-cover scale-110 object-[45%_top]"
+                    className="object-cover object-[45%_top] transition-transform duration-500 group-hover:scale-105 cursor-pointer"
                     sizes="(max-width: 768px) 100vw, 50vw"
                   />
+                </div>
+
+                {/* Cadre décoratif au-dessus avec padding mobile */}
+                <div className="absolute inset-0 z-20 pointer-events-none">
+                  <div className="relative w-full h-full">
+                    <Image
+                      src="/cadre_description.png"
+                      alt="Cadre décoratif"
+                      fill
+                      className="object-contain w-full h-full  scale-x-[1.3] md:scale-x-[1.3]"
+                    />
+                  </div>
                 </div>
               </div>
             )}
@@ -166,12 +195,12 @@ export default function DescriptionSection({
         </div>
 
         {/* Galerie */}
-        <div className="relative w-full w-full ">
+        <div className="relative w-full">
           <Gallery images={eglise?.images ?? []} />
         </div>
 
         {/* Architecture */}
-        <div className="relative w-full w-full px-6" ref={architectureRef}>
+        <div className="relative w-full px-6" ref={architectureRef}>
           <Architecture
             styleArchitectural={eglise?.style_architectural}
             plan={eglise?.plan}
@@ -180,8 +209,8 @@ export default function DescriptionSection({
 
         {/* Interview */}
         {hasInterviewContent && (
-          <div ref={interviewRef} className=" relative w-full h-full ">
-            <div className="  max-w-4xl w-full ">
+          <div ref={interviewRef} className="relative w-full h-full">
+            <div className="max-w-4xl w-full">
               <Interview
                 titre={titreInterview}
                 description={descriptionInterview}

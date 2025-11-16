@@ -117,3 +117,10 @@ body {
 .pulse-button {
   animation: pulse-button 1.5s infinite ease-in-out;
 }
+.bg-pierre {
+  background-image: url("../../public/fond_pierre.jpg");
+  background-size: 100vw 100vh;
+  background-repeat: repeat;
+  background-position: center;
+  overflow: hidden;
+}

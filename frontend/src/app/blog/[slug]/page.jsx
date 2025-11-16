@@ -2,8 +2,8 @@
 
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-
 import { useSiteData } from "@hooks/useSiteData";
+import ErrorMessage from "@components/ErrorMessage";
 
 async function getArticle(slug) {
   const res = await fetch(
@@ -33,21 +33,19 @@ export default function ArticlePage({ params }) {
 
   if (isLoading || loadingArticle) {
     return (
-      <main className="min-h-screen flex items-center justify-center bg-white text-gray-700">
-        <p className="text-sm md:text-base font-normal drop-shadow-sm leading-relaxed">
-          Chargement en cours…
-        </p>
-      </main>
+      <ErrorMessage
+        type="loading"
+        message="Chargement de l’article en cours…"
+      />
     );
   }
 
   if (error || !article) {
     return (
-      <main className="min-h-screen flex items-center justify-center bg-white text-gray-700">
-        <p className="text-sm md:text-base font-normal drop-shadow-sm leading-relaxed">
-          Article introuvable pour le slug : {slug}
-        </p>
-      </main>
+      <ErrorMessage
+        type="error"
+        message={`Article introuvable pour le slug : ${slug}`}
+      />
     );
   }
 
@@ -55,23 +53,19 @@ export default function ArticlePage({ params }) {
   const imageUrl = image?.url || image?.data?.attributes?.url;
 
   return (
-    <main
-      className="min-h-screen pt-[150px] pb-20 px-6 "
-      style={{
-        backgroundImage: 'url("/fond_pierre.jpg")',
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-      }}
-    >
+    <main className="min-h-screen pt-[150px] pb-20 px-6 bg-pierre">
       <div className="max-w-3xl mx-auto">
-        <h1 className="text-2xl md:text-3xl font-bold drop-shadow-lg leading-snug text-gray-900 text-center mb-6">
+        <h1 className="text-2xl md:text-3xl font-garamond font-bold drop-shadow-lg leading-snug text-gray-900 text-center mb-6">
           {titre}
         </h1>
 
         <p className="text-sm md:text-base font-normal drop-shadow-sm leading-relaxed text-gray-500 text-center mb-2">
           {date_publication
-            ? new Date(date_publication).toLocaleDateString("fr-FR")
+            ? new Date(date_publication).toLocaleDateString("fr-FR", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })
             : "Date inconnue"}
         </p>
 

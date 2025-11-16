@@ -28,13 +28,13 @@ const Architecture = forwardRef(({ styleArchitectural, plan }, ref) => {
       gsap.to(imageContainerRef.current, {
         scale: 1,
         opacity: 1,
-        duration: 1,
+        duration: 0.6,
         ease: "power2.out",
         scrollTrigger: {
-          trigger: imageContainerRef.current,
-          start: "top center",
-          end: "bottom top",
-          toggleActions: "play none none reverse",
+          trigger: scopeRef.current,
+          start: "+=300%",
+          end: "+=50%",
+          scrub: true,
           markers: false,
         },
       });
@@ -72,13 +72,13 @@ const Architecture = forwardRef(({ styleArchitectural, plan }, ref) => {
           <div className="w-full md:w-1/2 flex justify-center items-center">
             <div
               ref={imageContainerRef}
-              className="relative w-full max-w-[24rem] aspect-[3/4] overflow-hidden shadow-xl border-3 border-[#ac1115] self-stretch"
+              className="relative max-w-[25rem] w-full aspect-[3/4]"
             >
               <Image
                 src={planUrl}
                 alt="Plan architectural de l’église"
                 fill
-                className="object-cover object-top w-full h-full"
+                className="object-contain"
                 sizes="(max-width: 768px) 100vw, 50vw"
               />
             </div>

@@ -7,19 +7,24 @@ import IntroSection from "@components/IntroSection";
 import DescriptionSection from "@components/DescriptionSection";
 import PartnerSection from "@components/PartnerSection";
 import BlogSection from "@components/BlogSection";
+import ErrorMessage from "@components/ErrorMessage";
 
 export default function Home() {
   const { eglise, accueil, interviews, partenaires, articles, error } =
     useSiteData();
 
   const firstInterview = Array.isArray(interviews) ? interviews[0] : null;
+  const isLoading =
+    !eglise && !accueil && !interviews && !partenaires && !articles && !error;
+
+  if (isLoading) {
+    return (
+      <ErrorMessage type="loading" message="Chargement du site en cours..." />
+    );
+  }
 
   if (error) {
-    return (
-      <main className="flex flex-col h-full w-full overflow-hidden items-center justify-center bg-black">
-        <p className="text-white text-lg">Erreur : {error}</p>
-      </main>
-    );
+    return <ErrorMessage type="error" message={`Erreur : ${error}`} />;
   }
 
   const videoUrl = accueil?.video?.url?.startsWith("http")
@@ -29,27 +34,22 @@ export default function Home() {
   return (
     <main className="relative w-full min-h-screen overflow-x-hidden">
       {/* 🎥 Fond vidéo permanent */}
-      {videoUrl && <VideoBackground videoUrl={videoUrl} />}
+      {videoUrl && (
+        <div className="fixed inset-0 z-0 pointer-events-none">
+          <VideoBackground videoUrl={videoUrl} />
+        </div>
+      )}
 
-      {/* 🏁 Intro */}
-      <div className="relative w-screen h-[200vh] overflow-x-hidden">
+      {/* 🧩 Contenu principal */}
+      <div className="relative z-10">
         <IntroSection eglise={eglise} />
-      </div>
 
-      <div className="relative w-[400vw] w-screen overflow-x-hidden">
-        {/* 📖 Description + interview */}
         {eglise && firstInterview && (
           <DescriptionSection eglise={eglise} interviewBlock={firstInterview} />
         )}
-      </div>
 
-      <div className="relative w-[100vw]overflow-x-hidden">
-        {/* 🤝 Partenaires */}
         {partenaires?.length > 0 && <PartnerSection partners={partenaires} />}
-      </div>
 
-      <div className="relative  overflow-x-hidden">
-        {/* 📰 Blog */}
         <BlogSection limit={3} />
       </div>
     </main>

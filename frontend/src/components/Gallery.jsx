@@ -27,24 +27,19 @@ export default function Gallery({ images }) {
       );
 
       if (desktopItems.length > 0) {
-        gsap.set(desktopItems, { opacity: 1, x: 500 });
+        gsap.set(desktopItems, { opacity: 0, y: 500 });
         gsap.to(desktopItems, {
           opacity: 1,
-          x: 0,
-          stagger: (index, target) => {
-            // Lire l'ordre d'animation depuis l'attribut data-order
-            return parseFloat(target.getAttribute("data-order")) * 1.5;
-          },
+          y: 0,
+          stagger: (index, target) =>
+            parseFloat(target.getAttribute("data-order")) * 1.5,
           duration: 1.5,
           ease: "none",
-
           scrollTrigger: {
             trigger: galleryRef.current,
-            start: "top+=30%",
-            end: "+=80%",
-
+            start: "top+=90%",
+            end: "+=60%",
             scrub: true,
-            markers: true,
           },
         });
       }
@@ -61,7 +56,7 @@ export default function Gallery({ images }) {
           scrollTrigger: {
             trigger: galleryRef.current,
             start: "+=100%",
-            toggleActions: "play none none reverse",
+            scrub: true,
           },
         });
       }
@@ -91,15 +86,15 @@ export default function Gallery({ images }) {
   if (!images || images.length === 0) return null;
 
   const layoutStyles = [
-    { top: "0%", left: "0%", width: "22%", height: "37%", order: 0 },
-    { top: "0%", left: "24%", width: "22%", height: "66%", order: 1 },
-    { top: "0%", left: "48%", width: "25%", height: "26%", order: 2 },
-    { top: "0%", left: "75%", width: "25%", height: "36%", order: 3 },
-    { top: "29%", left: "48%", width: "25%", height: "37%", order: 4 },
-    { top: "39%", left: "75%", width: "25%", height: "27%", order: 5 },
-    { top: "40%", left: "0%", width: "22%", height: "60%", order: 6 },
-    { top: "69%", left: "60%", width: "40%", height: "31%", order: 7 },
-    { top: "69%", left: "24%", width: "34%", height: "31%", order: 8 },
+    { top: "0%", left: "0%", width: "17.6%", height: "29.6%", order: 0 },
+    { top: "0%", left: "19.2%", width: "17.6%", height: "52.8%", order: 1 },
+    { top: "0%", left: "38.4%", width: "20%", height: "20.8%", order: 2 },
+    { top: "0%", left: "60%", width: "20%", height: "28.8%", order: 3 },
+    { top: "23.2%", left: "38.4%", width: "20%", height: "29.6%", order: 4 },
+    { top: "31.2%", left: "60%", width: "20%", height: "21.6%", order: 5 },
+    { top: "32%", left: "0%", width: "17.6%", height: "48%", order: 6 },
+    { top: "55.2%", left: "48%", width: "32%", height: "24.8%", order: 7 },
+    { top: "55.2%", left: "19.2%", width: "27.2%", height: "24.8%", order: 8 },
   ];
 
   return (
@@ -107,8 +102,20 @@ export default function Gallery({ images }) {
       ref={galleryRef}
       className="relative w-screen h-screen flex items-center justify-center"
     >
+      {/* Cadre décoratif global */}
+      <div className="absolute inset-0 z-0 hidden md:flex items-center justify-center pt-20 pr-30">
+        <div className="relative h-[64rem] w-[72rem]">
+          <Image
+            src="/grand.png"
+            alt="Cadre décoratif"
+            fill
+            className="object-contain scale-x-[0.86]"
+          />
+        </div>
+      </div>
+
       {/* Desktop */}
-      <div className="hidden md:block relative w-[50vw] h-[60vh]  mx-auto">
+      <div className="hidden md:block relative w-[50vw] h-[60vh] mt-46 ml-13">
         {images.slice(0, 9).map((img, index) => {
           const style = layoutStyles[index] || {
             top: "0%",
@@ -120,7 +127,7 @@ export default function Gallery({ images }) {
             <button
               key={img.id || index}
               onClick={() => setSelectedImage(img)}
-              className="gallery-item desktop absolute overflow-hidden border-3 border-white shadow-lg transition-transform duration-500"
+              className="gallery-item desktop absolute overflow-hidden shadow-lg transition-transform duration-500 cursor-pointer"
               data-order={style.order}
               style={{
                 top: style.top,
@@ -129,13 +136,23 @@ export default function Gallery({ images }) {
                 height: style.height,
               }}
             >
-              <div className="relative w-full h-full">
+              <div className="relative w-full h-full group">
+                {/* Cadre décoratif */}
                 <Image
-                  src={getImageUrl(img)}
-                  alt={img.name || `Image ${index + 1}`}
+                  src="/or3.png"
+                  alt="Cadre décoratif"
                   fill
-                  className="object-cover transition-transform duration-300 hover:scale-105 cursor-pointer"
+                  className="object-fill z-10 pointer-events-none"
                 />
+                {/* Image */}
+                <div className="w-full h-full transition-transform duration-300 group-hover:scale-115">
+                  <Image
+                    src={getImageUrl(img)}
+                    alt={img.name || `Image ${index + 1}`}
+                    fill
+                    className="object-cover z-0"
+                  />
+                </div>
               </div>
             </button>
           );
@@ -144,23 +161,32 @@ export default function Gallery({ images }) {
 
       {/* Mobile */}
       <div className="md:hidden w-full h-screen flex items-center justify-center px-6">
-        <div className="w-full grid grid-cols-1 gap-4 ">
+        <div className="w-full grid grid-cols-1 gap-4">
           {images.slice(0, 4).map((img, index) => (
             <div
               key={img.id || index}
-              className="gallery-item mobile relative h-[180px] overflow-hidden shadow-lg transition-transform duration-300 hover:scale-105 border-3 border-white"
+              className="gallery-item mobile relative h-[180px] overflow-hidden shadow-lg transition-transform duration-300 hover:scale-115"
             >
-              <Image
-                src={getImageUrl(img)}
-                alt={img.name || `Image ${index + 1}`}
-                fill
-                className="object-cover"
-              />
+              <div className="relative w-full h-full">
+                <Image
+                  src="/or3.png"
+                  alt="Cadre décoratif"
+                  fill
+                  className="object-fill z-10 pointer-events-none"
+                />
+                <Image
+                  src={getImageUrl(img)}
+                  alt={img.name || `Image ${index + 1}`}
+                  fill
+                  className="object-cover z-0"
+                />
+              </div>
             </div>
           ))}
         </div>
       </div>
 
+      {/* Fullscreen viewer */}
       {typeof document !== "undefined" && selectedImage
         ? createPortal(
             <div

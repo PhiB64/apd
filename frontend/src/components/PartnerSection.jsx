@@ -4,80 +4,111 @@ import { useLayoutEffect, useRef } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import ErrorMessage from "@components/ErrorMessage";
 
 gsap.registerPlugin(ScrollTrigger);
 
-export default function PartnerSection({ partners }) {
+export default function PartnerSection({ partners, error, isLoading }) {
   const scopeRef = useRef(null);
-  const blockRef = useRef(null);
   const textBlockRef = useRef(null);
   const logoBlockRef = useRef(null);
   const imagesRef = useRef([]);
 
+  // ✅ Gestion des états
+  if (isLoading) {
+    return (
+      <ErrorMessage
+        type="loading"
+        message="Chargement des partenaires en cours..."
+      />
+    );
+  }
+
+  if (error) {
+    return (
+      <ErrorMessage
+        type="error"
+        message={`Erreur lors du chargement des partenaires : ${error}`}
+      />
+    );
+  }
+
+  if (!partners || partners.length === 0) {
+    return (
+      <ErrorMessage
+        type="empty"
+        message="Aucun partenaire à afficher pour le moment."
+      />
+    );
+  }
+
+  // ✅ Animation GSAP
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: scopeRef.current,
           start: "top top",
-          end: "bottom center",
+          end: "+=70%",
           pin: true,
+          pinSpacing: true,
+          anticipatePin: 1,
           scrub: true,
-          markers: false,
+          markers: true,
         },
       });
 
-      // Animation texte
       tl.fromTo(
         textBlockRef.current,
         { xPercent: -50, opacity: 0 },
         { xPercent: 0, opacity: 1, ease: "power2.out", duration: 0.6 }
       );
 
-      // Animation logos
       tl.fromTo(
         logoBlockRef.current,
         { scale: 0.5, opacity: 0 },
         { scale: 1, opacity: 1, ease: "power2.out", duration: 0.6 },
-        "<" // démarre en même temps que le texte
+        "<"
       );
 
-      // Effets de survol sur les logos
       imagesRef.current.forEach((img) => {
         if (!img) return;
-        img.addEventListener("mouseenter", () => {
+        const enter = () =>
           gsap.to(img, {
             scale: 1.05,
             rotation: 10,
             duration: 0.3,
             ease: "power2.out",
           });
-        });
-        img.addEventListener("mouseleave", () => {
+        const leave = () =>
           gsap.to(img, {
             scale: 1,
             rotation: 0,
             duration: 0.3,
             ease: "power2.out",
           });
-        });
+
+        img.addEventListener("mouseenter", enter);
+        img.addEventListener("mouseleave", leave);
+        img._gsapCleanup = () => {
+          img.removeEventListener("mouseenter", enter);
+          img.removeEventListener("mouseleave", leave);
+        };
       });
     }, scopeRef);
 
-    return () => ctx.revert();
+    return () => {
+      imagesRef.current.forEach((img) => img?._gsapCleanup?.());
+      ctx.revert();
+    };
   }, []);
-
-  if (!partners || partners.length === 0) return null;
 
   return (
     <section
       ref={scopeRef}
-      className="relative z-50 min-h-screen w-full bg-[#ac1115] flex items-center justify-center"
+      className="relative z-50 min-h-screen w-full bg-[#ac1115]  flex items-center justify-center"
     >
-      <div
-        ref={blockRef}
-        className="relative max-w-6xl h-100vh mx-auto grid grid-cols-1 md:grid-cols-2 items-center"
-      >
+      <div className="relative max-w-6xl min-h-screen mx-auto grid grid-cols-1 md:grid-cols-2 items-center">
         {/* Bloc texte */}
         <div ref={textBlockRef} className="space-y-4 px-6 pt-28 md:pt-0">
           <h2 className="text-3xl sm:text-4xl font-garamond leading-snug drop-shadow-xl text-white">
@@ -93,7 +124,7 @@ export default function PartnerSection({ partners }) {
           </div>
           <a
             href="/partners"
-            className="inline-block px-6 py-2 rounded-sm bg-white text-[#ac1115] font-semibold shadow-md hover:bg-[#f9f5ef] transition-all duration-300 w-fit mt-4"
+            className="inline-block px-6 py-2 rounded-sm bg-[#ac1115] text-white font-semibold shadow-md hover:bg-[#f9f5ef] transition-all duration-300 w-fit mt-4"
           >
             Devenez partenaire
           </a>
