@@ -49,15 +49,28 @@ export default function Home() {
 
       {/* 🧩 Contenu principal */}
       <div className="relative z-10">
-        <IntroSection eglise={eglise} />
+        <section id="intro">
+          <IntroSection eglise={eglise} />
+        </section>
 
         {eglise && firstInterview && (
-          <DescriptionSection eglise={eglise} interviewBlock={firstInterview} />
+          <section id="description">
+            <DescriptionSection
+              eglise={eglise}
+              interviewBlock={firstInterview}
+            />
+          </section>
         )}
 
-        {partenaires?.length > 0 && <PartnerSection partners={partenaires} />}
+        {partenaires?.length > 0 && (
+          <section id="partners">
+            <PartnerSection partners={partenaires} />
+          </section>
+        )}
 
-        <BlogSection limit={3} />
+        <section id="blog">
+          <BlogSection limit={3} />
+        </section>
       </div>
     </main>
   );

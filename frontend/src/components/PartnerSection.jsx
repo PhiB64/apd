@@ -49,7 +49,7 @@ export default function PartnerSection({ partners, error, isLoading }) {
         scrollTrigger: {
           trigger: scopeRef.current,
           start: "top top",
-          end: "+=70%",
+          end: () => `${scopeRef.current.offsetHeight}px`,
           pin: true,
           pinSpacing: true,
           anticipatePin: 1,

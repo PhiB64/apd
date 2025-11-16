@@ -91,7 +91,7 @@ export default function DescriptionSection({
           id: "sliderScroll",
           trigger: sectionRef.current,
           start: "top top",
-          end: "+=500%",
+          end: () => `${sliderRef.current.scrollWidth - window.innerWidth}px`,
           scrub: true,
           pin: true,
           anticipatePin: 1,
