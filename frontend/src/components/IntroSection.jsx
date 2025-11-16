@@ -154,7 +154,7 @@ export default function IntroSection({ eglise }) {
       </div>
 
       <div
-        className={`absolute bottom-6 sm:bottom-15 z-40 pointer-events-none transition-opacity duration-500 ${
+        className={`absolute bottom-15 md:bottom-6 z-40 pointer-events-none transition-opacity duration-500 ${
           showScrollIndicator ? "opacity-100" : "opacity-0"
         }`}
         aria-hidden="true"
