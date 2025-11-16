@@ -169,7 +169,7 @@ export default function Gallery({ images }) {
             >
               <div className="relative w-full h-full">
                 <Image
-                  src="/or3.png"
+                  src="/cadre.png"
                   alt="Cadre décoratif"
                   fill
                   className="object-fill z-10 pointer-events-none"

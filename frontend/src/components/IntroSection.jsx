@@ -23,12 +23,10 @@ export default function IntroSection({ eglise }) {
   const isMobile = useIsMobile();
   const { setShowDonationButton } = useHeaderDonation();
 
-  //  Initialisation à false au montage
   useEffect(() => {
     setShowDonationButton(false);
   }, [setShowDonationButton]);
 
-  //  Scroll indicator uniquement
   useLayoutEffect(() => {
     const handleScroll = () => {
       const isTop = window.scrollY < 100;
@@ -39,7 +37,6 @@ export default function IntroSection({ eglise }) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Mute vidéo au chargement
   useLayoutEffect(() => {
     const video = document.querySelector("video");
     if (video) {
@@ -48,7 +45,6 @@ export default function IntroSection({ eglise }) {
     }
   }, []);
 
-  // Animation GSAP + déclenchement du bouton Header
   useLayoutEffect(() => {
     if (!sectionRef.current || !welcomeRef.current || !buttonRef.current)
       return;
@@ -63,7 +59,7 @@ export default function IntroSection({ eglise }) {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top top",
-          end: +"=100%",
+          end: "+=100%",
           scrub: true,
           pin: true,
           anticipatePin: 1,
@@ -90,7 +86,7 @@ export default function IntroSection({ eglise }) {
             opacity: 0,
             scale: 0.6,
             ease: "none",
-            onComplete: () => setShowDonationButton(true), //  Affiche le bouton Header
+            onComplete: () => setShowDonationButton(true),
           },
           "+=0.6"
         );
@@ -104,7 +100,7 @@ export default function IntroSection({ eglise }) {
           const video = document.querySelector("video");
           if (video) {
             video.muted = true;
-            setIsMuted(true); // pour mettre à jour l’icône
+            setIsMuted(true);
           }
         },
       });
@@ -132,13 +128,14 @@ export default function IntroSection({ eglise }) {
         sectionRef.current = el;
         gsapScope.current = el;
       }}
-      className="relative h-screen w-screen flex flex-col items-center justify-center text-center px-4 overflow-hidden"
+      className="relative h-screen w-screen overflow-hidden flex items-center justify-center text-center"
     >
+      {/* Contenu centré */}
       <div
         ref={welcomeRef}
-        className="z-20 text-white flex flex-col items-center justify-center w-full px-4"
+        className="absolute inset-0 flex flex-col items-center justify-center px-4 z-20"
       >
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight tracking-tight drop-shadow-xl text-white text-center mt-6">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight tracking-tight drop-shadow-xl text-white text-center">
           Aidez-nous à préserver
           <br />
           ce trésor du patrimoine
@@ -153,8 +150,9 @@ export default function IntroSection({ eglise }) {
         </div>
       </div>
 
+      {/* Indicateur de scroll */}
       <div
-        className={`absolute bottom-15 md:bottom-6 z-40 pointer-events-none transition-opacity duration-500 ${
+        className={`absolute bottom-6 z-40 pointer-events-none transition-opacity duration-500 ${
           showScrollIndicator ? "opacity-100" : "opacity-0"
         }`}
         aria-hidden="true"
@@ -162,7 +160,8 @@ export default function IntroSection({ eglise }) {
         <ScrollIndicator />
       </div>
 
-      <div className="fixed bottom-6 right-6 z-50 transition-opacity duration-500">
+      {/* Bouton mute */}
+      <div className="absolute bottom-6 right-6 z-50">
         <button
           onClick={toggleMute}
           className="w-12 h-12 rounded-full bg-white/10 text-white backdrop-blur-md shadow-md hover:bg-white/20 transition flex items-center justify-center"
