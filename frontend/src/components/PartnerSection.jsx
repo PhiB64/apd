@@ -106,11 +106,11 @@ export default function PartnerSection({ partners, error, isLoading }) {
   return (
     <section
       ref={scopeRef}
-      className="relative z-50 min-h-screen w-full bg-[#ac1115]  flex items-center justify-center"
+      className="relative z-50 w-full min-h-screen overflow-hidden bg-[#ac1115] flex items-center justify-center"
     >
-      <div className="relative max-w-6xl min-h-screen mx-auto grid grid-cols-1 md:grid-cols-2 items-center">
+      <div className="relative max-w-6xl w-full min-h-screen mx-auto grid grid-cols-1 md:grid-cols-2 items-center">
         {/* Bloc texte */}
-        <div ref={textBlockRef} className="space-y-4 px-6 pt-28 md:pt-0">
+        <div ref={textBlockRef} className="space-y-4 px-6 pt-20 md:pt-0">
           <h2 className="text-3xl sm:text-4xl font-garamond leading-snug drop-shadow-xl text-white">
             Nos <span className="shadow-underline text-white">partenaires</span>
           </h2>

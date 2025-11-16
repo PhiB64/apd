@@ -1,13 +1,17 @@
 "use client";
-import Link from "next/link";
+
+import { useSiteData } from "@hooks/useSiteData";
 import Image from "next/image";
 
-export default function Footer({ site }) {
+export default function Footer() {
+  const { site } = useSiteData();
   const logoUrl = site?.logo_footer?.url;
   const reseaux = site?.reseaux_sociaux ?? [];
 
+  if (!site) return null;
+
   return (
-    <footer className="relative bg-black text-white px-6 py-16 min-h-[150px]">
+    <footer className="relative z-10 bg-black text-white px-6 py-16 min-h-[150px]">
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center md:items-start justify-between gap-10">
         <LogoBlock logoUrl={logoUrl} />
         <SocialBlock reseaux={reseaux} />

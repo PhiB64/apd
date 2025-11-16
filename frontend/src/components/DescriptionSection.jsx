@@ -27,7 +27,7 @@ export default function DescriptionSection({
   const architectureRef = useRef(null);
   const interviewRef = useRef(null);
   const imageContainerRef = useRef(null);
-  const imageRevealRef = useRef(null); // ✅ ref pour le voile mobile
+  const imageRevealRef = useRef(null);
 
   const isMobile = useIsMobile();
 
@@ -81,13 +81,14 @@ export default function DescriptionSection({
       gsap.set(slides, {
         width: "100%",
         flexShrink: 0,
+        minHeight: "100vh",
       });
 
       gsap.to(sliderRef.current, {
-        xPercent: -300,
+        xPercent: -230,
         ease: "none",
         scrollTrigger: {
-          id: "sliderScroll", // ✅ nom pour containerAnimation
+          id: "sliderScroll",
           trigger: sectionRef.current,
           start: "top top",
           end: "+=500%",
@@ -116,7 +117,7 @@ export default function DescriptionSection({
           trigger: imageContainerRef.current,
           start: "top 80%",
           end: "bottom center",
-          toggleActions: "play none none reverse",
+          scrub: true,
         },
       });
     }, imageContainerRef);
@@ -138,7 +139,7 @@ export default function DescriptionSection({
           trigger: imageRevealRef.current,
           start: "top 90%",
           end: "bottom center",
-          toggleActions: "play none none reverse",
+          scrub: true,
         },
       });
     }, imageRevealRef);
@@ -154,12 +155,12 @@ export default function DescriptionSection({
     >
       <div
         ref={sliderRef}
-        className={`w-full h-full z-10 ${isMobile ? "flex flex-col" : "h-full"}`}
+        className={`w-screen ${isMobile ? "flex flex-col" : "h-full flex"}`}
       >
         {/* Bloc description */}
         <div
           ref={descriptionRef}
-          className="relative w-full h-full px-6 pt-12 flex items-center justify-center"
+          className="relative w-full min-h-screen px-6 pt-12 flex items-center justify-center"
         >
           <div className="max-w-4xl w-full flex flex-col md:flex-row gap-10 items-center text-black">
             <div className="md:w-1/2 space-y-4">
@@ -188,7 +189,6 @@ export default function DescriptionSection({
                 ref={imageContainerRef}
                 className="md:w-1/2 w-full relative flex justify-center items-center"
               >
-                {/* Image principale */}
                 <div className="relative w-[17em] md:w-[20em] h-[25em] md:h-[32em] aspect-[9/16] rounded-t-full overflow-hidden shadow-xl border-white gallery-item mobile z-10 group">
                   {/* Voile + flou */}
                   <div
@@ -223,12 +223,15 @@ export default function DescriptionSection({
         </div>
 
         {/* Galerie */}
-        <div className="relative w-full">
+        <div className="relative w-full min-h-screen">
           <Gallery images={eglise?.images ?? []} />
         </div>
 
         {/* Architecture */}
-        <div className="relative w-full px-6" ref={architectureRef}>
+        <div
+          className="relative w-full min-h-screen px-6"
+          ref={architectureRef}
+        >
           <Architecture
             styleArchitectural={eglise?.style_architectural}
             plan={eglise?.plan}
@@ -237,7 +240,7 @@ export default function DescriptionSection({
 
         {/* Interview */}
         {hasInterviewContent && (
-          <div ref={interviewRef} className="relative w-full h-full">
+          <div ref={interviewRef} className="relative w-full min-h-screen">
             <div className="max-w-4xl w-full">
               <Interview
                 titre={titreInterview}

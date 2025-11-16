@@ -14,25 +14,32 @@ export default function Home() {
     useSiteData();
 
   const firstInterview = Array.isArray(interviews) ? interviews[0] : null;
+
   const isLoading =
     !eglise && !accueil && !interviews && !partenaires && !articles && !error;
-
-  if (isLoading) {
-    return (
-      <ErrorMessage type="loading" message="Chargement du site en cours..." />
-    );
-  }
-
-  if (error) {
-    return <ErrorMessage type="error" message={`Erreur : ${error}`} />;
-  }
 
   const videoUrl = accueil?.video?.url?.startsWith("http")
     ? accueil.video.url
     : `${process.env.NEXT_PUBLIC_API_URL}${accueil?.video?.url}`;
 
+  if (isLoading) {
+    return (
+      <main className="relative w-full min-h-screen flex items-center justify-center bg-black text-white">
+        <ErrorMessage type="loading" message="Chargement du site en cours..." />
+      </main>
+    );
+  }
+
+  if (error) {
+    return (
+      <main className="relative w-full min-h-screen flex items-center justify-center bg-black text-white">
+        <ErrorMessage type="error" message={`Erreur : ${error}`} />
+      </main>
+    );
+  }
+
   return (
-    <main className="relative w-full min-h-screen overflow-x-hidden">
+    <main className="relative w-full min-h-screen overflow-x-hidden bg-black text-white">
       {/* 🎥 Fond vidéo permanent */}
       {videoUrl && (
         <div className="fixed inset-0 z-0 pointer-events-none">

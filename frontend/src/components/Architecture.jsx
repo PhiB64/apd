@@ -20,7 +20,7 @@ const Architecture = forwardRef(({ styleArchitectural, plan }, ref) => {
     null;
 
   useLayoutEffect(() => {
-    if (!imageContainerRef.current) return;
+    if (!imageContainerRef.current || !scopeRef.current) return;
 
     const ctx = gsap.context(() => {
       gsap.set(imageContainerRef.current, { scale: 0.5, opacity: 0 });
@@ -31,9 +31,10 @@ const Architecture = forwardRef(({ styleArchitectural, plan }, ref) => {
         duration: 0.6,
         ease: "power2.out",
         scrollTrigger: {
+          containerAnimation: ScrollTrigger.getById("sliderScroll"), // ✅ synchronisation avec le slider
           trigger: scopeRef.current,
-          start: "+=300%",
-          end: "+=50%",
+          start: "center center",
+          end: "center center",
           scrub: true,
           markers: false,
         },
@@ -46,7 +47,7 @@ const Architecture = forwardRef(({ styleArchitectural, plan }, ref) => {
   return (
     <div
       ref={scopeRef}
-      className="relative w-full h-full flex items-center justify-center"
+      className="relative w-full min-h-screen flex items-center justify-center"
     >
       <div className="max-w-6xl w-full flex flex-col md:flex-row gap-10 items-center text-black pt-15">
         {/* 📝 Texte à gauche */}

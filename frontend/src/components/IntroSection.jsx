@@ -128,7 +128,7 @@ export default function IntroSection({ eglise }) {
         sectionRef.current = el;
         gsapScope.current = el;
       }}
-      className="relative h-screen w-screen overflow-hidden flex items-center justify-center text-center"
+      className="relative min-h-screen w-full overflow-hidden flex items-center justify-center text-center"
     >
       {/* Contenu centré */}
       <div

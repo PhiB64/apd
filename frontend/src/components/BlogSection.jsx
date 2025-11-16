@@ -41,7 +41,7 @@ export default function BlogSection({ limit = 4 }) {
         </div>
 
         {/* 🖋️ Liste des articles */}
-        <div className="flex flex-wrap justify-center gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 justify-center">
           {displayedArticles.map((article) => {
             const {
               id,
@@ -54,7 +54,6 @@ export default function BlogSection({ limit = 4 }) {
             } = article;
 
             const imageUrl = image?.formats?.medium?.url ?? image?.url ?? null;
-
             const extrait =
               contenu?.[0]?.children?.[0]?.text?.slice(0, 180) ?? "";
 

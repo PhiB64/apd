@@ -9,7 +9,8 @@ export default function VideoBackground({ videoUrl }) {
         loop
         muted
         playsInline
-        className="w-full h-full object-cover overflow-hidden"
+        preload="auto"
+        className="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000"
       />
     </div>
   );

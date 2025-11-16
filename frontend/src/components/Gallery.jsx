@@ -100,7 +100,7 @@ export default function Gallery({ images }) {
   return (
     <div
       ref={galleryRef}
-      className="relative w-screen h-screen flex items-center justify-center"
+      className="relative w-full min-h-screen overflow-hidden flex items-center justify-center"
     >
       {/* Cadre décoratif global */}
       <div className="absolute inset-0 z-0 hidden md:flex items-center justify-center pt-20 pr-30">
@@ -115,7 +115,7 @@ export default function Gallery({ images }) {
       </div>
 
       {/* Desktop */}
-      <div className="hidden md:block relative w-[50vw] h-[60vh] mt-46 ml-13">
+      <div className="hidden md:block relative w-[50vw] h-[60vh]">
         {images.slice(0, 9).map((img, index) => {
           const style = layoutStyles[index] || {
             top: "0%",
@@ -137,14 +137,12 @@ export default function Gallery({ images }) {
               }}
             >
               <div className="relative w-full h-full group">
-                {/* Cadre décoratif */}
                 <Image
-                  src="/cadre.png"
+                  src="/cadre_gallery.png"
                   alt="Cadre décoratif"
                   fill
                   className="object-fill z-10 pointer-events-none"
                 />
-                {/* Image */}
                 <div className="w-full h-full transition-transform duration-300 group-hover:scale-115">
                   <Image
                     src={getImageUrl(img)}
@@ -160,7 +158,7 @@ export default function Gallery({ images }) {
       </div>
 
       {/* Mobile */}
-      <div className="md:hidden w-full h-screen flex items-center justify-center px-6">
+      <div className="md:hidden w-full min-h-screen flex items-center justify-center px-6">
         <div className="w-full grid grid-cols-1 gap-4">
           {images.slice(0, 4).map((img, index) => (
             <div
@@ -169,7 +167,7 @@ export default function Gallery({ images }) {
             >
               <div className="relative w-full h-full">
                 <Image
-                  src="/cadre.png"
+                  src="/cadre_gallery.png"
                   alt="Cadre décoratif"
                   fill
                   className="object-fill z-10 pointer-events-none"
