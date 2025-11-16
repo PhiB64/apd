@@ -27,10 +27,10 @@ export default function DescriptionSection({
   const architectureRef = useRef(null);
   const interviewRef = useRef(null);
   const imageContainerRef = useRef(null);
+  const imageRevealRef = useRef(null); // ✅ ref pour le voile mobile
 
   const isMobile = useIsMobile();
 
-  // ✅ Gestion des états
   if (isLoading) {
     return (
       <ErrorMessage
@@ -62,7 +62,7 @@ export default function DescriptionSection({
 
   if (!eglise && !hasInterviewContent) return null;
 
-  // ✅ GSAP animations
+  // ✅ GSAP horizontal slider
   useLayoutEffect(() => {
     if (!sectionRef.current || isMobile) return;
 
@@ -87,11 +87,13 @@ export default function DescriptionSection({
         xPercent: -300,
         ease: "none",
         scrollTrigger: {
+          id: "sliderScroll", // ✅ nom pour containerAnimation
           trigger: sectionRef.current,
           start: "top top",
           end: "+=500%",
           scrub: true,
           pin: true,
+          anticipatePin: 1,
         },
       });
     }, sectionRef);
@@ -99,6 +101,7 @@ export default function DescriptionSection({
     return () => ctx.revert();
   }, [isMobile, onEnter, onLeave]);
 
+  // ✅ Animation mobile : fade-in du conteneur
   useLayoutEffect(() => {
     if (!isMobile || !imageContainerRef.current) return;
 
@@ -117,6 +120,28 @@ export default function DescriptionSection({
         },
       });
     }, imageContainerRef);
+
+    return () => ctx.revert();
+  }, [isMobile]);
+
+  // ✅ Animation mobile : dévoilement du voile + flou
+  useLayoutEffect(() => {
+    if (!isMobile || !imageRevealRef.current) return;
+
+    const ctx = gsap.context(() => {
+      gsap.to(imageRevealRef.current, {
+        opacity: 0,
+        backdropFilter: "blur(0px)",
+        duration: 1,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: imageRevealRef.current,
+          start: "top 90%",
+          end: "bottom center",
+          toggleActions: "play none none reverse",
+        },
+      });
+    }, imageRevealRef);
 
     return () => ctx.revert();
   }, [isMobile]);
@@ -165,10 +190,13 @@ export default function DescriptionSection({
               >
                 {/* Image principale */}
                 <div className="relative w-[17em] md:w-[20em] h-[25em] md:h-[32em] aspect-[9/16] rounded-t-full overflow-hidden shadow-xl border-white gallery-item mobile z-10 group">
-                  {/* Voile + flou initial */}
-                  <div className="absolute inset-0 z-20 pointer-events-none transition-all duration-500 group-hover:opacity-0 group-hover:backdrop-blur-0 backdrop-blur-sm bg-black/60" />
+                  {/* Voile + flou */}
+                  <div
+                    ref={imageRevealRef}
+                    className="absolute inset-0 z-20 pointer-events-none transition-all duration-500 backdrop-blur-sm bg-black/60 group-hover:opacity-0 group-hover:backdrop-blur-0"
+                  />
 
-                  {/* Image principale */}
+                  {/* Image */}
                   <Image
                     src={getImageUrl(eglise.image_principale)}
                     alt="Image principale"
@@ -178,14 +206,14 @@ export default function DescriptionSection({
                   />
                 </div>
 
-                {/* Cadre décoratif au-dessus avec padding mobile */}
+                {/* Cadre décoratif */}
                 <div className="absolute inset-0 z-20 pointer-events-none">
                   <div className="relative w-full h-full">
                     <Image
                       src="/cadre_description.png"
                       alt="Cadre décoratif"
                       fill
-                      className="object-contain w-full h-full  scale-x-[1.3] md:scale-x-[1.3]"
+                      className="object-contain w-full h-full scale-x-[1.3] md:scale-x-[1.3]"
                     />
                   </div>
                 </div>
