@@ -12,11 +12,10 @@ gsap.registerPlugin(ScrollTrigger);
 export default function Gallery({ images }) {
   const galleryRef = useRef(null);
   const [selectedImage, setSelectedImage] = useState(null);
+  const isMobile = useIsMobile();
 
   const getImageUrl = (img) =>
     img?.formats?.large?.url ?? img?.formats?.medium?.url ?? img?.url;
-
-  const isMobile = useIsMobile();
 
   useLayoutEffect(() => {
     if (!galleryRef.current || !images || images.length === 0) return;
@@ -24,6 +23,9 @@ export default function Gallery({ images }) {
     const ctx = gsap.context(() => {
       const desktopItems = galleryRef.current.querySelectorAll(
         ".gallery-item.desktop"
+      );
+      const tabletItems = galleryRef.current.querySelectorAll(
+        ".gallery-item.tablet"
       );
       const mobileItems = galleryRef.current.querySelectorAll(
         ".gallery-item.mobile"
@@ -39,9 +41,28 @@ export default function Gallery({ images }) {
           ease: "none",
           scrollTrigger: {
             trigger: galleryRef.current,
-            start: isMobile ? "" : "+=15%",
-            end: isMobile ? "" : "+=30%",
+            start: "+=15%",
+            end: "+=30%",
             scrub: true,
+            markers: false,
+          },
+        });
+      }
+
+      if (tabletItems.length > 0) {
+        gsap.set(tabletItems, { opacity: 0, y: 100 });
+        gsap.to(tabletItems, {
+          opacity: 1,
+          y: 0,
+          stagger: 0.4,
+          duration: 1,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: galleryRef.current,
+            start: "top center",
+            end: "+=40%",
+            toggleActions: "play none none reverse",
+            scrub: false,
             markers: false,
           },
         });
@@ -55,7 +76,6 @@ export default function Gallery({ images }) {
           stagger: 0.6,
           duration: 1,
           ease: "power3.out",
-
           scrollTrigger: {
             trigger: galleryRef.current,
             start: "top center",
@@ -100,28 +120,29 @@ export default function Gallery({ images }) {
     { top: "69%", left: "57%", width: "23%", height: "19%", order: 7 },
     { top: "69%", left: "35%", width: "21%", height: "19%", order: 8 },
   ];
+
   return (
     <div
       ref={galleryRef}
-      className="relative w-full min-h-screen overflow-hidden flex items-center justify-center "
+      className="relative w-full min-h-screen overflow-hidden flex items-center justify-center"
     >
       {/* Cadre décoratif global */}
-      <div className="absolute inset-0 z-0 hidden md:flex items-center justify-center pt-16 ">
+      <div className="absolute inset-0 z-0 hidden md:flex items-center justify-center pt-16">
         <div className="relative h-[65rem] w-[73rem]">
           <Image
             src="/grand.png"
             alt="Cadre décoratif"
             fill
-            className="object-contain scale-x-[0.83] scale-y-[0.98] "
+            className="object-contain scale-x-[0.83] scale-y-[0.98]"
           />
         </div>
       </div>
 
       {/* Desktop */}
-      <div className="hidden md:block relative w-[50vw] h-[60vh] ">
+      <div className="hidden md:block relative w-[50vw] h-[60vh]">
         {images.slice(0, 9).map((img, index) => {
           const style = layoutStyles[index] || {
-            top: "%",
+            top: "0%",
             left: "0%",
             width: "20%",
             height: "33%",
@@ -160,20 +181,46 @@ export default function Gallery({ images }) {
         })}
       </div>
 
+      {/* Intermédiaire (tablettes) */}
+      <div className="hidden sm:grid md:hidden w-full px-6 py-12 grid grid-cols-2 gap-4">
+        {images.slice(0, 4).map((img, index) => (
+          <button
+            key={img.id || index}
+            onClick={() => setSelectedImage(img)}
+            className="gallery-item tablet relative h-[220px] overflow-hidden shadow-lg transition-transform duration-300 hover:scale-105"
+          >
+            <div className="relative w-full h-full">
+              <Image
+                src={getImageUrl(img)}
+                alt={img.name || `Image ${index + 1}`}
+                fill
+                className="object-cover z-0"
+              />
+            </div>
+          </button>
+        ))}
+      </div>
+
       {/* Mobile */}
-      <div className="md:hidden w-full min-h-screen flex items-center justify-center px-12">
+      <div className="sm:hidden w-full min-h-screen flex items-center justify-center px-12">
         <div className="w-full grid grid-cols-1 gap-4">
           {images.slice(0, 4).map((img, index) => (
             <div
               key={img.id || index}
-              className="gallery-item mobile relative h-[180px] overflow-hidden shadow-lg transition-transform duration-300 hover:scale-115"
+              className="gallery-item mobile relative h-[180px] overflow-hidden shadow-lg transition-transform duration-300 hover:scale-105"
             >
               <div className="relative w-full h-full">
+                <Image
+                  src="/cadre_bois.png"
+                  alt="Cadre décoratif"
+                  fill
+                  className="object-fill z-10 pointer-events-none"
+                />
                 <Image
                   src={getImageUrl(img)}
                   alt={img.name || `Image ${index + 1}`}
                   fill
-                  className="object-cover border-3 border-black z-0"
+                  className="object-cover z-0"
                 />
               </div>
             </div>

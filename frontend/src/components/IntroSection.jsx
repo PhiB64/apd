@@ -15,6 +15,8 @@ export default function IntroSection({ eglise }) {
   const sectionRef = useRef(null);
   const welcomeRef = useRef(null);
   const buttonRef = useRef(null);
+  const premierMotRef = useRef(null);
+  const resteNomRef = useRef(null);
   const gsapScope = useRef(null);
 
   const [isMuted, setIsMuted] = useState(true);
@@ -38,11 +40,16 @@ export default function IntroSection({ eglise }) {
   }, []);
 
   useLayoutEffect(() => {
-    if (!sectionRef.current || !welcomeRef.current || !buttonRef.current)
+    if (
+      !sectionRef.current ||
+      !welcomeRef.current ||
+      !buttonRef.current ||
+      !premierMotRef.current ||
+      !resteNomRef.current
+    )
       return;
 
     const ctx = gsap.context(() => {
-      // Animation intro
       gsap.set([welcomeRef.current, buttonRef.current], {
         opacity: 0,
         scale: 0.5,
@@ -52,7 +59,7 @@ export default function IntroSection({ eglise }) {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top top",
-          end: "=+55% top",
+          end: "=+300% top",
           scrub: 1,
           pin: true,
           anticipatePin: 1,
@@ -63,41 +70,85 @@ export default function IntroSection({ eglise }) {
       tl.to(welcomeRef.current, {
         opacity: 1,
         scale: 1,
+        ease: "none",
+        duration: 10,
+      });
+
+      // Pavé reveal sur premierMot
+      tl.to(premierMotRef.current.querySelector(".reveal-box"), {
+        width: "100%",
+        duration: 4,
         ease: "power2.out",
-        duration: 2,
       })
+        .to(premierMotRef.current.querySelector(".reveal-box"), {
+          width: "100%",
+          left: "100%",
+          duration: 4,
+          ease: "power2.in",
+        })
         .to(
-          buttonRef.current,
+          premierMotRef.current.querySelector(".reveal-text"),
           {
-            opacity: 1,
-            scale: 1,
-            ease: "power2.out",
-            duration: 1.2,
+            color: "white",
+            duration: 2,
+            ease: "none",
           },
-          "+=0.4"
-        )
-        .to(
-          buttonRef.current,
-          {
-            opacity: 0,
-            scale: 0.5,
-            ease: "power2.in",
-            duration: 1,
-          },
-          "+=1.5"
+          "-=2"
         );
 
-      // ✅ ScrollTrigger indépendant pour le bouton du header
+      // Pavé reveal sur resteNom
+      tl.to(resteNomRef.current.querySelector(".reveal-box"), {
+        width: "100%",
+        duration: 4,
+        ease: "power2.out",
+      })
+        .to(resteNomRef.current.querySelector(".reveal-box"), {
+          width: "100%",
+          left: "72%",
+          duration: 4,
+          ease: "power2.in",
+        })
+        .to(
+          resteNomRef.current.querySelector(".reveal-text"),
+          {
+            color: "white",
+            duration: 2,
+            ease: "none",
+          },
+          "-=1.5"
+        );
+
+      // Animation du bouton
+      tl.to(
+        buttonRef.current,
+        {
+          opacity: 1,
+          scale: 1,
+          ease: "none",
+          duration: 10,
+        },
+        "+=1.5"
+      ).to(
+        buttonRef.current,
+        {
+          opacity: 0,
+          scale: 0.5,
+          delay: 10,
+          ease: "none",
+          duration: 10,
+        },
+        "+=1.5"
+      );
+
       ScrollTrigger.create({
-        trigger: buttonRef.current,
-        start: "top", // ⏪ déclenchement anticipé
-        end: "bottom",
+        trigger: sectionRef.current,
+        start: "top",
+        end: "+=10%",
         markers: false,
         onEnter: () => setShowDonationButton(true),
         onLeaveBack: () => setShowDonationButton(false),
       });
 
-      // ScrollTrigger pour mute vidéo
       ScrollTrigger.create({
         trigger: sectionRef.current,
         start: "top",
@@ -126,8 +177,8 @@ export default function IntroSection({ eglise }) {
 
   const nom = eglise?.nom?.trim() || "";
   const motsNom = nom.split(" ");
-  const reste = motsNom.slice(0, -1).join(" ");
-  const dernier = motsNom.slice(-1)[0];
+  const premierMot = motsNom[0];
+  const resteNom = motsNom.slice(1).join(" ");
 
   return (
     <section
@@ -137,19 +188,34 @@ export default function IntroSection({ eglise }) {
       }}
       className="relative min-h-screen w-full overflow-hidden flex items-center justify-center text-center"
     >
-      {/* Contenu centré */}
       <div
         ref={welcomeRef}
         className="absolute inset-0 flex flex-col items-center justify-center px-4 z-20"
       >
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight tracking-tight drop-shadow-xl text-white text-center">
+        <h1 className="text-xl sm:text-2xl md:text-4xl lg:text-5xl font-extrabold leading-tight tracking-tight drop-shadow-xl text-white text-center">
           Aidez-nous à préserver
           <br />
           ce trésor du patrimoine
         </h1>
 
-        <p className="mt-4 sm:mt-6 text-4xl md:text-5xl font-garamond leading-relaxed text-white/90 text-center">
-          {reste} <span className="shadow-underline text-white">{dernier}</span>
+        <p
+          ref={premierMotRef}
+          className="mt-4 sm:mt-6 text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-garamond leading-relaxed text-center relative overflow-hidden max-w-[90vw]"
+        >
+          <span className="reveal-text text-transparent relative z-10">
+            {premierMot}
+          </span>
+          <span className="reveal-box absolute top-0 left-0 h-[4.5rem] w-0 bg-[#ac1115] z-20"></span>
+        </p>
+
+        <p
+          ref={resteNomRef}
+          className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-garamond leading-relaxed text-center relative overflow-hidden max-w-[90vw]"
+        >
+          <span className="reveal-text text-transparent relative z-10">
+            {resteNom}
+          </span>
+          <span className="reveal-box absolute top-0 left-0 h-[4.5rem] w-0 bg-[#ac1115] z-0"></span>
         </p>
 
         <div ref={buttonRef} className="mt-8">
@@ -157,7 +223,6 @@ export default function IntroSection({ eglise }) {
         </div>
       </div>
 
-      {/* Indicateur de scroll */}
       <div
         className={`absolute bottom-6 z-40 pointer-events-none transition-opacity duration-500 ${
           showScrollIndicator ? "opacity-100" : "opacity-0"
@@ -167,7 +232,6 @@ export default function IntroSection({ eglise }) {
         <ScrollIndicator />
       </div>
 
-      {/* Bouton mute */}
       <div className="absolute bottom-6 right-6 z-50">
         <button
           onClick={toggleMute}

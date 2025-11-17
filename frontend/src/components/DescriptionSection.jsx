@@ -101,7 +101,7 @@ export default function DescriptionSection({
     return () => ctx.revert();
   }, [isMobile, onEnter, onLeave]);
 
-  // ✅ Animation mobile : fade-in du conteneur
+  // Animation mobile : fade-in du conteneur
   useLayoutEffect(() => {
     if (!isMobile || !imageContainerRef.current) return;
 
@@ -124,7 +124,7 @@ export default function DescriptionSection({
     return () => ctx.revert();
   }, [isMobile]);
 
-  // ✅ Animation mobile : dévoilement du voile + flou
+  // Animation mobile : dévoilement du voile + flou
   useLayoutEffect(() => {
     if (!isMobile || !imageRevealRef.current) return;
 

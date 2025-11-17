@@ -36,7 +36,7 @@ export default function Header({
 
   return (
     <>
-      {/* 🖥️ Desktop Header */}
+      {/* Desktop Header */}
       <header
         className={`fixed top-3 left-0 right-0 z-50 flex justify-center transition-opacity duration-500 ${
           isVisible
@@ -82,7 +82,7 @@ export default function Header({
         </div>
       </header>
 
-      {/* 📱 Mobile Header */}
+      {/* Mobile Header */}
       <header
         className={`fixed top-3 left-0 right-0 z-50 flex items-center justify-between px-4 py-2 bg-white/60 backdrop-blur-md shadow-md rounded-sm md:hidden transition-opacity duration-500 ${
           isVisible
@@ -126,7 +126,7 @@ export default function Header({
         </div>
       </header>
 
-      {/* 📱 Mobile Menu Overlay */}
+      {/* Mobile Menu  */}
       <div
         className={`fixed top-0 left-0 w-full h-screen z-40 flex items-center justify-center transform transition-transform duration-500 ${
           menuOpen ? "translate-x-0" : "translate-x-full"
@@ -161,7 +161,7 @@ export default function Header({
           {showDonationButton && (
             <DonationButton
               variant="menu"
-              className="mt-6 border-white border pulse-button"
+              className="mt-6 border-white border pulse-button "
             />
           )}
         </div>

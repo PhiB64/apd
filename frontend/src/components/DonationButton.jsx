@@ -27,7 +27,7 @@ export default function DonationButton({
           target="_blank"
           rel="noopener noreferrer"
           className={`${baseClasses}
-            px-4 py-1.5 text-sm font-medium
+            px-4 py-1.5 text-sm font-medium mr-4 md:mx-0
             md:px-6 md:py-2 md:text-base md:font-semibold
             ${className}`}
         >
@@ -40,7 +40,7 @@ export default function DonationButton({
           href={href}
           target="_blank"
           rel="noopener noreferrer"
-          className={`${baseClasses} text-xl px-8 py-4 font-semibold ${className}`}
+          className={`${baseClasses} text-l px-4 py-2.5 md:text-xl md:px-8 md:py-4 font-semibold ${className}`}
         >
           {label}
         </a>
