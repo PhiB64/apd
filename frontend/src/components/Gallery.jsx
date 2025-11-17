@@ -5,6 +5,7 @@ import { createPortal } from "react-dom";
 import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import useIsMobile from "@hooks/useIsMobile";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -14,6 +15,8 @@ export default function Gallery({ images }) {
 
   const getImageUrl = (img) =>
     img?.formats?.large?.url ?? img?.formats?.medium?.url ?? img?.url;
+
+  const isMobile = useIsMobile();
 
   useLayoutEffect(() => {
     if (!galleryRef.current || !images || images.length === 0) return;
@@ -31,15 +34,15 @@ export default function Gallery({ images }) {
         gsap.to(desktopItems, {
           opacity: 1,
           y: 0,
-          stagger: (index, target) =>
-            parseFloat(target.getAttribute("data-order")) * 1.5,
-          duration: 1.5,
+          stagger: 0.6,
+          duration: 1,
           ease: "none",
           scrollTrigger: {
             trigger: galleryRef.current,
-            start: "top+=90%",
-            end: "+=60%",
+            start: isMobile ? "" : "+=15%",
+            end: isMobile ? "" : "+=30%",
             scrub: true,
+            markers: false,
           },
         });
       }
@@ -50,20 +53,23 @@ export default function Gallery({ images }) {
           opacity: 1,
           y: 0,
           stagger: 0.6,
-          duration: 1.5,
+          duration: 1,
           ease: "power3.out",
-          delay: 0.2,
+
           scrollTrigger: {
             trigger: galleryRef.current,
-            start: "+=100%",
-            scrub: true,
+            start: "top center",
+            end: "+=40%",
+            toggleActions: "play none none reverse",
+            scrub: false,
+            markers: false,
           },
         });
       }
     }, galleryRef.current);
 
     return () => ctx.revert();
-  }, [images]);
+  }, [images, isMobile]);
 
   useEffect(() => {
     let previousOverflow;
@@ -83,42 +89,39 @@ export default function Gallery({ images }) {
     };
   }, [selectedImage]);
 
-  if (!images || images.length === 0) return null;
-
   const layoutStyles = [
-    { top: "0%", left: "0%", width: "17.6%", height: "29.6%", order: 0 },
-    { top: "0%", left: "19.2%", width: "17.6%", height: "52.8%", order: 1 },
-    { top: "0%", left: "38.4%", width: "20%", height: "20.8%", order: 2 },
-    { top: "0%", left: "60%", width: "20%", height: "28.8%", order: 3 },
-    { top: "23.2%", left: "38.4%", width: "20%", height: "29.6%", order: 4 },
-    { top: "31.2%", left: "60%", width: "20%", height: "21.6%", order: 5 },
-    { top: "32%", left: "0%", width: "17.6%", height: "48%", order: 6 },
-    { top: "55.2%", left: "48%", width: "32%", height: "24.8%", order: 7 },
-    { top: "55.2%", left: "19.2%", width: "27.2%", height: "24.8%", order: 8 },
+    { top: "26%", left: "20%", width: "14%", height: "23%", order: 0 },
+    { top: "26%", left: "35%", width: "14%", height: "41%", order: 1 },
+    { top: "26%", left: "50%", width: "15%", height: "16%", order: 2 },
+    { top: "26%", left: "66%", width: "14%", height: "22%", order: 3 },
+    { top: "44%", left: "50%", width: "15%", height: "23%", order: 4 },
+    { top: "50%", left: "66%", width: "14%", height: "17%", order: 5 },
+    { top: "51%", left: "20%", width: "14%", height: "37%", order: 6 },
+    { top: "69%", left: "57%", width: "23%", height: "19%", order: 7 },
+    { top: "69%", left: "35%", width: "21%", height: "19%", order: 8 },
   ];
-
   return (
     <div
       ref={galleryRef}
-      className="relative w-full min-h-screen overflow-hidden flex items-center justify-center"
+      className="relative w-full min-h-screen overflow-hidden flex items-center justify-center "
     >
       {/* Cadre décoratif global */}
-      <div className="absolute inset-0 z-0 hidden md:flex items-center justify-center pt-20 pr-30">
-        <div className="relative h-[64rem] w-[72rem]">
+      <div className="absolute inset-0 z-0 hidden md:flex items-center justify-center pt-15 ">
+        <div className="relative h-[65rem] w-[73rem]">
           <Image
             src="/grand.png"
             alt="Cadre décoratif"
             fill
-            className="object-contain scale-x-[0.86]"
+            className="object-contain scale-x-[0.85] scale-y-[1.01]"
           />
         </div>
       </div>
 
       {/* Desktop */}
-      <div className="hidden md:block relative w-[50vw] h-[60vh]">
+      <div className="hidden md:block relative w-[50vw] h-[60vh] ">
         {images.slice(0, 9).map((img, index) => {
           const style = layoutStyles[index] || {
-            top: "0%",
+            top: "%",
             left: "0%",
             width: "20%",
             height: "33%",

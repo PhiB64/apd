@@ -23,19 +23,21 @@ const Architecture = forwardRef(({ styleArchitectural, plan }, ref) => {
     if (!imageContainerRef.current || !scopeRef.current) return;
 
     const ctx = gsap.context(() => {
+      const isMobile = window.innerWidth < 768;
+
       gsap.set(imageContainerRef.current, { scale: 0.5, opacity: 0 });
 
       gsap.to(imageContainerRef.current, {
         scale: 1,
         opacity: 1,
-        duration: 0.6,
+        duration: isMobile ? 1 : 1,
         ease: "power2.out",
         scrollTrigger: {
-          containerAnimation: ScrollTrigger.getById("sliderScroll"), // ✅ synchronisation avec le slider
-          trigger: scopeRef.current,
-          start: "center center",
-          end: "center center",
-          scrub: true,
+          trigger: imageContainerRef.current,
+          start: isMobile ? "top center" : "+=130%",
+          end: isMobile ? "bottom center" : "+=20%",
+          toggleActions: "play none none reverse",
+          scrub: false,
           markers: false,
         },
       });

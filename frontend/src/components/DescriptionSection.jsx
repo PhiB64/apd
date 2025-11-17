@@ -139,8 +139,9 @@ export default function DescriptionSection({
           trigger: imageRevealRef.current,
           start: "top 90%",
           end: "bottom center",
-          scrub: true,
+          toggleActions: "play none none reverse",
         },
+        scrub: true,
       });
     }, imageRevealRef);
 

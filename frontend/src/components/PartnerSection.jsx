@@ -42,35 +42,28 @@ export default function PartnerSection({ partners, error, isLoading }) {
     );
   }
 
-  // ✅ Animation GSAP
+  // ✅ Animation GSAP sans pin
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: scopeRef.current,
-          start: "top",
-          end: "bottom+=100% center",
-          pin: true,
-          pinSpacing: true,
-          anticipatePin: 1,
-          scrub: true,
-          markers: false,
-        },
-      });
-
-      tl.fromTo(
-        textBlockRef.current,
-        { xPercent: -50, opacity: 0 },
-        { xPercent: 0, opacity: 1, ease: "power2.out", duration: 0.6 }
-      );
-
-      tl.fromTo(
+      // Bloc texte et logos : fade-in + slide
+      gsap.fromTo(
         logoBlockRef.current,
-        { scale: 0.5, opacity: 0 },
-        { scale: 1, opacity: 1, ease: "power2.out", duration: 0.6 },
-        "<"
+        { opacity: 0, scale: 0.5 },
+        {
+          scale: 1,
+          opacity: 1,
+          duration: 0.6,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: scopeRef.current,
+            start: "top top",
+            end: "bottom center",
+            toggleActions: "play none none reverse",
+          },
+        }
       );
 
+      // Logos : animation au survol
       imagesRef.current.forEach((img) => {
         if (!img) return;
         const enter = () =>
@@ -106,7 +99,7 @@ export default function PartnerSection({ partners, error, isLoading }) {
   return (
     <section
       ref={scopeRef}
-      className="relative z-50 w-full min-h-screen overflow-hidden bg-[#ac1115] flex items-center justify-center"
+      className="relative z-10 w-full min-h-screen bg-[#ac1115] flex items-center justify-center"
     >
       <div className="relative max-w-6xl w-full min-h-screen mx-auto grid grid-cols-1 md:grid-cols-2 items-center">
         {/* Bloc texte */}
