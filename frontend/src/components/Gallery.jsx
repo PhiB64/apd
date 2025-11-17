@@ -30,7 +30,7 @@ export default function Gallery({ images }) {
       );
 
       if (desktopItems.length > 0) {
-        gsap.set(desktopItems, { opacity: 0, y: 500 });
+        gsap.set(desktopItems, { opacity: 0, y: 400 });
         gsap.to(desktopItems, {
           opacity: 1,
           y: 0,
@@ -106,13 +106,13 @@ export default function Gallery({ images }) {
       className="relative w-full min-h-screen overflow-hidden flex items-center justify-center "
     >
       {/* Cadre décoratif global */}
-      <div className="absolute inset-0 z-0 hidden md:flex items-center justify-center pt-15 ">
+      <div className="absolute inset-0 z-0 hidden md:flex items-center justify-center pt-16 ">
         <div className="relative h-[65rem] w-[73rem]">
           <Image
             src="/grand.png"
             alt="Cadre décoratif"
             fill
-            className="object-contain scale-x-[0.85] scale-y-[1.01]"
+            className="object-contain scale-x-[0.83] scale-y-[0.98] "
           />
         </div>
       </div>
@@ -170,16 +170,10 @@ export default function Gallery({ images }) {
             >
               <div className="relative w-full h-full">
                 <Image
-                  src="/cadre_gallery.png"
-                  alt="Cadre décoratif"
-                  fill
-                  className="object-fill z-10 pointer-events-none"
-                />
-                <Image
                   src={getImageUrl(img)}
                   alt={img.name || `Image ${index + 1}`}
                   fill
-                  className="object-cover z-0"
+                  className="object-cover border-3 border-black z-0"
                 />
               </div>
             </div>

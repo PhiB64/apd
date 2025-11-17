@@ -38,18 +38,11 @@ export default function IntroSection({ eglise }) {
   }, []);
 
   useLayoutEffect(() => {
-    const video = document.querySelector("video");
-    if (video) {
-      video.muted = true;
-      setIsMuted(true);
-    }
-  }, []);
-
-  useLayoutEffect(() => {
     if (!sectionRef.current || !welcomeRef.current || !buttonRef.current)
       return;
 
     const ctx = gsap.context(() => {
+      // Animation intro
       gsap.set([welcomeRef.current, buttonRef.current], {
         opacity: 0,
         scale: 0.5,
@@ -59,43 +52,57 @@ export default function IntroSection({ eglise }) {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top top",
-          end: "+=100%",
-          scrub: true,
+          end: "=+55% top",
+          scrub: 1,
           pin: true,
           anticipatePin: 1,
+          markers: false,
         },
       });
 
       tl.to(welcomeRef.current, {
         opacity: 1,
         scale: 1,
-        ease: "none",
+        ease: "power2.out",
+        duration: 2,
       })
         .to(
           buttonRef.current,
           {
             opacity: 1,
             scale: 1,
-            ease: "none",
+            ease: "power2.out",
+            duration: 1.2,
           },
-          "+=0.3"
+          "+=0.4"
         )
         .to(
           buttonRef.current,
           {
             opacity: 0,
-            scale: 0.6,
-            ease: "none",
-            onComplete: () => setShowDonationButton(true),
+            scale: 0.5,
+            ease: "power2.in",
+            duration: 1,
           },
-          "+=0.6"
+          "+=1.5"
         );
 
+      // ✅ ScrollTrigger indépendant pour le bouton du header
+      ScrollTrigger.create({
+        trigger: buttonRef.current,
+        start: "top", // ⏪ déclenchement anticipé
+        end: "bottom",
+        markers: false,
+        onEnter: () => setShowDonationButton(true),
+        onLeaveBack: () => setShowDonationButton(false),
+      });
+
+      // ScrollTrigger pour mute vidéo
       ScrollTrigger.create({
         trigger: sectionRef.current,
-        start: "top top",
+        start: "top",
         end: "+=100%",
-        onLeaveBack: () => setShowDonationButton(false),
+        scrub: true,
         onLeave: () => {
           const video = document.querySelector("video");
           if (video) {

@@ -5,6 +5,7 @@ import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import ErrorMessage from "@components/ErrorMessage";
+import useIsMobile from "@hooks/useIsMobile"; // ✅ hooks/useIsMobile";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -14,38 +15,13 @@ export default function PartnerSection({ partners, error, isLoading }) {
   const logoBlockRef = useRef(null);
   const imagesRef = useRef([]);
 
-  // ✅ Gestion des états
-  if (isLoading) {
-    return (
-      <ErrorMessage
-        type="loading"
-        message="Chargement des partenaires en cours..."
-      />
-    );
-  }
+  const isMobile = useIsMobile(); // ✅ au bon endroit
 
-  if (error) {
-    return (
-      <ErrorMessage
-        type="error"
-        message={`Erreur lors du chargement des partenaires : ${error}`}
-      />
-    );
-  }
-
-  if (!partners || partners.length === 0) {
-    return (
-      <ErrorMessage
-        type="empty"
-        message="Aucun partenaire à afficher pour le moment."
-      />
-    );
-  }
-
-  // ✅ Animation GSAP sans pin
+  // ✅ Toujours appeler les hooks avant tout return
   useLayoutEffect(() => {
+    if (!partners || partners.length === 0) return;
+
     const ctx = gsap.context(() => {
-      // Bloc texte et logos : fade-in + slide
       gsap.fromTo(
         logoBlockRef.current,
         { opacity: 0, scale: 0.5 },
@@ -56,14 +32,15 @@ export default function PartnerSection({ partners, error, isLoading }) {
           ease: "power2.out",
           scrollTrigger: {
             trigger: scopeRef.current,
-            start: "top top",
-            end: "bottom center",
+            start: isMobile ? "+=220%top" : "+370% top",
+            end: isMobile ? "+=240%top" : "+=390% top",
             toggleActions: "play none none reverse",
+            scrub: false,
+            markers: false,
           },
         }
       );
 
-      // Logos : animation au survol
       imagesRef.current.forEach((img) => {
         if (!img) return;
         const enter = () =>
@@ -94,8 +71,37 @@ export default function PartnerSection({ partners, error, isLoading }) {
       imagesRef.current.forEach((img) => img?._gsapCleanup?.());
       ctx.revert();
     };
-  }, []);
+  }, [partners]);
 
+  // ✅ Gestion des états après les hooks
+  if (isLoading) {
+    return (
+      <ErrorMessage
+        type="loading"
+        message="Chargement des partenaires en cours..."
+      />
+    );
+  }
+
+  if (error) {
+    return (
+      <ErrorMessage
+        type="error"
+        message={`Erreur lors du chargement des partenaires : ${error}`}
+      />
+    );
+  }
+
+  if (!partners || partners.length === 0) {
+    return (
+      <ErrorMessage
+        type="empty"
+        message="Aucun partenaire à afficher pour le moment."
+      />
+    );
+  }
+
+  // ✅ Rendu principal
   return (
     <section
       ref={scopeRef}
@@ -126,7 +132,7 @@ export default function PartnerSection({ partners, error, isLoading }) {
         {/* Bloc logos */}
         <div
           ref={logoBlockRef}
-          className="grid grid-cols-1 sm:grid-cols-2 gap-5 items-center justify-center px-12 py-10"
+          className="grid grid-cols-2 gap-5 px-6 md:px-12 py-0 md:py-10 pb-20 md:pb-0"
         >
           {partners.map((partner, index) => {
             const logo = partner.logo?.[0];

@@ -86,15 +86,14 @@ export default function DescriptionSection({
 
       gsap.to(sliderRef.current, {
         xPercent: -230,
-        ease: "none",
+        ease: "power3.InOut",
         scrollTrigger: {
           id: "sliderScroll",
           trigger: sectionRef.current,
           start: "top",
-          end: "bottom+=100% center",
-          scrub: true,
+          end: "=+400%",
+          scrub: 0.5,
           pin: true,
-          anticipatePin: 1,
         },
       });
     }, sectionRef);

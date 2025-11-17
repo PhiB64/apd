@@ -25,19 +25,18 @@ const Architecture = forwardRef(({ styleArchitectural, plan }, ref) => {
     const ctx = gsap.context(() => {
       const isMobile = window.innerWidth < 768;
 
-      gsap.set(imageContainerRef.current, { scale: 0.5, opacity: 0 });
+      gsap.set(imageContainerRef.current, { scale: 0.3, opacity: 0 });
 
       gsap.to(imageContainerRef.current, {
         scale: 1,
         opacity: 1,
-        duration: isMobile ? 1 : 1,
+        duration: isMobile ? 1 : 2,
         ease: "power2.out",
         scrollTrigger: {
           trigger: imageContainerRef.current,
-          start: isMobile ? "top center" : "+=130%",
-          end: isMobile ? "bottom center" : "+=20%",
+          start: isMobile ? "top center" : "+=290%",
+          end: isMobile ? "bottom center" : "+=50%",
           toggleActions: "play none none reverse",
-          scrub: false,
           markers: false,
         },
       });

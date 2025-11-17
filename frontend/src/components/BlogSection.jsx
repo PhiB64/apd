@@ -27,11 +27,15 @@ export default function BlogSection({ limit = 4 }) {
     );
   }
 
+  if (!articles?.length) {
+    return <ErrorMessage type="empty" message="Chargement des articles ..." />;
+  }
+
   const displayedArticles = articles.slice(0, limit);
 
   return (
     <section className="relative w-full min-h-screen bg-pierre px-6 md:px-32 py-20 text-black overflow-hidden">
-      <div className="relative z-10 max-w-6xl mx-auto space-y-12">
+      <div className="relative min-h-screenz-10 max-w-6xl mx-auto space-y-12">
         {/* 📰 Titre principal */}
         <div className="text-center">
           <h2 className="text-3xl md:text-4xl font-garamond text-black leading-snug">
@@ -41,7 +45,7 @@ export default function BlogSection({ limit = 4 }) {
         </div>
 
         {/* 🖋️ Liste des articles */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 justify-center">
+        <div className="flex flex-wrap justify-center gap-8">
           {displayedArticles.map((article) => {
             const {
               id,
@@ -54,6 +58,7 @@ export default function BlogSection({ limit = 4 }) {
             } = article;
 
             const imageUrl = image?.formats?.medium?.url ?? image?.url ?? null;
+
             const extrait =
               contenu?.[0]?.children?.[0]?.text?.slice(0, 180) ?? "";
 

@@ -1,13 +1,32 @@
 "use client";
 
 import { useSiteData } from "@hooks/useSiteData";
+import dynamic from "next/dynamic";
 
 import VideoBackground from "@components/VideoBackground";
 import IntroSection from "@components/IntroSection";
 import DescriptionSection from "@components/DescriptionSection";
-import PartnerSection from "@components/PartnerSection";
-import BlogSection from "@components/BlogSection";
 import ErrorMessage from "@components/ErrorMessage";
+
+// ⏳ Chargement dynamique de PartnerSection
+const PartnerSection = dynamic(() => import("@components/PartnerSection"), {
+  ssr: false,
+  loading: () => (
+    <div className="h-[60vh] flex items-center justify-center text-white font-garamond text-xl">
+      Chargement des partenaires…
+    </div>
+  ),
+});
+
+// ⏳ Chargement dynamique de BlogSection
+const BlogSection = dynamic(() => import("@components/BlogSection"), {
+  ssr: false,
+  loading: () => (
+    <div className="h-[60vh] flex items-center justify-center text-white font-garamond text-xl">
+      Chargement des récits…
+    </div>
+  ),
+});
 
 export default function Home() {
   const { eglise, accueil, interviews, partenaires, articles, error } =
@@ -62,11 +81,9 @@ export default function Home() {
           </section>
         )}
 
-        {partenaires?.length > 0 && (
-          <section id="partners">
-            <PartnerSection partners={partenaires} />
-          </section>
-        )}
+        <section id="partners">
+          <PartnerSection partners={partenaires} />
+        </section>
 
         <section id="blog">
           <BlogSection limit={3} />

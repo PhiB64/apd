@@ -11,7 +11,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="fr" className="scroll-smooth">
-      <body className="bg-black text-white overflow-x-hidden antialiased">
+      <body className=" overflow-x-hidden antialiased">
         <HeaderDonationProvider>
           <HeaderWrapper />
           <main className="relative z-10">{children}</main>
