@@ -8,10 +8,8 @@ export default function Footer() {
   const logoUrl = site?.logo_footer?.url;
   const reseaux = site?.reseaux_sociaux ?? [];
 
-  if (!site) return null;
-
   return (
-    <footer className="relative z-10 bg-black text-white px-6 py-16 min-h-[150px]">
+    <footer className="relative z-10 bg-black text-gray-100 px-6 py-16 ">
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center md:items-start justify-between gap-10">
         <LogoBlock logoUrl={logoUrl} />
         <SocialBlock reseaux={reseaux} />
@@ -27,13 +25,13 @@ function LogoBlock({ logoUrl }) {
         <Image
           src={logoUrl}
           alt="Logo footer"
-          width={300}
+          width={280}
           height={100}
-          className="mb-4"
+          className="mb-4 object-contain"
         />
       )}
-      <p className="text-sm text-gray-400">
-        &copy; 2025 Ufo Agency. Tous droits réservés.
+      <p className="text-sm text-stone-400">
+        &copy; {new Date().getFullYear()} Ufo Agency. Tous droits réservés.
       </p>
     </div>
   );
@@ -42,7 +40,7 @@ function LogoBlock({ logoUrl }) {
 function SocialBlock({ reseaux }) {
   return (
     <div className="flex flex-col items-center md:items-end text-center md:text-right">
-      <h3 className="text-lg font-semibold mb-4">Suivez-nous</h3>
+      <h3 className="text-lg font-semibold mb-4 tracking-wide ">Suivez-nous</h3>
       <div className="flex flex-col space-y-2">
         {reseaux.length > 0 ? (
           reseaux.map((reseau, index) => (
@@ -51,13 +49,13 @@ function SocialBlock({ reseaux }) {
               href={reseau.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-gray-300 hover:text-white transition-colors text-base"
+              className=" hover:text-white transition-colors text-base"
             >
               {reseau.nom} →
             </a>
           ))
         ) : (
-          <p className="text-gray-400">Aucun réseau social configuré</p>
+          <p className="text-lg">Aucun réseau social configuré</p>
         )}
       </div>
     </div>

@@ -37,6 +37,7 @@ const Architecture = forwardRef(({ styleArchitectural, plan }, ref) => {
           start: isMobile ? "top center" : "+=290%",
           end: isMobile ? "bottom center" : "+=50%",
           toggleActions: "play none none reverse",
+          scrub: 0.5,
           markers: false,
         },
       });

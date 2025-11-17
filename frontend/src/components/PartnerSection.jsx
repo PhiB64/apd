@@ -35,7 +35,7 @@ export default function PartnerSection({ partners, error, isLoading }) {
             start: isMobile ? "+=220%top" : "+370% top",
             end: isMobile ? "+=240%top" : "+=390% top",
             toggleActions: "play none none reverse",
-            scrub: false,
+            scrub: 0.5,
             markers: false,
           },
         }
