@@ -161,7 +161,7 @@ export default function Gallery({ images }) {
       </div>
 
       {/* Mobile */}
-      <div className="md:hidden w-full min-h-screen flex items-center justify-center px-6">
+      <div className="md:hidden w-full min-h-screen flex items-center justify-center px-12">
         <div className="w-full grid grid-cols-1 gap-4">
           {images.slice(0, 4).map((img, index) => (
             <div
