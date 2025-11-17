@@ -32,11 +32,10 @@ export default function PartnerSection({ partners, error, isLoading }) {
           ease: "power2.out",
           scrollTrigger: {
             trigger: scopeRef.current,
-            start: isMobile ? "+=220%top" : "+370% top",
-            end: isMobile ? "+=240%top" : "+=390% top",
+            start: isMobile ? "top top" : "+370% top",
+            end: isMobile ? "bottom top" : "+=390% top",
             toggleActions: "play none none reverse",
-            scrub: 0.5,
-            markers: false,
+            markers: true,
           },
         }
       );

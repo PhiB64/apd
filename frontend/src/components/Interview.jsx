@@ -43,11 +43,11 @@ const Interview = forwardRef(({ titre, description, videoUrl }, ref) => {
   return (
     <div
       ref={ref}
-      className="w-full min-h-screen flex items-center justify-center px-4 md:px-6"
+      className="w-full min-h-screen flex items-center justify-center px-4 md:px-20 py-28"
     >
-      <div className="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-        {/* Texte à gauche */}
-        <div className="flex flex-col justify-center space-y-6 text-black px-2">
+      <div className="w-full max-w-7xl flex flex-col gap-6 items-center">
+        {/* Texte au-dessus */}
+        <div className="flex flex-col justify-center space-y-6 text-black px-2 w-full">
           {titre &&
             (() => {
               const mots = titre.trim().split(" ");
@@ -78,10 +78,10 @@ const Interview = forwardRef(({ titre, description, videoUrl }, ref) => {
           )}
         </div>
 
-        {/* Vidéo à droite */}
+        {/* Vidéo en dessous */}
         {videoUrl && (
-          <div className="flex items-center justify-center px-2">
-            <div className="relative w-full max-w-[40rem] aspect-video overflow-hidden">
+          <div className="flex items-center justify-center px-2 w-full">
+            <div className="relative w-full max-w-[42rem] md:max-w-[35rem] aspect-video overflow-hidden">
               <svg width="0" height="0">
                 <defs>
                   <clipPath id="videoMask" clipPathUnits="objectBoundingBox">
@@ -99,7 +99,7 @@ const Interview = forwardRef(({ titre, description, videoUrl }, ref) => {
                 autoPlay={false}
                 disableRemotePlayback
                 onClick={handleClick}
-                className="w-full h-full object-cover p-2 cursor-pointer"
+                className="w-full h-full object-cover p-1 cursor-pointer"
                 style={{
                   clipPath: isFullscreen ? "none" : "url(#videoMask)",
                   transition: "clip-path 0.3s ease",

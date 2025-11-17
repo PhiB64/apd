@@ -55,6 +55,7 @@ export default function Header({
               priority
             />
           </a>
+
           <nav className="flex items-center gap-4 sm:gap-6 lg:gap-8 text-black flex-wrap justify-end w-full">
             {navLinks.map((link) =>
               link.href ? (
